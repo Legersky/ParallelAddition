@@ -11,35 +11,35 @@ class AlgorithmForParallelAddition(object):
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
             #evaluation of minimal polynomial
         if not minPol.is_irreducible():
-            raise ValueError("For construction AlphabetRing, polynomial %s must be irreducible." %minPol)
+            raise ValueError("For the construction of Ring, polynomial %s must be irreducible." %minPol)
         if not minPol.is_monic():
             raise ValueError("For parallel addition algorithms, polynomial %s must be monic." %minPol)
-        N.<alpRatRingGenator> = NumberField(minPol, embedding=embd)
-            # Rational Polynomials with variable alpRingGenR mod minPol, beta is the closest root of minPol to embd
-        self._alpRatRingGen=N.gen()
+        N.<ratRingGenator> = NumberField(minPol, embedding=embd)
+            # Rational Polynomials with variable ratRingGenerator mod minPol, beta is the closest root of minPol to embd
+        self._ratRingGen=N.gen()
             #the generator of rational polynomials
-        self._alpGenCCValue=CC(self._alpRatRingGen)
-            #complex value of alphabetGenerator
+        self._genCCValue=CC(self._ratRingGen)
+            #complex value of ring generator
         IntegerPolynomials.<t> = PolynomialRing(ZZ)
             #Integer polynomials with variable t
         Zomega.<omega> = PolynomialQuotientRing(IntegerPolynomials,IntegerPolynomials(N.polynomial()) )
             #construction of alphabetRing
-        self._alphabetRing = Zomega
-            #ring of the alphabet (Z[omega])
+        self._ring = Zomega
+            #the ring (Z[omega])
         self._minPolynomial=Zomega.modulus()
-            #minimal polynomial of generator of alphabet ring, i.e. modulus of Z[omega]
-        self._alphabetGenerator = Zomega.gen()
+            #minimal polynomial of generator of the ring, i.e. modulus of Z[omega]
+        self._ringGenerator = Zomega.gen()
             #generator of alphabetRing (omega)
         def latexZomega(self):
             return self._polynomial._latex_('\\omega')  #self.parent().latex_variable_names()[0])
-        self._alphabetRing.element_class._latex_=latexZomega
+        self._ring.element_class._latex_=latexZomega
             #latex output
-        self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._alphabetGenerator}))
+        self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
             #alphabet
-        self.setBase(sage.misc.sage_eval.sage_eval(base, locals={'omega':self._alphabetGenerator}))
+        self.setBase(sage.misc.sage_eval.sage_eval(base, locals={'omega':self._ringGenerator}))
             #base of numeration system
         if inputAlphabet:
-            self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._alphabetGenerator}))
+            self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
             self._inputAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
@@ -62,10 +62,10 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._alphabet, latex=True)
         self.addLog("Input alphabet: ")
         self.addLog(self._inputAlphabet, latex=True)
-        self.addLog("Minimal polynomial of alphabet generator: ")
+        self.addLog("Minimal polynomial of ring generator: ")
         self.addLog(self.getMinPolynomial(), latex=True)
         self.addLog("Embedding: ")
-        self.addLog(self._alpGenCCValue, latex=True)
+        self.addLog(self._genCCValue, latex=True)
         self.addLog("Base: ")
         self.addLog(self._base, latex=True)
         self.addLog("Minimal polynomial of base:")
@@ -74,10 +74,10 @@ class AlgorithmForParallelAddition(object):
     def setAlphabet(self,A):
         self._alphabet=[]
         for a in A:
-            if a in self._alphabetRing:
+            if a in self._ring:
                 self._alphabet.append(a)    #adding to alphabet
             else:
-                raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._alpGenCCValue, self._minPolynomial))
+                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
 
     def setInputAlphabet(self,B):
         alphabetPlusAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
@@ -100,14 +100,14 @@ class AlgorithmForParallelAddition(object):
         self._verbose=verb
 
     def setBase(self, base):
-        if base in self._alphabetRing:
-                self._base=self._alphabetRing.coerce(base)
+        if base in self._ring:
+                self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
         else:
-            raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s)) so it cannot be used for base." %(a, self._alpGenCCValue, self._minPolynomial))
+            raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
 
     def __repr__(self):
-        return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._alpGenCCValue, self._minPolynomial, self._alphabet)
+        return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
 
     def getMinPolynomial(self):
         #returns modulus of AlphabetRing
@@ -119,7 +119,7 @@ class AlgorithmForParallelAddition(object):
 
     def getAlphabetGenerator(self):
         #returns generator of AlphabetRing
-        return self._alphabetGenerator
+        return self._ringGenerator
 
     def getBase(self):
         #returns generator od BaseRing
@@ -146,28 +146,28 @@ class AlgorithmForParallelAddition(object):
         setting['inputAlphabet']=str(self._inputAlphabet)
         setting['minPol_alpGen']=str(self._minPolynomial(x).expand())
         setting['base']=str(self._base)
-        setting['embedding']=self._alpGenCCValue
+        setting['embedding']=self._genCCValue
         setting['name']=self._name
         return setting
 
     def sumOfSets(self,A,B):
         #outputs set sum of A and B if A and B are subsets of AlphabetRing
         for a in A+B:
-            if not(a in self._alphabetRing):
-                raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s))." %(a, self._alpGenCCValue, self._minPolynomial))
+            if not(a in self._ring):
+                raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
         res=Set([])
         for a in A:
             for b in B:
                 res=res+Set([a+b])
         return res.list()
 
-    def alphabetRing2NumberField(self, num_from_alphabetRing):            #puvodne getValue
+    def alphabetRing2NumberField(self, num_from_ring):            #puvodne getValue
         #converts number from AlphabetRing to NumberField
         res=0
-        coef=num_from_alphabetRing.list()
+        coef=num_from_ring.list()
         coef.reverse()
         for a in coef:    #Horner scheme
-            res*=self._alpRatRingGen
+            res*=self._ratRingGen
             res+=a
         return res
 
@@ -187,27 +187,27 @@ class AlgorithmForParallelAddition(object):
         digits=copy(_digits)
         digits.reverse()
         for a in digits:    #Horner scheme
-            res*=self._alphabetGenerator
+            res*=self._ringGenerator
             res+=a
         return res
 
-    def alphabetRing2CC(self, num_from_alphabetRing):        #puvodne getComplexValue
+    def alphabetRing2CC(self, num_from_ring):        #puvodne getComplexValue
         #converts numbers from AlphabetRing to complex
-        return CC(self.alphabetRing2NumberField(num_from_alphabetRing))
+        return CC(self.alphabetRing2NumberField(num_from_ring))
 
-    def plot(self, nums_from_alphabetRing):
+    def plot(self, nums_from_ring):
         #plots numbers from AlphabetRing
         to_plot = []
         allReal=True
         zeros=[]
-        for num in nums_from_alphabetRing:
+        for num in nums_from_ring:
             to_plot.append(self.alphabetRing2CC(num))
             zeros.append(0)
             if not self.alphabetRing2CC(num) in RR:
                 allReal=False
         if self._verbose==1:
             print "Plotting:"
-            show(nums_from_alphabetRing)
+            show(nums_from_ring)
         if allReal:
             return list_plot(zip(to_plot,zeros), color='red')
         else:
@@ -245,11 +245,11 @@ class AlgorithmForParallelAddition(object):
 
 
     def printWeightFunction(self):
-        print "Weight Function for AlphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._alpGenCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print "Weight Function for AlphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         self._weightFunction.printMapping()
 
     def printWeightFunctionInfo(self):
-        print "Info about Weight Function for alphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._alpGenCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print "Info about Weight Function for alphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         if not self._weightFunction is None:
             self._weightFunction.printInfo()
         else:
