@@ -21,9 +21,6 @@ try:
         alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
-
-    save(alg.getDictOfSetting(), './examples/last')
-
     unsolved_saved=False
 
     filename=alg.getName()
@@ -42,6 +39,7 @@ try:
 
     print " "
     alg.findWeightFunction()
+    alg_update=True
 
     print '\n'
 
