@@ -6,7 +6,7 @@ class AlgorithmForParallelAddition(object):
     """
     zastresujici trida pro hledani algoritmu paralelniho scitani s abecedou v alphabetRing (Z[\omega]) s prepisovacim pravidlem x-base, base \in baseRing \subset alphabetRing
     """
-    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, verbose=0):
+    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0):
         P.<x>=ZZ[]
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
             #evaluation of minimal polynomial
@@ -53,6 +53,8 @@ class AlgorithmForParallelAddition(object):
             #list of logs
         self._printLog=printLog
             #log are printed if True
+        self._printLogLatex=printLogLatex
+            #log are printed using latex if True
         self._verbose=verbose
 
         self.addLog("Inicialization...")
@@ -494,7 +496,7 @@ class AlgorithmForParallelAddition(object):
 
     def addLog(self,_log, latex=False):
         if self._printLog:
-            if latex:
+            if latex and self._printLogLatex:
                 show(_log)
             else:
                 print _log
