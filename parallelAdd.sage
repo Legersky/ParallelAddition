@@ -1,4 +1,4 @@
-load_attach_path('~/classes')
+load_attach_path('./classes')
 load('AlgorithmForParallelAddition.sage')
 
 alg=None
