@@ -7,8 +7,8 @@ class WeightFunctionSearch(CandidateSetSearch):
     """
     def __init__(self, algForParallelAdd, weightCoefSet, method):
         super(WeightFunctionSearch,self).__init__(algForParallelAdd)
-        self._B=algForParallelAdd.getInputAlphabet()   #sumOfSets(algForParallelAdd.getAlphabet(),algForParallelAdd.getAlphabet())
-            #alphabet of inputs (rewritten sequence)
+        self._B=algForParallelAdd.getInputAlphabet()
+            #alphabet of inputs (sequence to rewrite)
         self._weightFunction= WeightFunction(self._B)
             #weight function
         self._weightCoefSet=weightCoefSet
