@@ -104,25 +104,25 @@ class AlgorithmForParallelAddition(object):
                 self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
         else:
-            raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
+            raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
 
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
 
     def getMinPolynomial(self):
-        #returns modulus of AlphabetRing
+        #returns modulus of Ring
         return self._minPolynomial
 
     def getMinPolynomialOfBase(self):
         #returns modulus of BaseRing
         return self._minimalPolynomialOfBase
 
-    def getAlphabetGenerator(self):
-        #returns generator of AlphabetRing
+    def getRingGenerator(self):
+        #returns generator of Ring
         return self._ringGenerator
 
     def getBase(self):
-        #returns generator od BaseRing
+        #returns base
         return self._base
 
     def getAlphabet(self):
@@ -151,18 +151,18 @@ class AlgorithmForParallelAddition(object):
         return setting
 
     def sumOfSets(self,A,B):
-        #outputs set sum of A and B if A and B are subsets of AlphabetRing
+        #outputs set sum of A and B if A and B are subsets of Ring
         for a in A+B:
             if not(a in self._ring):
-                raise TypeError("Value %s is not element of AlphabetRing (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
+                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
         res=Set([])
         for a in A:
             for b in B:
                 res=res+Set([a+b])
         return res.list()
 
-    def alphabetRing2NumberField(self, num_from_ring):            #puvodne getValue
-        #converts number from AlphabetRing to NumberField
+    def ring2NumberField(self, num_from_ring):            #puvodne getValue
+        #converts number from Ring to NumberField
         res=0
         coef=num_from_ring.list()
         coef.reverse()
@@ -181,7 +181,7 @@ class AlgorithmForParallelAddition(object):
             res+=a
         return res
 
-    def list2AlphabetRing(self, _digits):
+    def list2Ring(self, _digits):
         #converts list [a_0, a_1, ..., a_k] to a_0 + a_1*alphabetGen + ... + a_k*alphabetGen^k
         res=0
         digits=copy(_digits)
@@ -191,19 +191,19 @@ class AlgorithmForParallelAddition(object):
             res+=a
         return res
 
-    def alphabetRing2CC(self, num_from_ring):        #puvodne getComplexValue
-        #converts numbers from AlphabetRing to complex
-        return CC(self.alphabetRing2NumberField(num_from_ring))
+    def ring2CC(self, num_from_ring):        #puvodne getComplexValue
+        #converts numbers from Ring to complex
+        return CC(self.ring2NumberField(num_from_ring))
 
     def plot(self, nums_from_ring):
-        #plots numbers from AlphabetRing
+        #plots numbers from Ring
         to_plot = []
         allReal=True
         zeros=[]
         for num in nums_from_ring:
-            to_plot.append(self.alphabetRing2CC(num))
+            to_plot.append(self.ring2CC(num))
             zeros.append(0)
-            if not self.alphabetRing2CC(num) in RR:
+            if not self.ring2CC(num) in RR:
                 allReal=False
         if self._verbose==1:
             print "Plotting:"
@@ -245,11 +245,11 @@ class AlgorithmForParallelAddition(object):
 
 
     def printWeightFunction(self):
-        print "Weight Function for AlphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print "Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         self._weightFunction.printMapping()
 
     def printWeightFunctionInfo(self):
-        print "Info about Weight Function for alphabetGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print "Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         if not self._weightFunction is None:
             self._weightFunction.printInfo()
         else:

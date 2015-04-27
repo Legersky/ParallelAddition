@@ -8,22 +8,22 @@ class CandidateSetSearch(object):
             #class AlgorithmForParallelAddition
         self._alphabet = AlgForParallelAdd.getAlphabet()
             #alphabet
-        self._alphabetGenerator = AlgForParallelAdd.getAlphabetGenerator()
-            #generator of AlphabetRing omega
+        self._ringGenerator = AlgForParallelAdd.getRingGenerator()
+            #generator of Ring omega
         self._base=AlgForParallelAdd.getBase()
-            #generator of BaseRing
+            #base
         self._verbose=AlgForParallelAdd._verbose
-        self._alphGenCompanionMatrix=matrix.companion(self._algForParallelAdd.getMinPolynomial())
-            # companion matrix to minimal polynomial of alphabetGenerator
+        self._ringGenCompanionMatrix=matrix.companion(self._algForParallelAdd.getMinPolynomial())
+            # companion matrix to minimal polynomial of ringGenerator
         self._inverseBaseCompanionMatrix=self._computeInverseBaseCompanionMatrix()
             # inversion of companion matrix of base
 
     def _computeInverseBaseCompanionMatrix(self):
         base_list=self._base.list()
         #Horner scheme:
-        baseCompanionMatrix=matrix(self._alphGenCompanionMatrix.nrows())
+        baseCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
         for base_coef in reversed(base_list):
-            baseCompanionMatrix *= self._alphGenCompanionMatrix
+            baseCompanionMatrix *= self._ringGenCompanionMatrix
             baseCompanionMatrix += base_coef
         return baseCompanionMatrix.inverse()
 
@@ -51,9 +51,9 @@ class CandidateSetSearch(object):
 
     def divideByBase(self,divided_number):
         #returns w divided by base if defined, else returns None
-        num_list=divided_number.list()    #coeffients of divided_number in AlphabetRing
+        num_list=divided_number.list()    #coeffients of divided_number in Ring
         for i in range(len(divided_number.list()), self._inverseBaseCompanionMatrix.nrows()):
-            num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of alphabetGenerator
+            num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of ringGenerator
         num_vect=vector(num_list)
         res_vect=(self._inverseBaseCompanionMatrix)*num_vect    #division over rational polynomials
         res_list=[]
@@ -62,19 +62,19 @@ class CandidateSetSearch(object):
                 res_list.append(Integer(val))
             else:
                 return None
-        return self._algForParallelAdd.list2AlphabetRing(res_list)    #conversion to alphabetRing
+        return self._algForParallelAdd.list2Ring(res_list)    #conversion to Ring
 
-    def _findSmallest(self,list_from_AlphabetRing):
-        #finds smallest (in absolute value) element of list_from_AlphabetRing
-        smallestAbs=abs(self._algForParallelAdd.alphabetRing2CC(list_from_AlphabetRing[0]))
+    def _findSmallest(self,list_from_Ring):
+        #finds smallest (in absolute value) element of list_from_Ring
+        smallestAbs=abs(self._algForParallelAdd.ring2CC(list_from_Ring[0]))
         smallest_in=0
         i=0
-        for num in list_from_AlphabetRing[1:]:
-            numAbs=abs(self._algForParallelAdd.alphabetRing2CC(num))
+        for num in list_from_Ring[1:]:
+            numAbs=abs(self._algForParallelAdd.ring2CC(num))
             i+=1
             if numAbs<smallestAbs:
                 smallestAbs=numAbs
                 smallest_in=i
-        return list_from_AlphabetRing[smallest_in]
+        return list_from_Ring[smallest_in]
 
 
