@@ -52,7 +52,7 @@ try:
         alg.saveLocalConversionToCsvFile("./outputs/"+filename+'/'+filename)
 
     if sanityCheck:
-        er=alg.sanityCheck_conversion(len_inp)
+        er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
 
 except KeyboardInterrupt:
@@ -69,7 +69,7 @@ finally:
         alg.saveLog("./outputs/"+filename+'/'+filename)
     if saveUnsolved and not alg_update and not unsolved_saved:
         alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
-
+    print '--------------------------end of '+ filename +'---------------------------------------------'
 
 
 
