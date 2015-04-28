@@ -7,7 +7,6 @@ import sys
 alg=None
 alg_update=False
 
-
 load(sys.argv[1])
 
 try:

@@ -13,7 +13,5 @@ localConversionCsv=False     #Local conversion to .csv file
 saveSetting=True     #Inputs setting
 saveLog=True     #Log file
 saveUnsolved=True     #Unsolved inputs after interruption
-
 sanityCheck=True
 len_inp =  3     #Number of digits for sanity check
-saveLog=True      #Save log file after sanity check
