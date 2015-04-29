@@ -1,4 +1,4 @@
 #!/bin/bash
 for input_name in $1*.sage
-do sage parallelAdd.sage $input_name
+do ~/../sage-devel/sage/sage parallelAdd.sage $input_name
 done
