@@ -503,3 +503,51 @@ class AlgorithmForParallelAddition(object):
                 sys.stdout.flush()
         self._log.append(_log)
 
+    def inputSettingToSageFile(self, filename):
+        with open(filename+".sage", 'w') as fp:
+            stdout = sys.stdout
+            sys.stdout = fp
+
+            print '#---------------INPUTS---------------'
+            print '#Name of the numeration system'
+            print 'name = \'', self._name, "'"
+            print ''
+            print '#Minimal polynomial of ring generator (use variable x)'
+            print 'minPol =\'', self._minPolynomial(x).expand(), "'"
+            print ''
+            print '#Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)'
+            print 'omegaCC=', self._genCCValue
+            print ''
+            print '#Alphabet (use \'omega\' as ring generator)'
+            print 'alphabet = \'', self._alphabet, "'"
+            print ''
+            print '#Input alphabet (if empty, A + A is used)'
+            print 'inputAlphabet = \'', self._inputAlphabet, "'"
+            print ''
+            print '#Base (use \'omega\' as ring generator)'
+            print 'base =\'' ,self._base, "'"
+            print ''
+            print ''
+            print '#------------SAVING----------------'
+            print '#save general info to .tex file'
+            print 'info=True'
+            print ''
+            print '#save Weight function to .csv file'
+            print 'WFcsv=True'
+            print ''
+            print '#save Local conversion to .csv file'
+            print 'localConversionCsv=False'
+            print ''
+            print '#save Inputs setting'
+            print 'saveSetting=True'
+            print ''
+            print '#save Log file'
+            print 'saveLog=True'
+            print ''
+            print '#save Unsolved inputs after interruption'
+            print 'saveUnsolved=True'
+            print ''
+            print '#run sanity check'
+            print 'sanityCheck=True'
+
+            sys.stdout = stdout
