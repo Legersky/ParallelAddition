@@ -1,0 +1,4 @@
+#!/bin/bash
+for input_name in $1*.sobj
+do sage input_from_object.sage $input_name
+done

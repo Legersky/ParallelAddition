@@ -10,14 +10,7 @@ alg_update=False
 load(sys.argv[1])
 
 try:
-    if setting_name:
-        setting = load('./examples/'+ setting_name )
-        print "The following setting was loaded from ./examples/" + setting_name
-        print setting
-
-        alg= AlgorithmForParallelAddition(setting['minPol_alpGen'], setting['embedding'], setting['alphabet'], setting['base'], setting['name'], setting['inputAlphabet'],  printLog=True)
-    else:
-        alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
+    alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
     unsolved_saved=False
