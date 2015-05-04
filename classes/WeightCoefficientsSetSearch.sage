@@ -73,7 +73,7 @@ class WeightCoefficientsSetSearch(CandidateSetSearch):
         #it extends Qk1 to Qk such that C \subset A + \beta Qk
         return self._chooseQk_FromCandidates(self._findCandidates(C))
 
-    def findWeightCoefficientsSet(self, maxIterations=20):
+    def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
         self._Qk1=[]    #previous potential Weight Coefficient Set
         self._Qk1.append(0)    #O is always in Weight Coefficients set
@@ -85,9 +85,9 @@ class WeightCoefficientsSetSearch(CandidateSetSearch):
         self._Qk1=self._getQk(self._algForParallelAdd.sumOfSets(B,self._Qk1))    #get Qk for B+Qk1 \subset alphabet + base* Qk
         k=0
         while True:
-            if k>maxIterations:
-                print "Alg doesn't stop after %s loops" %k
-                break
+            if k>=maxIterations-1:
+                if self._verbose>=1: print "Phase 1 doesn't stop after %s loops" %(k+1)
+                raise RuntimeError("Searching Weight coefficient set requires more interations than given maximum: " + str(maxIterations))
             tested_set=Set(self._algForParallelAdd.sumOfSets(B,self._Qk1)).difference(Set(self._algForParallelAdd.sumOfSets(B,self._Qk2)))
                 #it is enough to check (B+Qk1)-(B+Qk2)
             Qk=self._getQk(tested_set.list())

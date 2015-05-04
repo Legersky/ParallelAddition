@@ -215,24 +215,24 @@ class AlgorithmForParallelAddition(object):
         else:
             return list_plot(to_plot, color='red')
 
-    def _findWeightCoefSet(self,method):
+    def _findWeightCoefSet(self, max_iterations, method):
         #finds and sets Weight Coefficients set
         weightCoefSet=WeightCoefficientsSetSearch(self,method)
-        self._weightCoefSet=copy(weightCoefSet.findWeightCoefficientsSet())
+        self._weightCoefSet=copy(weightCoefSet.findWeightCoefficientsSet(max_iterations))
         return self._weightCoefSet
 
-    def _findWeightFunction(self,method):
+    def _findWeightFunction(self, max_input_length,method):
         #finds and sets Weight Function using the set of weight coefficients
         if not self._weightCoefSet:
             raise ValueError("There are no values in the weight coefficient set Q.")
         else:
             self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method)
-            self._weightFunction = copy(self._weightFunSearch.findWeightFunction())
+            self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
 
-    def findWeightFunction(self, method_weightCoefSet=2, method_weightFunSearch=3):
+    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=3):
         #finds and sets Weight Function
         self.addLog("Searching the Weight Coefficient Set...")
-        self._findWeightCoefSet(method_weightCoefSet)
+        self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
         self.addLog("The Weight Coefficient Set is:")
         self.addLog(self._weightCoefSet,latex=True)
@@ -240,7 +240,7 @@ class AlgorithmForParallelAddition(object):
         show(self.plot(self.getWeightCoefSet()))
 
         self.addLog("Searching the Weight Function...")
-        self._findWeightFunction(method_weightFunSearch)
+        self._findWeightFunction(max_input_length, method_weightFunSearch)
         self.addLog("Info about Weight Function:")
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
         self.addLog("Number of inputs: "+ str(len(self._weightFunction.getMapping().keys())))
@@ -527,6 +527,12 @@ class AlgorithmForParallelAddition(object):
             print '#Base (use \'omega\' as ring generator)'
             print 'base =\'' ,self._base, "'"
             print ''
+            print '#------------LIMITATIONS----------------'
+            print '#maximum of iterations in searching weight coefficient set'
+            print 'max_interations = 100'
+            print ''
+            print '#maximal length of input of weight function'
+            print 'max_input_length =  100'
             print ''
             print '#------------SAVING----------------'
             print '#save general info to .tex file'
@@ -549,5 +555,6 @@ class AlgorithmForParallelAddition(object):
             print ''
             print '#run sanity check'
             print 'sanityCheck=True'
+
 
             sys.stdout = stdout

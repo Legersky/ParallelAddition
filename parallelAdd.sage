@@ -30,7 +30,11 @@ try:
         save(setting,'./examples/'+ filename )
 
     print " "
-    alg.findWeightFunction()
+    try:
+        max_iterations
+    except:
+        max_iterations=100
+    alg.findWeightFunction(max_iterations, max_input_length)
     alg_update=True
 
     print '\n'

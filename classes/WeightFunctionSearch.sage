@@ -121,13 +121,15 @@ class WeightFunctionSearch(CandidateSetSearch):
         else:
             raise RuntimeError("There is no Qxx for: ", x_tuple_without_first)
 
-    def findWeightFunction(self):
+    def findWeightFunction(self, max_input_length):
         # checks different x \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
         self._maxRecursionDepth=30
         self._Qx_x[()]=self._weightCoefSet
         combinations=[()]
         self._k=0
         while combinations:
+            if self._k>=max_input_length:
+                raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
             num_prev_comb=len(combinations)
             combinations=self._find_weightCoef_for_comb_B(combinations,self._k)
             self._k+=1
