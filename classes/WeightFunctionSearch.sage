@@ -30,7 +30,7 @@ class WeightFunctionSearch(CandidateSetSearch):
             if self._verbose>=1: print res
             return Set(res).list()
         elif self._method==2:
-            #method 2 adds the candidates with the highest number of occurencies
+            #method 2 adds the candidates with the highest number of occurencies BLBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             cand_occur={}
             for cand_elem in cand_Qxx:    #counting occurencies
                 for cand in cand_elem:
@@ -94,8 +94,6 @@ class WeightFunctionSearch(CandidateSetSearch):
 
     def _find_weightCoef_for_comb_B(self, combinations, max_len):
         #finds weight coefficients for combinations + letter from self._B if it is possible, function returns combinations for which wider window is necessary to get weight coefficient
-        if max_len>=self._maxRecursionDepth:
-            raise RuntimeError("Too deep recursion.")
         new_combinations=[]
         for comb in combinations:
             for xj in self._B:
@@ -123,7 +121,6 @@ class WeightFunctionSearch(CandidateSetSearch):
 
     def findWeightFunction(self, max_input_length):
         # checks different x \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
-        self._maxRecursionDepth=30
         self._Qx_x[()]=self._weightCoefSet
         combinations=[()]
         self._k=0
@@ -148,5 +145,32 @@ class WeightFunctionSearch(CandidateSetSearch):
                 line=line+ str(coef)
                 print line
 
-
+    def check_one_letter_inputs(self, max_input_length):
+        self._Qx_x[()]=self._weightCoefSet
+        longest=[()]
+        for a in self._B:
+            if self._verbose>=1: print "Processing input", a,',', a, '...'
+            x_tuple=(a,)
+            Qxx=self._findQx(x_tuple)
+            if self._verbose>=1:print Qxx
+            inp_len=1
+            prevQxx=Set(Qxx)
+            while len(Qxx)>1:
+                if inp_len>=max_input_length:
+                    raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
+                x_tuple = x_tuple+(a,)
+                Qxx=self._findQx(x_tuple)    #find Qxx for the tuple and save weight coefficient if there is only one element in Qxx
+                if self._verbose>=1:  print Qxx
+                if prevQxx==Set(Qxx):
+                    self._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
+                    raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
+                if len(Qxx)==1:
+                    self._weightFunction.addWeightCoefToInput(x_tuple, Qxx[0])
+                inp_len+=1
+                prevQxx=Set(Qxx)
+            if len(x_tuple)>len(longest[0]):
+                longest=[x_tuple]
+            elif len(x_tuple)==len(longest[0]):
+                longest.append(x_tuple)
+        return longest
 

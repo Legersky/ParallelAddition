@@ -227,6 +227,12 @@ class AlgorithmForParallelAddition(object):
             raise ValueError("There are no values in the weight coefficient set Q.")
         else:
             self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method)
+            self.addLog("Checking one letter inputs...")
+            longest=self._weightFunSearch.check_one_letter_inputs(max_input_length)
+            self.addLog("The longest inputs are:")
+            self.addLog(longest, latex=True)
+            self.addLog("Length of one letter input: %s: " %len(longest[0]))
+            self.addLog("Number of letters with longest input: %s" %len(longest))
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=3):
@@ -545,7 +551,7 @@ class AlgorithmForParallelAddition(object):
             print 'localConversionCsv=False'
             print ''
             print '#save Inputs setting'
-            print 'saveSetting=True'
+            print 'saveSetting=False'
             print ''
             print '#save Log file'
             print 'saveLog=True'

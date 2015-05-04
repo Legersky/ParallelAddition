@@ -56,8 +56,9 @@ try:
 
 except KeyboardInterrupt:
     print "Keyboard Interrupt:"
-    alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
-    unsolved_saved=True
+    if saveUnsolved:
+        alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
+        unsolved_saved=True
 
 except Exception, e:
     print "Error:"
