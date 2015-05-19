@@ -197,23 +197,32 @@ class AlgorithmForParallelAddition(object):
         #converts numbers from Ring to complex
         return CC(self.ring2NumberField(num_from_ring))
 
-    def plot(self, nums_from_ring):
+    def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
         #plots numbers from Ring
         to_plot = []
         allReal=True
         zeros=[]
+        label_plot=plot([])
         for num in nums_from_ring:
-            to_plot.append(self.ring2CC(num))
+            numCC=self.ring2CC(num)
+            to_plot.append(numCC)
             zeros.append(0)
+            if labeled:
+                label_plot+=text('$'+latex(num)+ '$', self.getCoordinates(num)+vector([0.1,0.1]) ,
+                                 color=color, horizontal_alignment='left', fontsize=fontsize )
             if not self.ring2CC(num) in RR:
                 allReal=False
         if self._verbose==1:
             print "Plotting:"
             show(nums_from_ring)
         if allReal:
-            return list_plot(zip(to_plot,zeros), color='red')
+            p=list_plot(zip(to_plot,zeros), color=color,  size=size, axes_labels=['Re', 'Im'])
         else:
-            return list_plot(to_plot, color='red')
+            p=list_plot(to_plot, color=color,  size=size, axes_labels=['Re', 'Im'])
+        if labeled:
+            p+=label_plot
+        p.set_aspect_ratio(1)
+        return p
 
     def _findWeightCoefSet(self, max_iterations, method):
         #finds and sets Weight Coefficients set
@@ -564,3 +573,7 @@ class AlgorithmForParallelAddition(object):
 
 
             sys.stdout = stdout
+
+    def getCoordinates(self, num):
+        numCC=self.ring2CC(num)
+        return vector([real(numCC), imag(numCC)])
