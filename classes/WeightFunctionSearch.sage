@@ -20,7 +20,12 @@ class WeightFunctionSearch(CandidateSetSearch):
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
 
-    def _chooseQxx_FromCandidates(self, cand_Qxx):
+    def _chooseQxx_FromCandidates(self, cand_Qxx, x_tuple):
+        Qx_prev=self._Qx_x[x_tuple[0:-1]]
+        for cand_elem in copy(cand_Qxx):   #intersection with previous Qxx
+            for cand in copy(cand_elem):
+                if not cand in Qx_prev:
+                    cand_elem.remove(cand)
         # takes candidates from findCandidates(x + Qx) and then it chooses the Qxx such that  x + Qx \subset alphabet + base * Qxx
         if self._method==1:
             #method 1 adds the smallest candidate in absolute value -> it is very slow (both in convergence and power)
@@ -112,7 +117,7 @@ class WeightFunctionSearch(CandidateSetSearch):
             C=self._algForParallelAdd.sumOfSets([x0],self._Qx_x[x_tuple_without_first])
             #find candidates cand_Qxx such that x0 + _Qx_x[x_tuple_without_first \subset alphabet + base* Qxx
             cand_Qxx=self._findCandidates(C)
-            Qxx=self._chooseQxx_FromCandidates( cand_Qxx)
+            Qxx=self._chooseQxx_FromCandidates(cand_Qxx, x_tuple)
             if self._verbose>=2: print "Qx_x for ", x_tuple, " was found"
             self._Qx_x[x_tuple]=Qxx
             return Qxx

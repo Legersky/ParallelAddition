@@ -438,20 +438,29 @@ class AlgorithmForParallelAddition(object):
             if self._verbose==2 :print "Converted digit:", z[-1]
         return z
 
-    def parallelConversion(self,x):
+    def parallelConversion(self,_x):
+        x=copy(_x)
         #converts x = [x_0, x_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
         if self._verbose== 2 : print "Converting: ", x
         maxLength=self._weightFunction.getMaxLength()
         x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        x[:0]=([0]*(maxLength))    #prepending zeros in smaller exponents
         z=[]
         q_i_prev=0
-        for i in range(0,len(x)):
+        if self._verbose>=2:
+            print 'Converting: ', _x
+        for i in range(maxLength,len(x)):
             #input_tuple=x[i:i+maxLength+1]    #input to weight function
             input_tuple=x[i-maxLength:i+1]    #input to weight function
-            q_i=self._weightFunction(reversed(input_tuple))        #getting of output of weight function
-            z.append(x[i]+q_i_prev-self._base*q_i)                    #conversion to alphabet A
+            q_i=self._weightFunction(reversed(input_tuple))        #getting weight coefficient
+            z_i=x[i]+q_i_prev-self._base*q_i
+            if not z_i in self._alphabet:
+                raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(x[i],x,z_i))
+            z.append(z_i)                    #conversion to alphabet A
             q_i_prev=q_i
             if self._verbose==2 :print "Converted digit:", z[-1]
+        if self._verbose>=2:
+            print '----------> ', z
         return z
 
     def parallelConversion_using_localConversion(self,x):
@@ -472,7 +481,10 @@ class AlgorithmForParallelAddition(object):
         maxLength=self._weightFunction.getMaxLength()
         q_i_prev=self._weightFunction(x[1:1+maxLength+1])
         q_i=self._weightFunction(x[0:maxLength+1])
-        return x[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
+        z_i=x[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
+        if not z_i in self._alphabet:
+            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(x[0],x,z_i))
+        return z_i
 
     def sanityCheck_addition(self, num_digits):
         #tries to add all possible combinations of numbers with num_digits digits
@@ -498,8 +510,11 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Sanity check of %s digits..." %num_digits)
         for num_list in allNumbers:
             num_converted=self.parallelConversion(num_list)
+            if self._verbose>=1:
+                print 'Converting', num_list
+                print '----------> ', num_converted
             if not self.list2BaseRing(num_converted) == self.list2BaseRing(num_list):
-                if self._verbose>=1:
+                if self._verbose>=0:
                     print 'problem: %s does not equal to  %s' %(num_list, num_converted)
                 errors+=1
         if self._verbose>=1:
