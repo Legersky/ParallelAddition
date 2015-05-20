@@ -16,6 +16,7 @@ class WeightFunctionSearch(CandidateSetSearch):
         self._Qx_x={}
             #dictionary of sets of weight coefficients for (x_0 ... x_m), xi \in self._B
         self._method=method
+        self._k=0
 
     def __repr__(self):
         return "Instance of WeightFunctionSearch"

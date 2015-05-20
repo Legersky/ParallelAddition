@@ -34,6 +34,10 @@ try:
         max_iterations
     except:
         max_iterations=100
+    try:
+        max_input_length
+    except:
+        max_input_length=10
     alg.addLog("Maximum iterations: " + str(max_iterations))
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
     alg.findWeightFunction(max_iterations, max_input_length)
