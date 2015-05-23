@@ -116,9 +116,51 @@ class WeightFunctionSearch(CandidateSetSearch):
         x0=x_tuple[0]
         if x_tuple_without_first in self._Qx_x:
             C=self._algForParallelAdd.sumOfSets([x0],self._Qx_x[x_tuple_without_first])
-            #find candidates cand_Qxx such that x0 + _Qx_x[x_tuple_without_first \subset alphabet + base* Qxx
-            cand_Qxx=self._findCandidates(C)
-            Qxx=self._chooseQxx_FromCandidates(cand_Qxx, x_tuple)
+            if self._method==4:
+                Qxx=[]
+                Qx_prev=self._Qx_x[x_tuple[0:-1]]
+                if self._verbose>=2:
+                    print 'To be covered:' , C
+                    print 'Previous Qx', Qx_prev
+                C_covered_by={}        #key= element of C, value=list of elements of Qx_prev that cover key
+                for q in Qx_prev:
+                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
+                        #add covering values
+                        if covered_by_q in C_covered_by:
+                            C_covered_by[covered_by_q].append(q)    #next ones
+                        else:
+                            C_covered_by[covered_by_q]=[q]        #first covering value
+
+                while C_covered_by:        #while there are uncovered elements
+                    if self._verbose>=2:
+                        print C_covered_by
+                    to_add=[]
+                    for covered in C_covered_by:
+                        if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
+                            to_add.append(C_covered_by[covered][0])
+                    to_add=Set(to_add).list()
+
+                    num=2
+                    while not to_add:
+                        for covered in C_covered_by:
+                            if len(C_covered_by[covered])==num:    #then add first value of number num
+                                to_add.append(C_covered_by[covered][0])
+                                break
+                        num+=1
+
+                    for covered in copy(C_covered_by):
+                        for added in to_add:
+                            if added in C_covered_by[covered]:
+                                C_covered_by.pop(covered)    #remove covered elements from dictionary
+                                break
+                    if self._verbose>=2:
+                        print 'Elements to add:', to_add
+                    Qxx+=to_add
+                Qxx=Set(Qxx).list()
+            else:
+                #find candidates cand_Qxx such that x0 + _Qx_x[x_tuple_without_first \subset alphabet + base* Qxx
+                cand_Qxx=self._findCandidates(C)
+                Qxx=self._chooseQxx_FromCandidates(cand_Qxx, x_tuple)
             if self._verbose>=2: print "Qx_x for ", x_tuple, " was found"
             self._Qx_x[x_tuple]=Qxx
             return Qxx

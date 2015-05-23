@@ -249,7 +249,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog("Number of letters with longest input: %s" %len(longest))
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
 
-    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=3):
+    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
         #finds and sets Weight Function
         self.addLog("Searching the Weight Coefficient Set...")
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
