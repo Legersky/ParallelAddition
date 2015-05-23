@@ -125,6 +125,7 @@ class WeightFunctionSearch(CandidateSetSearch):
         else:
             raise RuntimeError("There is no Qxx for: ", x_tuple_without_first)
 
+    @cached_method
     def findWeightFunction(self, max_input_length):
         # checks different x \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
         self._Qx_x[()]=self._weightCoefSet

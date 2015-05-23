@@ -38,6 +38,15 @@ try:
         max_input_length
     except:
         max_input_length=10
+    try:
+        phase1_images
+        phase2_images
+    except:
+        phase1_images=True
+        phase2_images=True
+        omega=alg.getRingGenerator()
+        phase2_input=(omega,1,omega,1,omega,1,omega,1)
+
     alg.addLog("Maximum iterations: " + str(max_iterations))
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
     alg.findWeightFunction(max_iterations, max_input_length)
@@ -57,6 +66,13 @@ try:
     if sanityCheck:
         er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
+    if phase1_images:
+        imgs1=alg.plotPhase1()
+        alg.saveImages(imgs1,'./outputs/'+ filename + '/img','phase1')
+
+    if phase2_images:
+        imgs2=alg.plotPhase2(phase2_input)
+        alg.saveImages(imgs2,'./outputs/'+ filename + '/img','phase2')
 
 except KeyboardInterrupt:
     print "Keyboard Interrupt:"

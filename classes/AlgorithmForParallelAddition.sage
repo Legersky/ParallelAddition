@@ -45,6 +45,7 @@ class AlgorithmForParallelAddition(object):
             self._inputAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
         self._weightCoefSet=[]
             #set of potential coefficients
+        self._weightCoefSetIncrements=[]
         self._weightFunction = None
             #Weight Function
         self._name=name
@@ -56,6 +57,7 @@ class AlgorithmForParallelAddition(object):
         self._printLogLatex=printLogLatex
             #log are printed using latex if True
         self._verbose=verbose
+
 
         self.addLog("Inicialization...")
         self.addLog("Numeration system: ")
@@ -223,6 +225,9 @@ class AlgorithmForParallelAddition(object):
             p+=label_plot
         p.set_aspect_ratio(1)
         return p
+
+    def addWeightCoefSetIncrement(self, increment):
+        self._weightCoefSetIncrements.append(increment)
 
     def _findWeightCoefSet(self, max_iterations, method):
         #finds and sets Weight Coefficients set
@@ -592,3 +597,218 @@ class AlgorithmForParallelAddition(object):
     def getCoordinates(self, num):
         numCC=self.ring2CC(num)
         return vector([real(numCC), imag(numCC)])
+
+    def plotPhase1(self,legend_xshift=8,
+                  font_size=20,
+                  font_size_legend=30,
+                  axis_fontsize=15,
+                  circle_big=100, #80,
+                  circle_middle=50, #40,
+                  circle_small=40): #30):
+        def polygon_shifted(points,shift=0, enlargement=1, color='green'):
+            vertices=[]
+            for point in points:
+                    vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
+            p= Polyhedron(vertices)
+            tmp=CandidateSetSearch(alg)
+            shift_divided=tmp.divideByBase(shift)
+            return (p.plot(point=False, line=color, polygon=False)
+                    +text('$\\beta\\cdot('+latex(shift_divided)+ ')$',
+                          self.getCoordinates(shift) + vector([0,-0.2]) ,
+                          color=color, horizontal_alignment='center',fontsize=font_size)
+                    +text('$'+latex(shift_divided)+ '$',
+                          self.getCoordinates(shift_divided) + vector([0,-0.2]) ,
+                          color='black', horizontal_alignment='center',fontsize=font_size)
+                   +self.plot([shift], color='green', size=circle_big, labeled=False)
+                   +arrow(self.getCoordinates(shift_divided),self.getCoordinates(shift), color='black', linestyle='dashed', width=1))
+
+        def legend(k,covered, new, alphabet):
+            xshift=legend_xshift
+            p=(text('$\\mathcal{Q}_{%s}$' %k,(xshift,2), color='red', horizontal_alignment='left', fontsize=font_size_legend)
+                   + text('$\\mathcal{A} + \\mathcal{A} + \\mathcal{Q}_{%s}$' %k,(xshift,1), color='black', horizontal_alignment='left', fontsize=font_size_legend))
+            if covered:
+                p+=(text('$\\mathcal{A} + \\beta \\cdot \\mathcal{Q}_{%s}$' %k,(xshift,-1), color='orange', horizontal_alignment='left', fontsize=font_size_legend)
+                    + text('$?\\, \\subset \\,?$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend))
+            if new:
+                p+=text('$\\mathcal{Q}_{%s} \\backslash  \\mathcal{Q}_{%s}$' %(k+1,k),(xshift,-2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
+            if alphabet:
+                p+=text('$\\mathcal{A} + \\beta \\cdot (' +latex(alphabet) + ')$',(xshift,-1), color='green', horizontal_alignment='left', fontsize=font_size_legend)
+            return p
+
+        Q=self._weightCoefSetIncrements
+
+        betaQ=[]
+        Q_total=[]
+        for _Q in Q:
+            Q_total+=_Q
+            betaQ.append((self._base*vector(Q_total)).list())
+
+        iterations=len(Q)
+        q=range(0,iterations)
+        q_new=range(0,iterations)
+
+        to_cover=range(0,iterations)
+        covered=range(0,iterations)
+        Q_total=[]
+
+        for i in range(0,iterations):
+            Q_total+=Q[i]
+            q[i]=self.plot(Q_total, color='red', size=circle_big, labeled=False, fontsize=font_size)
+            q_new[i]=self.plot(Q[i], color='blue', size=circle_big, fontsize=font_size)
+            covered[i]=self.plot(self.sumOfSets(self.getAlphabet(),betaQ[i]), color='orange', size=circle_small, labeled=False, fontsize=font_size)
+            to_cover[i]=self.plot(self.sumOfSets(self.getInputAlphabet(),Q[i]), color='black', size=circle_middle, labeled=False,  fontsize=font_size)
+
+        imgs=[q_new[0]+ text('$\\mathcal{Q}_{0}$',(6,2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
+
+        q_for_centers=[]
+        centers=[]
+        for i in range(1,iterations-1):
+            q_for_centers.append(Q[i][0])
+            centers.append(self._base*Q[i][0])
+
+        for l in range(0,iterations-1):
+            imgs+=[
+                to_cover[l]+q[l] +legend(l, False, False, False),
+                to_cover[l]+covered[l]+q[l] +legend(l, True, False, False),
+                ]
+            if l<iterations-2:
+                imgs+=[to_cover[l]+covered[l]+q[l]+polygon_shifted(self.getAlphabet(),centers[l], 1.2) +legend(l, False, False, q_for_centers[l]),
+                       to_cover[l]+covered[l]+q[l]+polygon_shifted(self.getAlphabet(),centers[l], 1.2)+q_new[l+1] +legend(l, False, True, q_for_centers[l])]
+
+
+        imgs.append(q[l]+text('$\\mathcal{Q}=\\mathcal{Q}_{'+ str(iterations-2)+ '}$',(6,2), color='red', horizontal_alignment='left', fontsize=font_size_legend))
+
+        xmin=0
+        xmax=0
+        ymin=0
+        ymax=0
+        for im in imgs:
+            axes_range=im.get_axes_range()
+            if axes_range['xmin']< xmin:
+                xmin=axes_range['xmin']
+            if axes_range['xmax']> xmax:
+                xmax=axes_range['xmax']
+            if axes_range['ymin']< ymin:
+                ymin=axes_range['ymin']
+            if axes_range['ymax']> ymax:
+                ymax=axes_range['ymax']
+
+        for im in imgs:
+            im.set_axes_range(xmin,xmax,ymin,ymax)
+            im.fontsize(axis_fontsize)
+        return imgs
+
+    def plotPhase2(self, digits,
+                  legend_xshift=8,
+                  font_size=20,
+                  font_size_legend=30,
+                  axis_fontsize=15,
+                  circle_big=100, #80,
+                  circle_middle=50, #40,
+                  circle_small=40): #30):
+
+        def polygon_shifted2(points,shift=0, enlargement=1, color='green'):
+            vertices=[]
+            for point in points:
+                    vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
+            p= Polyhedron(vertices)
+            tmp=CandidateSetSearch(alg)
+            shift_divided=tmp.divideByBase(shift)
+            return (p.plot(point=False, line=color, polygon=False)
+                    +alg.plot([shift_divided], color='blue', size=circle_big, labeled=False))
+
+        Q_covering=[]#[self._weightCoefSet]
+        Q_to_cover=[]
+        window_length=len(digits)
+        for i in range(0,len(digits)+1):
+            Q_covering.append(self._weightFunSearch._Qx_x[digits[0:i]])
+
+            if len(Q_covering[-1])==1:
+                window_length=i
+                break
+            Q_to_cover.append(self._weightFunSearch._Qx_x[digits[1:i+1]])
+
+        betaQx=[]
+        for _Q in Q_covering:
+            betaQx.append((self._base*vector(_Q)).list())
+        betaQx.append([])
+
+        Qx_plot=[]
+        Qx_plus_w=[]
+        betaQx_plus_A=[]
+        w_plot=self.plot([digits[0]], color='red', size=circle_big, fontsize=font_size)
+
+        for i in range(0,window_length):
+            Qx_plot.append(self.plot(Q_covering[i+1], color='blue', size=circle_big, labeled=True, fontsize=font_size))
+            Qx_plus_w.append(self.plot(self.sumOfSets(Q_to_cover[i],[digits[0]]), color='black', size=circle_middle, labeled=False, fontsize=font_size))
+            tmp=plot([])
+            for q in Q_covering[i+1]:
+                tmp+=polygon_shifted2(self.getAlphabet(),self._base*q,1.2)
+            betaQx_plus_A.append(tmp)
+
+        Qx_str_to_cover='\\mathcal{Q}'
+        Qx_str_covering='\\mathcal{Q}'
+        seq_covering=''
+        seq_to_cover=''
+        xshift=legend_xshift
+        imgs2=[self.plot(self._weightCoefSet, color='blue', size=circle_big, labeled=False, fontsize=font_size)
+               +text('$'+Qx_str_covering+'$' ,(xshift,1), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
+        for l in range(0,window_length):
+            seq_covering+=latex(digits[l])
+            Qx_str_covering='\\mathcal{Q}_{['+seq_covering+']}'
+
+            legend_black=text('$('+latex(digits[0])+')+'+Qx_str_to_cover+'$' ,(xshift,1), color='black', horizontal_alignment='left', fontsize=font_size_legend)
+            imgs2.append(w_plot+Qx_plus_w[l]+legend_black)
+            covering=(betaQx_plus_A[l]
+                        +Qx_plus_w[l]
+                      +legend_black)
+            imgs2.append(covering
+                        + text('$?\\, \\subset \\,?$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend)
+                         +text('$\\mathcal{A} + \\beta \\cdot '+Qx_str_covering+'$',(xshift,-1), color='green', horizontal_alignment='left', fontsize=font_size_legend))
+            imgs2.append(covering
+                         + text('$\\subset$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend)
+                         +text('$\\mathcal{A} + \\beta \\cdot '+Qx_str_covering+'$',(xshift,-1), color='green', horizontal_alignment='left', fontsize=font_size_legend)
+                         + Qx_plot[l]
+                        +text('$'+Qx_str_covering+'$' ,(xshift,-2), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
+            imgs2.append(Qx_plot[l]
+                        +text('$'+Qx_str_covering+'$' ,(xshift,1), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
+
+            if l<window_length-1:
+                seq_covering+=','
+                seq_to_cover+=latex(digits[l+1])
+            Qx_str_to_cover='\\mathcal{Q}_{['+seq_to_cover+']}'
+            seq_to_cover+=','
+
+        imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0), color='blue', horizontal_alignment='left', fontsize=font_size)
+
+        xmin=0
+        xmax=0
+        ymin=0
+        ymax=0
+        for im in imgs2:
+            axes_range=im.get_axes_range()
+            if axes_range['xmin']< xmin:
+                xmin=axes_range['xmin']
+            if axes_range['xmax']> xmax:
+                xmax=axes_range['xmax']
+            if axes_range['ymin']< ymin:
+                ymin=axes_range['ymin']
+            if axes_range['ymax']> ymax:
+                ymax=axes_range['ymax']
+
+        for im in imgs2:
+            im.set_axes_range(xmin,xmax-2,ymin,ymax)
+            im.fontsize(axis_fontsize)
+
+        return imgs2
+
+
+    def saveImages(self,images, folder,name, img_size=10):
+        d = os.path.dirname(folder+'/')
+        if not os.path.exists(d):
+            os.makedirs(d)
+        k=1
+        for im in images:
+            im.save(folder+'/'+name+ '_image_{0}.png'.format(k), figsize=img_size)
+            k+=1
+        self.addLog("Images "+ name+ ' saved to '+ folder)

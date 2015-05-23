@@ -1,4 +1,4 @@
-︠fac1a72d-5fed-4f1f-a65c-66a9f2f103c6i︠
+︠2d27af7a-83da-4b3c-b1ce-38ab00c52867︠
 ︠dfd01256-cf8e-4c9b-8176-0b05a951ec3fs︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
@@ -40,7 +40,7 @@ def _(frame_label=text_control('<h3>Load inputs: </h3>', label=''),
             setting_global=setting
             alg= AlgorithmForParallelAddition(setting['minPol_alpGen'], setting['embedding'], setting['alphabet'], setting['base'], setting['name'], setting['inputAlphabet'],  printLog=True, printLogLatex=True)
         else:
-            alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, printLogLatex=True)
+            alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, printLogLatex=True, verbose=0)
 
         alg_update=False
 
@@ -83,7 +83,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
             save(setting,'./examples/'+ filename )
 
         print " "
-        alg.findWeightFunction(max_iterations,max_input_len, method_weightFunSearch=3)
+        alg.findWeightFunction(max_iterations,max_input_len, method_weightFunSearch=2)
         alg_update=True
 
 
@@ -109,25 +109,12 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
         print e
 
     finally:
+        if saveUnsolved and (not alg_update) and (not unsolved_saved):
+            alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
         if saveLog:
             alg.saveLog("./outputs/"+filename+'/'+filename)
-        if saveUnsolved and not alg_update and not unsolved_saved:
-            alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
 
-@interact(auto_update=False)    #weight function
-def _(frame_label=text_control('<h3>Weight function: </h3>', label=''),
-      inp = input_box(default = '(omega,1,2)', type = str, label = "Input tuple of weight function (use \'omega\' as ring generator, zeros are appended if necessary):")):
-    try:
-        global alg
-        global alg_update
-        if not alg_update:
-            raise RuntimeError("Weight function search must be updated first.")
 
-        inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
-        show("Weight coefficient for input tuple $(x_j, \dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" , latex(alg.getWeightFunction()(inp_alpRing)),'$')
-    except Exception, e:
-        print "Error:"
-        print e
 
 
 @interact(auto_update=False)        #sanity check
@@ -147,10 +134,70 @@ def _(frame_label=text_control('<h3>Sanity check: </h3>', label=''),
     except Exception, e:
         print "Error:"
         print e
-︡a5590284-202d-415c-94cb-224c7e8e2a70︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["frame_help",12,null]],[["name",12,null]],[["minPol",12,null]],[["omegaCC",12,null]],[["alphabet",12,null]],[["inputAlphabet",12,null]],[["base",12,null]],[["setting_name",12,null]],[["",12,null]],[["auto_update",2]]],"id":"95d872ae-98df-4a2c-b4c8-d608c936f84c","controls":[{"default":"<h3>Load inputs: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"default":"(Run this cell again to get the previous setting.)","var":"frame_help","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"eisenstein","label":"Name of the numeration system:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"name","type":"<type 'str'>"},{"control_type":"input-box","default":"x^2 + x + 1","label":"Minimal polynomial of ring generator (use variable x):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"minPol","type":"<type 'str'>"},{"control_type":"input-box","default":"-0.500000000000000 + 0.866025403784439*I","label":"Embedding (the closest root of minimal polynomial to this value is taken as the ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"omegaCC","type":"Complex Field with 53 bits of precision"},{"control_type":"input-box","default":"[0, 1, -1, omega, -omega, -omega - 1, omega + 1]","label":"Alphabet (use 'omega' as ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"alphabet","type":"<type 'str'>"},{"control_type":"input-box","default":"[0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -omega - 1, -omega - 2, -2*omega, -omega + 1, -1, -2*omega - 1, -2*omega - 2, -2]","label":"Input alphabet (if empty, A + A is used):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"inputAlphabet","type":"<type 'str'>"},{"control_type":"input-box","default":"omega - 1","label":"Base (use 'omega' as ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"base","type":"<type 'str'>"},{"control_type":"input-box","default":"","label":"Or you can load setting from the file (in folder /examples):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"setting_name","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["max_iterations",12,null]],[["max_input_len",12,null]],[["frame_help",12,null]],[["info",12,null]],[["WFcsv",12,null]],[["localConversionCsv",12,null]],[["saveSetting",12,null]],[["saveLog",12,null]],[["saveUnsolved",12,null]],[["",12,null]],[["auto_update",2]]],"id":"841ef243-7f65-43fe-9dea-b5a0f9dbe81c","controls":[{"default":"<h3>Find weight function: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"100","label":"Maximum of iterations to get Weight coefficient set:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"max_iterations","type":"<type 'sage.rings.integer.Integer'>"},{"control_type":"input-box","default":"10","label":"Maximal length of weight function input:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"max_input_len","type":"<type 'sage.rings.integer.Integer'>"},{"default":"Choose required outputs to save:","var":"frame_help","classes":null,"control_type":"text","label":""},{"default":true,"var":"info","readonly":false,"control_type":"checkbox","label":"General info to .tex file:"},{"default":true,"var":"WFcsv","readonly":false,"control_type":"checkbox","label":"Weight function to .csv file:"},{"default":false,"var":"localConversionCsv","readonly":false,"control_type":"checkbox","label":"Local conversion to .csv file:"},{"default":true,"var":"saveSetting","readonly":false,"control_type":"checkbox","label":"Inputs setting:"},{"default":true,"var":"saveLog","readonly":false,"control_type":"checkbox","label":"Log file:"},{"default":true,"var":"saveUnsolved","readonly":false,"control_type":"checkbox","label":"Unsolved inputs after interruption:"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["inp",12,null]],[["",12,null]],[["auto_update",2]]],"id":"52ee1f14-1282-45d9-9af5-4eff6df7a11a","controls":[{"default":"<h3>Weight function: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"(omega,1,2)","label":"Input tuple of weight function (use 'omega' as ring generator, zeros are appended if necessary):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"inp","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["len_inp",12,null]],[["saveLog",12,null]],[["",12,null]],[["auto_update",2]]],"id":"c387e0fb-0d0c-4bfa-823c-d2d9ffe2b1b9","controls":[{"default":"<h3>Sanity check: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":null,"label":"Number of digits for sanity check:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"len_inp","type":"<type 'sage.rings.integer.Integer'>"},{"default":true,"var":"saveLog","readonly":false,"control_type":"checkbox","label":"Save log file after sanity check:"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡
+
+
+
+@interact(auto_update=False)    #weight function
+def _(frame_label=text_control('<h3>Weight function: </h3>', label=''),
+      inp = input_box(default = '(omega,1,2)', type = str, label = "Input tuple of weight function (use \'omega\' as ring generator, zeros are appended if necessary):")):
+    try:
+        global alg
+        global alg_update
+        if not alg_update:
+            raise RuntimeError("Weight function search must be updated first.")
+
+        inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
+        show("Weight coefficient for input tuple $(x_j, \dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" ,
+             latex(alg.getWeightFunction()(inp_alpRing)),'$')
+    except Exception, e:
+        print "Error:"
+        print e
+
+@interact(auto_update=False)    #phase 1 plot
+def _(frame_label=text_control('<h3>Construction of the set of weight coefficients: </h3>', label=''),
+      folder = input_box(default = 'img', type = str, label = "Save to folder:")
+     ):
+    try:
+        global alg
+        global alg_update
+
+        imgs=alg.plotPhase1()
+        show(imgs)
+        if folder:
+            alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase1')
+
+    except Exception, e:
+        print "Error:"
+        print e
+
+
+@interact(auto_update=False)    #phase 2 plot
+def _(frame_label=text_control('<h3>Construction of the weight function: </h3>', label=''),
+      inp = input_box(default = '(omega,1,2)', type = str, label = "Tuple digits from the input alphabet (use \'omega\' as ring generator):"),
+     folder = input_box(default = 'img', type = str, label = "Save to folder:")):
+    try:
+        global alg
+        global alg_update
+        if not alg_update:
+            raise RuntimeError("Weight function search must be updated first.")
+
+        inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
+
+        imgs=alg.plotPhase2(inp_alpRing)
+        animation=animate(imgs)
+        animation.show(delay=100)
+
+        if folder:
+            alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase2')
+
+    except Exception, e:
+        print "Error:"
+        print e
+
+︡5265d33f-808c-4efb-9d34-8fc72c38242a︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["frame_help",12,null]],[["name",12,null]],[["minPol",12,null]],[["omegaCC",12,null]],[["alphabet",12,null]],[["inputAlphabet",12,null]],[["base",12,null]],[["setting_name",12,null]],[["",12,null]],[["auto_update",2]]],"id":"9bfeb45b-ebe6-4a42-bc0a-3b039d37e99b","controls":[{"default":"<h3>Load inputs: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"default":"(Run this cell again to get the previous setting.)","var":"frame_help","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"Quadratic(1,4,5)","label":"Name of the numeration system:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"name","type":"<type 'str'>"},{"control_type":"input-box","default":"x^2 + 1","label":"Minimal polynomial of ring generator (use variable x):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"minPol","type":"<type 'str'>"},{"control_type":"input-box","default":"1.00000000000000*I","label":"Embedding (the closest root of minimal polynomial to this value is taken as the ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"omegaCC","type":"Complex Field with 53 bits of precision"},{"control_type":"input-box","default":"[0, 1, -1, omega, -omega, omega + 1, -omega - 1, omega - 1, -omega - 2, -2]","label":"Alphabet (use 'omega' as ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"alphabet","type":"<type 'str'>"},{"control_type":"input-box","default":"[0, 1, 2, 2*omega - 1, omega - 2, -omega, 2*omega - 2, 2*omega, 2*omega + 1, 2*omega + 2, omega - 3, omega - 1, omega, omega + 1, omega + 2, -omega - 2, -2*omega - 4, -omega - 3, -2*omega - 2, -2*omega, -omega + 1, -3, -omega - 4, -1, -2*omega - 3, -2*omega - 1, -4, -omega - 1, -2]","label":"Input alphabet (if empty, A + A is used):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"inputAlphabet","type":"<type 'str'>"},{"control_type":"input-box","default":"omega - 2","label":"Base (use 'omega' as ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"base","type":"<type 'str'>"},{"control_type":"input-box","default":"","label":"Or you can load setting from the file (in folder /examples):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"setting_name","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["max_iterations",12,null]],[["max_input_len",12,null]],[["frame_help",12,null]],[["info",12,null]],[["WFcsv",12,null]],[["localConversionCsv",12,null]],[["saveSetting",12,null]],[["saveLog",12,null]],[["saveUnsolved",12,null]],[["",12,null]],[["auto_update",2]]],"id":"dcb31977-ea33-4b45-ad0d-1c4a353b8216","controls":[{"default":"<h3>Find weight function: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"100","label":"Maximum of iterations to get Weight coefficient set:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"max_iterations","type":"<type 'sage.rings.integer.Integer'>"},{"control_type":"input-box","default":"10","label":"Maximal length of weight function input:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"max_input_len","type":"<type 'sage.rings.integer.Integer'>"},{"default":"Choose required outputs to save:","var":"frame_help","classes":null,"control_type":"text","label":""},{"default":true,"var":"info","readonly":false,"control_type":"checkbox","label":"General info to .tex file:"},{"default":true,"var":"WFcsv","readonly":false,"control_type":"checkbox","label":"Weight function to .csv file:"},{"default":false,"var":"localConversionCsv","readonly":false,"control_type":"checkbox","label":"Local conversion to .csv file:"},{"default":true,"var":"saveSetting","readonly":false,"control_type":"checkbox","label":"Inputs setting:"},{"default":true,"var":"saveLog","readonly":false,"control_type":"checkbox","label":"Log file:"},{"default":true,"var":"saveUnsolved","readonly":false,"control_type":"checkbox","label":"Unsolved inputs after interruption:"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["len_inp",12,null]],[["saveLog",12,null]],[["",12,null]],[["auto_update",2]]],"id":"d8c0afe9-ea03-422f-86fb-e6b434027441","controls":[{"default":"<h3>Sanity check: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":null,"label":"Number of digits for sanity check:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"len_inp","type":"<type 'sage.rings.integer.Integer'>"},{"default":true,"var":"saveLog","readonly":false,"control_type":"checkbox","label":"Save log file after sanity check:"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["inp",12,null]],[["",12,null]],[["auto_update",2]]],"id":"982b8805-efef-4c90-8812-02573f08e5d6","controls":[{"default":"<h3>Weight function: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"(omega,1,2)","label":"Input tuple of weight function (use 'omega' as ring generator, zeros are appended if necessary):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"inp","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["folder",12,null]],[["",12,null]],[["auto_update",2]]],"id":"8028d8c3-509c-4e42-9fe1-f53327b13709","controls":[{"default":"<h3>Construction of the set of weight coefficients: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"img","label":"Save to folder:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"folder","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡{"interact":{"style":"None","flicker":false,"layout":[[["frame_label",12,null]],[["inp",12,null]],[["folder",12,null]],[["",12,null]],[["auto_update",2]]],"id":"d71d9b5f-991e-4307-b64e-d4736a16289f","controls":[{"default":"<h3>Construction of the weight function: </h3>","var":"frame_label","classes":null,"control_type":"text","label":""},{"control_type":"input-box","default":"(omega,1,2)","label":"Tuple digits from the input alphabet (use 'omega' as ring generator):","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"inp","type":"<type 'str'>"},{"control_type":"input-box","default":"img","label":"Save to folder:","nrows":1,"width":null,"readonly":false,"submit_button":null,"var":"folder","type":"<type 'str'>"},{"control_type":"button","default":"Update","label":null,"width":null,"classes":null,"var":"auto_update","icon":null}]}}︡
 ︠88d12faf-2ba6-44ce-aaa4-0e750ca6c356︠
-
-
+︡d33a6452-c4f6-41b3-b664-fb1f48680cc3︡
+︠14f674d3-916a-4022-82f0-e82d65b56452︠
 
 
 
