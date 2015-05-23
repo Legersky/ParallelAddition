@@ -2,6 +2,7 @@
 ︠dfd01256-cf8e-4c9b-8176-0b05a951ec3f︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
+import time
 
 alg=None
 alg_update=False

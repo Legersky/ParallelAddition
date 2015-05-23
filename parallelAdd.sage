@@ -3,6 +3,7 @@ load('AlgorithmForParallelAddition.sage')
 
 
 import sys
+import time
 
 alg=None
 alg_update=False
