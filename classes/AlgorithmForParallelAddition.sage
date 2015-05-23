@@ -251,7 +251,7 @@ class AlgorithmForParallelAddition(object):
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
         #finds and sets Weight Function
-        self.addLog("Searching the Weight Coefficient Set...")
+        self.addLog("Searching the Weight Coefficient Set using method %s..." %method_weightCoefSet)
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
         self.addLog("The Weight Coefficient Set is:")
@@ -259,7 +259,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Number of elements: " + str(len(self._weightCoefSet)))
         show(self.plot(self.getWeightCoefSet()))
 
-        self.addLog("Searching the Weight Function...")
+        self.addLog("Searching the Weight Function using method %s..." %method_weightFunSearch)
         self._findWeightFunction(max_input_length, method_weightFunSearch)
         self.addLog("Info about Weight Function:")
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
