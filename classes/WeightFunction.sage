@@ -45,7 +45,7 @@ class WeightFunction(object):
 
     def printCsvMapping(self):
         for inp, coef in self._mapping.items():
-            line=''
+            line=' '
             for xj in inp:
                 line=line+str(xj)+'; '
             for i in range(len(inp),self._maxLength):

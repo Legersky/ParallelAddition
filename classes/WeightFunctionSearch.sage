@@ -185,7 +185,7 @@ class WeightFunctionSearch(CandidateSetSearch):
 
     def printCsvQxx(self):
         for inp, coef in self._Qx_x.items():
-            line=''
+            line=' '
             if len(inp)==self._k:
                 for xj in inp:
                     line=line+str(xj)+'; '

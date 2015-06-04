@@ -354,7 +354,7 @@ class AlgorithmForParallelAddition(object):
             allNumbers = list(CartesianProduct(*(self._inputAlphabet for i in range(0,self._weightFunction.getMaxLength()+1))))
             for num_list in allNumbers:
                 out_digit=self.localConversion(num_list)
-                line=''
+                line=' '
                 for digit in num_list:
                     line=line+ str(digit)+'; '
                 line=line+ str(out_digit)
