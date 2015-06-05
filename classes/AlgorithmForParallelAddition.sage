@@ -59,6 +59,7 @@ class AlgorithmForParallelAddition(object):
         self._verbose=verbose
 
 
+
         self.addLog("Inicialization...")
         self.addLog("Numeration system: ")
         self.addLog(self._name, latex=True)
@@ -66,6 +67,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._alphabet, latex=True)
         self.addLog("Input alphabet: ")
         self.addLog(self._inputAlphabet, latex=True)
+        if self._printLogLatex: show(self.plot(self._inputAlphabet, color='blue')+self.plotAlphabet())
         self.addLog("Minimal polynomial of ring generator: ")
         self.addLog(self.getMinPolynomial(), latex=True)
         self.addLog("Embedding: ")
@@ -74,14 +76,19 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._base, latex=True)
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
+        if self._printLogLatex: show(self.plotLattice())
 
     def setAlphabet(self,A):
         self._alphabet=[]
+        maxA=0
         for a in A:
             if a in self._ring:
                 self._alphabet.append(a)    #adding to alphabet
+                if abs(self.ring2CC(a))>maxA:
+                    maxA=self.ring2CC(a)
             else:
                 raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
+        self._maximumOfAlphabet=maxA
 
     def setInputAlphabet(self,B):
         alphabetPlusAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
@@ -99,6 +106,11 @@ class AlgorithmForParallelAddition(object):
                 raise ValueError("Input alphabet cannot equal to alphabet.")
         else:
             self._inputAlphabet=alphabetPlusAlphabet
+        maxB=0
+        for b in self._inputAlphabet:
+            if abs(self.ring2CC(b))>maxB:
+                maxB=self.ring2CC(b)
+        self._maximumOfInputAlphabet=maxB
 
     def setVerbose(self,verb):
         self._verbose=verb
@@ -128,6 +140,10 @@ class AlgorithmForParallelAddition(object):
     def getBase(self):
         #returns base
         return self._base
+
+    def getBaseCC(self):
+        #returns complex value of base
+        return self.ring2CC(self._base)
 
     def getAlphabet(self):
         return self._alphabet
@@ -257,7 +273,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("The Weight Coefficient Set is:")
         self.addLog(self._weightCoefSet,latex=True)
         self.addLog("Number of elements: " + str(len(self._weightCoefSet)))
-        show(self.plot(self.getWeightCoefSet()))
+        if self._printLogLatex: show(self.plotWeightCoefSet(estimation=True))
 
         self.addLog("Searching the Weight Function using method %s..." %method_weightFunSearch)
         self._findWeightFunction(max_input_length, method_weightFunSearch)
@@ -814,3 +830,44 @@ class AlgorithmForParallelAddition(object):
             im.save(folder+'/'+name+ '_image_{0}.png'.format(k), figsize=img_size)
             k+=1
         self.addLog("Images "+ name+ ' saved to '+ folder)
+
+    def plotLattice(self,):
+        self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
+
+        lattice=[]
+
+        max_range=3*self._maximumOfAlphabet
+        max_coef=0
+        while abs(max_coef+max_coef*self._genCCValue)<max_range:
+            max_coef+=1
+
+        for a in range(0,max_coef):
+            for b in range(0,max_coef):
+                lattice.append(a+b*self._ringGenerator)
+                lattice.append(-a-b*self._ringGenerator)
+                lattice.append(a-b*self._ringGenerator)
+                lattice.append(-a+b*self._ringGenerator)
+
+        def polygon_shifted(points,shift=0, enlargement=1.2, color='green'):
+            vertices=[]
+            for point in points:
+                    vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
+            p= Polyhedron(vertices)
+            return (p.plot(point=False, line=color, polygon=False))
+
+        tiles=plot([])
+
+        for point in lattice:
+            if abs(self.ring2CC(point*self.getBase()))<max_range:
+                tiles+=polygon_shifted(self.getAlphabet(),shift=self.getBase()*point)
+
+        return self.plot(lattice)+tiles
+
+    def plotAlphabet(self):
+        return self.plot(self.getAlphabet())
+
+    def plotWeightCoefSet(self,estimation=False):
+        p=self.plot(self._weightCoefSet)
+        if estimation:
+            p+=circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
+        return p

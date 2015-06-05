@@ -10,4 +10,4 @@ print setting
 
 alg= AlgorithmForParallelAddition(setting['minPol_alpGen'], setting['embedding'], setting['alphabet'], setting['base'], setting['name'], setting['inputAlphabet'],  printLog=True, printLogLatex=False)
 
-alg.inputSettingToSageFile('./inputs/new/' + alg.getName())
+alg.inputSettingToSageFile(sys.argv[2] + alg.getName())
