@@ -5,6 +5,7 @@ class WeightFunctionSearch(CandidateSetSearch):
     """
     searching Weight Function
     """
+#-----------------------------CONSTRUCTOR, GETTERS-------------------------------------------------------------------
     def __init__(self, algForParallelAdd, weightCoefSet, method):
         super(WeightFunctionSearch,self).__init__(algForParallelAdd)
         self._B=algForParallelAdd.getInputAlphabet()
@@ -21,6 +22,7 @@ class WeightFunctionSearch(CandidateSetSearch):
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
 
+#-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
     def _chooseQxx_FromCandidates(self, cand_Qxx, x_tuple):
         Qx_prev=self._Qx_x[x_tuple[0:-1]]
         for cand_elem in copy(cand_Qxx):   #intersection with previous Qxx
@@ -167,7 +169,6 @@ class WeightFunctionSearch(CandidateSetSearch):
         else:
             raise RuntimeError("There is no Qxx for: ", x_tuple_without_first)
 
-    @cached_method
     def findWeightFunction(self, max_input_length):
         # checks different x \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
         self._Qx_x[()]=self._weightCoefSet
@@ -182,17 +183,6 @@ class WeightFunctionSearch(CandidateSetSearch):
             if self._verbose>=1: print "Processed length: ", self._k,", Saved rules: " ,num_prev_comb*len(self._B) - len(combinations), ", To next turn: " ,len(combinations)
             self._algForParallelAdd.addLog("Processed length: "+ str(self._k) + ", Saved rules: " + str(num_prev_comb*len(self._B) - len(combinations)) + ", To next turn: " + str(len(combinations)))
         return self._weightFunction
-
-    def printCsvQxx(self):
-        for inp, coef in self._Qx_x.items():
-            line=' '
-            if len(inp)==self._k:
-                for xj in inp:
-                    line=line+str(xj)+'; '
-                for i in range(len(inp),self._weightFunction._maxLength):
-                    line=line+'; '
-                line=line+ str(coef)
-                print line
 
     def check_one_letter_inputs(self, max_input_length):
         self._Qx_x[()]=self._weightCoefSet
@@ -223,3 +213,14 @@ class WeightFunctionSearch(CandidateSetSearch):
                 longest.append(x_tuple)
         return longest
 
+#-----------------------------PRINT FUNCTION-------------------------------------------------------------
+    def printCsvQxx(self):
+        for inp, coef in self._Qx_x.items():
+            line=' '
+            if len(inp)==self._k:
+                for xj in inp:
+                    line=line+str(xj)+'; '
+                for i in range(len(inp),self._weightFunction._maxLength):
+                    line=line+'; '
+                line=line+ str(coef)
+                print line

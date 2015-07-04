@@ -1,5 +1,6 @@
 class WeightFunction(object):
     """ukladani prepisovacich pravidel"""
+#-----------------------------CONSTRUCTOR, GETTERS-------------------------------------------------------------------
     def __init__(self,B):
         self._maxLength=1
         self._mapping={}
@@ -9,8 +10,35 @@ class WeightFunction(object):
     def __repr__(self):
         return "Instance of WeightFunction"
 
+    def getMaxLength(self):
+        return self._maxLength
+
+    def getMapping(self):
+        return self._mapping
+
+#-----------------------------ADDING INPUTS, CALL FUNCTION-------------------------------------------------------------------
     def __call__(self, input_tuple):
         return self.getWeightCoef(input_tuple)
+
+    def getWeightCoef(self, x):
+        #outputs weight coef for x = (x_j, x_j-1, ...), zeros are appended if necessary
+        maxLength=self._maxLength
+        x=list(x)
+        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        #minLength=1
+        for i in range(0,len(x)):
+            if not x[i] in self._inputAlphabet:
+                raise ValueError("Digit %s is not in the input alphabet" %x[i])
+        input_tuple=(x[0],)    #input to weight function
+         #   for k in range(0,minLength-1):
+         #       input_tuple= input_tuple + (x[i+k],)
+        shift=1
+        while not input_tuple in self._mapping:    #until the input is found in the weight function
+            input_tuple=input_tuple + (x[shift],)                    #take longer if not
+            shift+=1
+            if shift>maxLength:
+                raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
+        return self._mapping[input_tuple]
 
     def addWeightCoefToInput(self,_input, coef):
         if not type(_input) is tuple:
@@ -22,6 +50,7 @@ class WeightFunction(object):
             self._maxLength = len(_input)
         self._mapping[_input]=coef
 
+#-----------------------------PRINT FUNCTIONS-------------------------------------------------------------------
     def printInfo(self):
         print "Maximal input length: %s" %self._maxLength
         print "Number of inputs:", len(self._mapping.keys())
@@ -52,36 +81,4 @@ class WeightFunction(object):
                 line=line+'; '
             line=line+ str(coef)
             print line
-
-    def getMaxLength(self):
-        return self._maxLength
-
-    def getWeightCoef_old(self, input_tuple):
-        if input_tuple in self._mapping:
-            return self._mapping[input_tuple]
-        else:
-            raise ValueError("There is no rule for tuple ", input_tuple)
-
-    def getWeightCoef(self, x):
-        #outputs weight coef for x = (x_j, x_j-1, ...), zeros are appended if necessary
-        maxLength=self._maxLength
-        x=list(x)
-        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        #minLength=1
-        for i in range(0,len(x)):
-            if not x[i] in self._inputAlphabet:
-                raise ValueError("Digit %s is not in the input alphabet" %x[i])
-        input_tuple=(x[0],)    #input to weight function
-         #   for k in range(0,minLength-1):
-         #       input_tuple= input_tuple + (x[i+k],)
-        shift=1
-        while not input_tuple in self._mapping:    #until the input is found in the weight function
-            input_tuple=input_tuple + (x[shift],)                    #take longer if not
-            shift+=1
-            if shift>maxLength:
-                raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
-        return self._mapping[input_tuple]
-
-    def getMapping(self):
-        return self._mapping
 

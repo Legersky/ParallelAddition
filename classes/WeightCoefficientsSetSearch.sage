@@ -4,6 +4,7 @@ class WeightCoefficientsSetSearch(CandidateSetSearch):
     """
     Searching set of Weight Coefficients
     """
+#-----------------------------CONSTRUCTOR, GETTER-------------------------------------------------------------------
     def __init__(self, AlgForParallelAdd, method):
         super(WeightCoefficientsSetSearch,self).__init__(AlgForParallelAdd)
         self._method=method
@@ -11,6 +12,11 @@ class WeightCoefficientsSetSearch(CandidateSetSearch):
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
 
+    def _getQk(self,C):
+        #it extends Qk1 to Qk such that C \subset A + \beta Qk
+        return self._chooseQk_FromCandidates(self._findCandidates(C))
+
+#-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET--------------------------------------------------
     def _chooseQk_FromCandidates(self,cand_for_all):
         #using candidates in cand_for_all it enlarges Qk1 to Qk so that B + Qk1 \subset A + \beta Qk
         #returns Qk
@@ -70,10 +76,6 @@ class WeightCoefficientsSetSearch(CandidateSetSearch):
             return res.list()
         else:
             raise ValueError("Method number %s for PotentialCoefficientsSet is not implemented" % self._method)
-
-    def _getQk(self,C):
-        #it extends Qk1 to Qk such that C \subset A + \beta Qk
-        return self._chooseQk_FromCandidates(self._findCandidates(C))
 
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
