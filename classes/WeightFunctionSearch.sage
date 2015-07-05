@@ -14,8 +14,8 @@ class WeightFunctionSearch(CandidateSetSearch):
             #weight function
         self._weightCoefSet=weightCoefSet
             #starting set of weight coefficients
-        self._Qx_x={}
-            #dictionary of sets of weight coefficients for (x_0 ... x_m), xi \in self._B
+        self._Qw_w={}
+            #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         self._k=0
 
@@ -23,35 +23,35 @@ class WeightFunctionSearch(CandidateSetSearch):
         return "Instance of WeightFunctionSearch"
 
 #-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
-    def _chooseQxx_FromCandidates(self, cand_Qxx, x_tuple):
-        Qx_prev=self._Qx_x[x_tuple[0:-1]]
-        for cand_elem in copy(cand_Qxx):   #intersection with previous Qxx
+    def _chooseQww_FromCandidates(self, cand_Qww, w_tuple):
+        Qw_prev=self._Qw_w[w_tuple[0:-1]]
+        for cand_elem in copy(cand_Qww):   #intersection with previous Qww
             for cand in copy(cand_elem):
-                if not cand in Qx_prev:
+                if not cand in Qw_prev:
                     cand_elem.remove(cand)
-        # takes candidates from findCandidates(x + Qx) and then it chooses the Qxx such that  x + Qx \subset alphabet + base * Qxx
+        # takes candidates from findCandidates(w + Qw) and then it chooses the Qww such that  w + Qw \subset alphabet + base * Qww
         if self._method==1:
             #method 1 adds the smallest candidate in absolute value -> it is very slow (both in convergence and power)
             res=[]
-            for cand_elem in cand_Qxx:
+            for cand_elem in cand_Qww:
                 res.append(self._findSmallest(cand_elem))
             if self._verbose>=1: print res
             return Set(res).list()
         elif self._method==2:
             #method 2 adds the candidates with the highest number of occurencies BLBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             cand_occur={}
-            for cand_elem in cand_Qxx:    #counting occurencies
+            for cand_elem in cand_Qww:    #counting occurencies
                 for cand in cand_elem:
                     if not cand in cand_occur:
                         cand_occur[cand]=1
                     else:
                         cand_occur[cand]+=1
             cand_sorted_by_occur=sorted(cand_occur, key=cand_occur.get, reverse=True)    #sorting from the most frequent candidate
-            num_lists=len(cand_Qxx)
+            num_lists=len(cand_Qww)
             res=[]
             num_added=0
             index_sort=0
-            cand_notCoveredElem=copy(cand_Qxx)
+            cand_notCoveredElem=copy(cand_Qww)
             while cand_notCoveredElem:    #add candidates according to occurencies until there is at least one for each list
                 to_add=cand_sorted_by_occur[index_sort]
                 res.append(to_add)
@@ -64,13 +64,13 @@ class WeightFunctionSearch(CandidateSetSearch):
         elif self._method==3:
             #method 3 takes first the only possible candidates and then it adds the candidates with the highest number of occurencies
             res=[]
-            for cand_for_elem in cand_Qxx:
+            for cand_for_elem in cand_Qww:
                 if len(cand_for_elem)==1:
                     res.append(cand_for_elem[0])        #add only possible candidates
             res=Set(res).list()
 
-            notCoveredCandLists=copy(cand_Qxx)
-            for cand_for_elem in cand_Qxx:
+            notCoveredCandLists=copy(cand_Qww)
+            for cand_for_elem in cand_Qww:
                 for val in res:
                     if val in cand_for_elem:        #remove candidate list covered by added values
                         notCoveredCandLists.remove(cand_for_elem)
@@ -85,7 +85,7 @@ class WeightFunctionSearch(CandidateSetSearch):
                         else:
                             cand_occur[cand]+=1
                 cand_sorted_by_occur=sorted(cand_occur, key=cand_occur.get, reverse=True)    #sorting from the most frequent candidate
-                num_lists=len(cand_Qxx)
+                num_lists=len(cand_Qww)
                 num_added=0
                 index_sort=0
             while notCoveredCandLists:    #add candidates according to occurencies until all lists are covered
@@ -104,28 +104,28 @@ class WeightFunctionSearch(CandidateSetSearch):
         #finds weight coefficients for combinations + letter from self._B if it is possible, function returns combinations for which wider window is necessary to get weight coefficient
         new_combinations=[]
         for comb in combinations:
-            for xj in self._B:
-                x_tuple = comb+(xj,)
-                Qxx=self._findQx(x_tuple)    #find Qxx for the tuple and save weight coefficient if there is only one element in Qxx
-                if len(Qxx)==1:
-                    self._weightFunction.addWeightCoefToInput(x_tuple, Qxx[0])
+            for wj in self._B:
+                w_tuple = comb+(wj,)
+                Qww=self._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
+                if len(Qww)==1:
+                    self._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
                 else:
-                    new_combinations.append(x_tuple)
+                    new_combinations.append(w_tuple)
         return new_combinations
 
-    def _findQx(self,x_tuple):
-        x_tuple_without_first=x_tuple[1:]
-        x0=x_tuple[0]
-        if x_tuple_without_first in self._Qx_x:
-            C=self._algForParallelAdd.sumOfSets([x0],self._Qx_x[x_tuple_without_first])
+    def _findQw(self,w_tuple):
+        w_tuple_without_first=w_tuple[1:]
+        w0=w_tuple[0]
+        if w_tuple_without_first in self._Qw_w:
+            C=self._algForParallelAdd.sumOfSets([w0],self._Qw_w[w_tuple_without_first])
             if self._method==4:
-                Qxx=[]
-                Qx_prev=self._Qx_x[x_tuple[0:-1]]
+                Qww=[]
+                Qw_prev=self._Qw_w[w_tuple[0:-1]]
                 if self._verbose>=2:
                     print 'To be covered:' , C
-                    print 'Previous Qx', Qx_prev
-                C_covered_by={}        #key= element of C, value=list of elements of Qx_prev that cover key
-                for q in Qx_prev:
+                    print 'Previous Qw', Qw_prev
+                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
+                for q in Qw_prev:
                     for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
                         #add covering values
                         if covered_by_q in C_covered_by:
@@ -157,21 +157,21 @@ class WeightFunctionSearch(CandidateSetSearch):
                                 break
                     if self._verbose>=2:
                         print 'Elements to add:', to_add
-                    Qxx+=to_add
-                Qxx=Set(Qxx).list()
+                    Qww+=to_add
+                Qww=Set(Qww).list()
             else:
-                #find candidates cand_Qxx such that x0 + _Qx_x[x_tuple_without_first \subset alphabet + base* Qxx
-                cand_Qxx=self._findCandidates(C)
-                Qxx=self._chooseQxx_FromCandidates(cand_Qxx, x_tuple)
-            if self._verbose>=2: print "Qx_x for ", x_tuple, " was found"
-            self._Qx_x[x_tuple]=Qxx
-            return Qxx
+                #find candidates cand_Qww such that w0 + _Qw_w[w_tuple_without_first \subset alphabet + base* Qww
+                cand_Qww=self._findCandidates(C)
+                Qww=self._chooseQww_FromCandidates(cand_Qww, w_tuple)
+            if self._verbose>=2: print "Qw_w for ", w_tuple, " was found"
+            self._Qw_w[w_tuple]=Qww
+            return Qww
         else:
-            raise RuntimeError("There is no Qxx for: ", x_tuple_without_first)
+            raise RuntimeError("There is no Qww for: ", w_tuple_without_first)
 
     def findWeightFunction(self, max_input_length):
-        # checks different x \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
-        self._Qx_x[()]=self._weightCoefSet
+        # checks different w \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
+        self._Qw_w[()]=self._weightCoefSet
         combinations=[()]
         self._k=0
         while combinations:
@@ -185,41 +185,41 @@ class WeightFunctionSearch(CandidateSetSearch):
         return self._weightFunction
 
     def check_one_letter_inputs(self, max_input_length):
-        self._Qx_x[()]=self._weightCoefSet
+        self._Qw_w[()]=self._weightCoefSet
         longest=[()]
         for a in self._B:
             if self._verbose>=1: print "Processing input", a,',', a, '...'
-            x_tuple=(a,)
-            Qxx=self._findQx(x_tuple)
-            if self._verbose>=1:print Qxx
+            w_tuple=(a,)
+            Qww=self._findQw(w_tuple)
+            if self._verbose>=1:print Qww
             inp_len=1
-            prevQxx=Set(Qxx)
-            while len(Qxx)>1:
+            prevQww=Set(Qww)
+            while len(Qww)>1:
                 if inp_len>=max_input_length:
                     raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
-                x_tuple = x_tuple+(a,)
-                Qxx=self._findQx(x_tuple)    #find Qxx for the tuple and save weight coefficient if there is only one element in Qxx
-                if self._verbose>=1:  print Qxx
-                if prevQxx==Set(Qxx):
+                w_tuple = w_tuple+(a,)
+                Qww=self._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
+                if self._verbose>=1:  print Qww
+                if prevQww==Set(Qww):
                     self._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
                     raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
-                if len(Qxx)==1:
-                    self._weightFunction.addWeightCoefToInput(x_tuple, Qxx[0])
+                if len(Qww)==1:
+                    self._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
                 inp_len+=1
-                prevQxx=Set(Qxx)
-            if len(x_tuple)>len(longest[0]):
-                longest=[x_tuple]
-            elif len(x_tuple)==len(longest[0]):
-                longest.append(x_tuple)
+                prevQww=Set(Qww)
+            if len(w_tuple)>len(longest[0]):
+                longest=[w_tuple]
+            elif len(w_tuple)==len(longest[0]):
+                longest.append(w_tuple)
         return longest
 
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
-    def printCsvQxx(self):
-        for inp, coef in self._Qx_x.items():
+    def printCsvQww(self):
+        for inp, coef in self._Qw_w.items():
             line=' '
             if len(inp)==self._k:
-                for xj in inp:
-                    line=line+str(xj)+'; '
+                for wj in inp:
+                    line=line+str(wj)+'; '
                 for i in range(len(inp),self._weightFunction._maxLength):
                     line=line+'; '
                 line=line+ str(coef)

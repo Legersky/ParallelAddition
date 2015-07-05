@@ -20,21 +20,21 @@ class WeightFunction(object):
     def __call__(self, input_tuple):
         return self.getWeightCoef(input_tuple)
 
-    def getWeightCoef(self, x):
-        #outputs weight coef for x = (x_j, x_j-1, ...), zeros are appended if necessary
+    def getWeightCoef(self, w):
+        #outputs weight coef for w = (w_j, w_j-1, ...), zeros are appended if necessary
         maxLength=self._maxLength
-        x=list(x)
-        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        w=list(w)
+        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
         #minLength=1
-        for i in range(0,len(x)):
-            if not x[i] in self._inputAlphabet:
-                raise ValueError("Digit %s is not in the input alphabet" %x[i])
-        input_tuple=(x[0],)    #input to weight function
+        for i in range(0,len(w)):
+            if not w[i] in self._inputAlphabet:
+                raise ValueError("Digit %s is not in the input alphabet" %w[i])
+        input_tuple=(w[0],)    #input to weight function
          #   for k in range(0,minLength-1):
-         #       input_tuple= input_tuple + (x[i+k],)
+         #       input_tuple= input_tuple + (w[i+k],)
         shift=1
         while not input_tuple in self._mapping:    #until the input is found in the weight function
-            input_tuple=input_tuple + (x[shift],)                    #take longer if not
+            input_tuple=input_tuple + (w[shift],)                    #take longer if not
             shift+=1
             if shift>maxLength:
                 raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
@@ -43,9 +43,9 @@ class WeightFunction(object):
     def addWeightCoefToInput(self,_input, coef):
         if not type(_input) is tuple:
             raise TypeError("The weight function input must be a tuple.")
-        for x_i in _input:
-            if not x_i in self._inputAlphabet:
-                raise ValueError("Value %s is not in the alphabet of rewritten sequence." %x_i)
+        for w_i in _input:
+            if not w_i in self._inputAlphabet:
+                raise ValueError("Value %s is not in the alphabet of rewritten sequence." %w_i)
         if len(_input)>self._maxLength:
             self._maxLength = len(_input)
         self._mapping[_input]=coef
@@ -69,14 +69,14 @@ class WeightFunction(object):
     def printLatexMapping(self):
         self.printLatexInfo()
         for inp, coef in self._mapping.items():
-            print "Input $(x_j, \dots , x_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$'
+            print "Input $(w_j, \dots , w_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$'
             print '\n'
 
     def printCsvMapping(self):
         for inp, coef in self._mapping.items():
             line=' '
-            for xj in inp:
-                line=line+str(xj)+'; '
+            for wj in inp:
+                line=line+str(wj)+'; '
             for i in range(len(inp),self._maxLength):
                 line=line+'; '
             line=line+ str(coef)

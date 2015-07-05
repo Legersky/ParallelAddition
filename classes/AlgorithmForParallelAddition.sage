@@ -231,63 +231,63 @@ class AlgorithmForParallelAddition(object):
         for b_i in b:
             if not b_i in self._alphabet:
                 raise ValueError("The digit %s of the number %s is not in the alphabet A." %(b_i,b))
-        x=[]
+        w=[]
         for i in range(0, min(len(a),len(b))):    #adding digits of common part
-            x.append(a[i]+b[i])
+            w.append(a[i]+b[i])
         if len(a)<len(b):            #prolonging to the longer one
-            x.extend(b[len(a):])
+            w.extend(b[len(a):])
         else:
-            x.extend(a[len(b):])
-        z=self.parallelConversion(x)
+            w.extend(a[len(b):])
+        z=self.parallelConversion(w)
         return z
 
-    def parallelConversion_old(self,x):
-        #converts x with digits from input alphabet to number in BaseRing with digits in alphabet A
-        if self._verbose== 2 : print "Converting: ", x
+    def parallelConversion_old(self,w):
+        #converts w with digits from input alphabet to number in BaseRing with digits in alphabet A
+        if self._verbose== 2 : print "Converting: ", w
         maxLength=self._weightFunction.getMaxLength()
-        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
         #minLength=1
         z=[]
         q_i_prev=0
-        for i in range(0,len(x)):
-            if not x[i] in self._inputAlphabet:
-                raise ValueError("Digit %s is not in the input alphabet" %x[i])
-        for i in range(0,len(x)):
-            input_tuple=(x[i],)    #input to weight function
+        for i in range(0,len(w)):
+            if not w[i] in self._inputAlphabet:
+                raise ValueError("Digit %s is not in the input alphabet" %w[i])
+        for i in range(0,len(w)):
+            input_tuple=(w[i],)    #input to weight function
          #   for k in range(0,minLength-1):
-         #       input_tuple= input_tuple + (x[i-k],)
-            if self._verbose==2 : print "working with ", x[i], "in tuple" , input_tuple
+         #       input_tuple= input_tuple + (w[i-k],)
+            if self._verbose==2 : print "working with ", w[i], "in tuple" , input_tuple
             shift=1
             while not input_tuple in self._weightFunction.getMapping():    #until the input is found in the weight function
-                input_tuple=input_tuple + (x[i-shift],)                    #take longer if not
+                input_tuple=input_tuple + (w[i-shift],)                    #take longer if not
                 shift+=1
                 if shift>maxLength:
                     raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
             if self._verbose==2 : print "input of weight function:", input_tuple
             q_i=self._weightFunction(input_tuple)        #getting of output of weight function
-            z.append(x[i]+q_i_prev-self._base*q_i)                    #conversion to alphabet A
+            z.append(w[i]+q_i_prev-self._base*q_i)                    #conversion to alphabet A
             q_i_prev=q_i
             if self._verbose==2 :print "Converted digit:", z[-1]
         return z
 
-    def parallelConversion(self,_x):
-        x=copy(_x)
-        #converts x = [x_0, x_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
-        if self._verbose== 2 : print "Converting: ", x
+    def parallelConversion(self,_w):
+        w=copy(_w)
+        #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
+        if self._verbose== 2 : print "Converting: ", w
         maxLength=self._weightFunction.getMaxLength()
-        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        x[:0]=([0]*(maxLength))    #prepending zeros in smaller exponents
+        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        w[:0]=([0]*(maxLength))    #prepending zeros in smaller exponents
         z=[]
         q_i_prev=0
         if self._verbose>=2:
-            print 'Converting: ', _x
-        for i in range(maxLength,len(x)):
-            #input_tuple=x[i:i+maxLength+1]    #input to weight function
-            input_tuple=x[i-maxLength:i+1]    #input to weight function
+            print 'Converting: ', _w
+        for i in range(maxLength,len(w)):
+            #input_tuple=w[i:i+maxLength+1]    #input to weight function
+            input_tuple=w[i-maxLength:i+1]    #input to weight function
             q_i=self._weightFunction(reversed(input_tuple))        #getting weight coefficient
-            z_i=x[i]+q_i_prev-self._base*q_i
+            z_i=w[i]+q_i_prev-self._base*q_i
             if not z_i in self._alphabet:
-                raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(x[i],x,z_i))
+                raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[i],w,z_i))
             z.append(z_i)                    #conversion to alphabet A
             q_i_prev=q_i
             if self._verbose==2 :print "Converted digit:", z[-1]
@@ -295,27 +295,27 @@ class AlgorithmForParallelAddition(object):
             print '----------> ', z
         return z
 
-    def parallelConversion_using_localConversion(self,x):
-        #converts x = [x_0, x_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
+    def parallelConversion_using_localConversion(self,w):
+        #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
         z=[]
-        x=list(x)
+        w=list(w)
         maxLength=self._weightFunction.getMaxLength()
-        x.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        for i in range(0,len(x)):
-            input_x=copy(x[0:i+1])
-            input_x.reverse()
-            z.append(self.localConversion(input_x))
+        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
+        for i in range(0,len(w)):
+            input_w=copy(w[0:i+1])
+            input_w.reverse()
+            z.append(self.localConversion(input_w))
         return z
 
 
-    def localConversion(self,x):
-        #outputs digit z_j to x = x_j x_j-1... with digits from input alphabet
+    def localConversion(self,w):
+        #outputs digit z_j to w = w_j w_j-1... with digits from input alphabet
         maxLength=self._weightFunction.getMaxLength()
-        q_i_prev=self._weightFunction(x[1:1+maxLength+1])
-        q_i=self._weightFunction(x[0:maxLength+1])
-        z_i=x[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
+        q_i_prev=self._weightFunction(w[1:1+maxLength+1])
+        q_i=self._weightFunction(w[0:maxLength+1])
+        z_i=w[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
         if not z_i in self._alphabet:
-            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(x[0],x,z_i))
+            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[0],w,z_i))
         return z_i
 
 #-----------------------------SANITY CHECK-----------------------------------------------------------------------------------
@@ -602,62 +602,62 @@ class AlgorithmForParallelAddition(object):
         Q_to_cover=[]
         window_length=len(digits)
         for i in range(0,len(digits)+1):
-            Q_covering.append(self._weightFunSearch._Qx_x[digits[0:i]])
+            Q_covering.append(self._weightFunSearch._Qw_w[digits[0:i]])
 
             if len(Q_covering[-1])==1:
                 window_length=i
                 break
-            Q_to_cover.append(self._weightFunSearch._Qx_x[digits[1:i+1]])
+            Q_to_cover.append(self._weightFunSearch._Qw_w[digits[1:i+1]])
 
-        betaQx=[]
+        betaQw=[]
         for _Q in Q_covering:
-            betaQx.append((self._base*vector(_Q)).list())
-        betaQx.append([])
+            betaQw.append((self._base*vector(_Q)).list())
+        betaQw.append([])
 
-        Qx_plot=[]
-        Qx_plus_w=[]
-        betaQx_plus_A=[]
+        Qw_plot=[]
+        Qw_plus_w=[]
+        betaQw_plus_A=[]
         w_plot=self.plot([digits[0]], color='red', size=circle_big, fontsize=font_size)
 
         for i in range(0,window_length):
-            Qx_plot.append(self.plot(Q_covering[i+1], color='blue', size=circle_big, labeled=True, fontsize=font_size))
-            Qx_plus_w.append(self.plot(self.sumOfSets(Q_to_cover[i],[digits[0]]), color='black', size=circle_middle, labeled=False, fontsize=font_size))
+            Qw_plot.append(self.plot(Q_covering[i+1], color='blue', size=circle_big, labeled=True, fontsize=font_size))
+            Qw_plus_w.append(self.plot(self.sumOfSets(Q_to_cover[i],[digits[0]]), color='black', size=circle_middle, labeled=False, fontsize=font_size))
             tmp=plot([])
             for q in Q_covering[i+1]:
                 tmp+=polygon_shifted2(self.getAlphabet(),self._base*q,1.2)
-            betaQx_plus_A.append(tmp)
+            betaQw_plus_A.append(tmp)
 
-        Qx_str_to_cover='\\mathcal{Q}'
-        Qx_str_covering='\\mathcal{Q}'
+        Qw_str_to_cover='\\mathcal{Q}'
+        Qw_str_covering='\\mathcal{Q}'
         seq_covering=''
         seq_to_cover=''
         xshift=legend_xshift
         imgs2=[self.plot(self._weightCoefSet, color='blue', size=circle_big, labeled=False, fontsize=font_size)
-               +text('$'+Qx_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
+               +text('$'+Qw_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
         for l in range(0,window_length):
             seq_covering+=latex(digits[l])
-            Qx_str_covering='\\mathcal{Q}_{['+seq_covering+']}'
+            Qw_str_covering='\\mathcal{Q}_{['+seq_covering+']}'
 
-            legend_black=text('$'+latex(digits[0])+'+'+Qx_str_to_cover+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
-            imgs2.append(w_plot+Qx_plus_w[l]+legend_black)
-            covering=(betaQx_plus_A[l]
-                        +Qx_plus_w[l]
+            legend_black=text('$'+latex(digits[0])+'+'+Qw_str_to_cover+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
+            imgs2.append(w_plot+Qw_plus_w[l]+legend_black)
+            covering=(betaQw_plus_A[l]
+                        +Qw_plus_w[l]
                       +legend_black)
             imgs2.append(covering
                         + text('$?\\, \\subset \\,?$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
-                         +text('$\\mathcal{A} + \\beta \\cdot '+Qx_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend))
+                         +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend))
             imgs2.append(covering
                          + text('$\\subset$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
-                         +text('$\\mathcal{A} + \\beta \\cdot '+Qx_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend)
-                         + Qx_plot[l]
-                        +text('$'+Qx_str_covering+'$' ,(xshift,-2*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
-            imgs2.append(Qx_plot[l]
-                        +text('$'+Qx_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
+                         +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend)
+                         + Qw_plot[l]
+                        +text('$'+Qw_str_covering+'$' ,(xshift,-2*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
+            imgs2.append(Qw_plot[l]
+                        +text('$'+Qw_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
 
             if l<window_length-1:
                 seq_covering+=','
                 seq_to_cover+=latex(digits[l+1])
-            Qx_str_to_cover='\\mathcal{Q}_{['+seq_to_cover+']}'
+            Qw_str_to_cover='\\mathcal{Q}_{['+seq_to_cover+']}'
             seq_to_cover+=','
 
         imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
@@ -754,7 +754,7 @@ class AlgorithmForParallelAddition(object):
             stdout = sys.stdout
             sys.stdout = fp
             self._weightFunSearch._weightFunction.printCsvMapping()
-            self._weightFunSearch.printCsvQxx()
+            self._weightFunSearch.printCsvQww()
             sys.stdout = stdout
         self.addLog("Solved and unsolved inputs saved to "+filename+"_unsolved_inputs_after_interrupt.csv")
 
@@ -764,9 +764,9 @@ class AlgorithmForParallelAddition(object):
             stdout = sys.stdout
             sys.stdout = fp
 
-            header='x_j; '
+            header='w_j; '
             for i in range(1, self._weightFunction.getMaxLength()+1):
-                header=header+ ('x_j-%s; ' %i)
+                header=header+ ('w_j-%s; ' %i)
             header=header+ 'output digit'
             print header
 
@@ -804,9 +804,9 @@ class AlgorithmForParallelAddition(object):
         with open(filename+"-weightFunction.csv", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
-            header='x_j; '
+            header='w_j; '
             for i in range(1, self._weightFunction.getMaxLength()):
-                header=header+ ('x_j-%s; ' %i)
+                header=header+ ('w_j-%s; ' %i)
             header=header+ 'weight coefficient'
             print header
 
