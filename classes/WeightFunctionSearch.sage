@@ -1,13 +1,21 @@
-load('CandidateSetSearch.sage')
 load('WeightFunction.sage')
 
-class WeightFunctionSearch(CandidateSetSearch):
+class WeightFunctionSearch(object):
     """
     searching Weight Function
     """
-#-----------------------------CONSTRUCTOR, GETTERS-------------------------------------------------------------------
+#-----------------------------CONSTRUCTOR, SETTERS-------------------------------------------------------------------
     def __init__(self, algForParallelAdd, weightCoefSet, method):
-        super(WeightFunctionSearch,self).__init__(algForParallelAdd)
+        self._algForParallelAdd = algForParallelAdd
+            #class AlgorithmForParallelAddition
+        self._alphabet = algForParallelAdd.getAlphabet()
+            #alphabet
+        self._ringGenerator = algForParallelAdd.getRingGenerator()
+            #generator of Ring omega
+        self._base=algForParallelAdd.getBase()
+            #base
+        self._verbose=algForParallelAdd._verbose
+
         self._B=algForParallelAdd.getInputAlphabet()
             #alphabet of inputs (sequence to rewrite)
         self._weightFunction= WeightFunction(self._B)
@@ -22,84 +30,10 @@ class WeightFunctionSearch(CandidateSetSearch):
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
 
+    def setVerbose(self,verb):
+        self._verbose=verb
+
 #-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
-    def _chooseQww_FromCandidates(self, cand_Qww, w_tuple):
-        Qw_prev=self._Qw_w[w_tuple[0:-1]]
-        for cand_elem in copy(cand_Qww):   #intersection with previous Qww
-            for cand in copy(cand_elem):
-                if not cand in Qw_prev:
-                    cand_elem.remove(cand)
-        # takes candidates from findCandidates(w + Qw) and then it chooses the Qww such that  w + Qw \subset alphabet + base * Qww
-        if self._method==1:
-            #method 1 adds the smallest candidate in absolute value -> it is very slow (both in convergence and power)
-            res=[]
-            for cand_elem in cand_Qww:
-                res.append(self._findSmallest(cand_elem))
-            if self._verbose>=1: print res
-            return Set(res).list()
-        elif self._method==2:
-            #method 2 adds the candidates with the highest number of occurencies BLBE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            cand_occur={}
-            for cand_elem in cand_Qww:    #counting occurencies
-                for cand in cand_elem:
-                    if not cand in cand_occur:
-                        cand_occur[cand]=1
-                    else:
-                        cand_occur[cand]+=1
-            cand_sorted_by_occur=sorted(cand_occur, key=cand_occur.get, reverse=True)    #sorting from the most frequent candidate
-            num_lists=len(cand_Qww)
-            res=[]
-            num_added=0
-            index_sort=0
-            cand_notCoveredElem=copy(cand_Qww)
-            while cand_notCoveredElem:    #add candidates according to occurencies until there is at least one for each list
-                to_add=cand_sorted_by_occur[index_sort]
-                res.append(to_add)
-                if self._verbose>=2: print "Adding ", to_add
-                for cand_elem in copy(cand_notCoveredElem):
-                    if to_add in cand_elem:        #if the element to_add is in the list, then there is no need to check it again (i.e. it is removed)
-                        cand_notCoveredElem.remove(cand_elem)
-                index_sort+=1
-            return res
-        elif self._method==3:
-            #method 3 takes first the only possible candidates and then it adds the candidates with the highest number of occurencies
-            res=[]
-            for cand_for_elem in cand_Qww:
-                if len(cand_for_elem)==1:
-                    res.append(cand_for_elem[0])        #add only possible candidates
-            res=Set(res).list()
-
-            notCoveredCandLists=copy(cand_Qww)
-            for cand_for_elem in cand_Qww:
-                for val in res:
-                    if val in cand_for_elem:        #remove candidate list covered by added values
-                        notCoveredCandLists.remove(cand_for_elem)
-                        break
-
-            if notCoveredCandLists:    #if there are still lists to cover
-                cand_occur={}
-                for cand_elem in notCoveredCandLists:    #counting occurencies
-                    for cand in cand_elem:
-                        if not cand in cand_occur:
-                            cand_occur[cand]=1
-                        else:
-                            cand_occur[cand]+=1
-                cand_sorted_by_occur=sorted(cand_occur, key=cand_occur.get, reverse=True)    #sorting from the most frequent candidate
-                num_lists=len(cand_Qww)
-                num_added=0
-                index_sort=0
-            while notCoveredCandLists:    #add candidates according to occurencies until all lists are covered
-                to_add=cand_sorted_by_occur[index_sort]
-                res.append(to_add)
-                if self._verbose>=2: print "Adding ", to_add
-                for cand_elem in copy(notCoveredCandLists):
-                    if to_add in cand_elem:        #if the element to_add is in the list, then there is no need to check it again (i.e. it is removed)
-                        notCoveredCandLists.remove(cand_elem)
-                index_sort+=1
-            return res
-        else:
-            raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
-
     def _find_weightCoef_for_comb_B(self, combinations, max_len):
         #finds weight coefficients for combinations + letter from self._B if it is possible, function returns combinations for which wider window is necessary to get weight coefficient
         new_combinations=[]
@@ -160,9 +94,7 @@ class WeightFunctionSearch(CandidateSetSearch):
                     Qww+=to_add
                 Qww=Set(Qww).list()
             else:
-                #find candidates cand_Qww such that w0 + _Qw_w[w_tuple_without_first \subset alphabet + base* Qww
-                cand_Qww=self._findCandidates(C)
-                Qww=self._chooseQww_FromCandidates(cand_Qww, w_tuple)
+                raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
             if self._verbose>=2: print "Qw_w for ", w_tuple, " was found"
             self._Qw_w[w_tuple]=Qww
             return Qww

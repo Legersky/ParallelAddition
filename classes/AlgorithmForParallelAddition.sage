@@ -489,7 +489,7 @@ class AlgorithmForParallelAddition(object):
             for point in points:
                     vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
             p= Polyhedron(vertices)
-            tmp=CandidateSetSearch(alg)
+            tmp=WeightCoefficientsSetSearch(alg)
             shift_divided=tmp.divideByBase(shift)
             return (p.plot(point=False, line=color, polygon=False)
                     +text('$\\beta\\cdot('+latex(shift_divided)+ ')$',
@@ -593,7 +593,7 @@ class AlgorithmForParallelAddition(object):
             for point in points:
                     vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
             p= Polyhedron(vertices)
-            tmp=CandidateSetSearch(alg)
+            tmp=WeightCoefficientsSetSearch(alg)
             shift_divided=tmp.divideByBase(shift)
             return (p.plot(point=False, line=color, polygon=False)
                     +alg.plot([shift_divided], color='blue', size=circle_big, labeled=False))
