@@ -44,6 +44,10 @@ class AlgorithmForParallelAddition(object):
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
             self._inputAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
+        self._ringGenCompanionMatrix=matrix.companion(self._minPolynomial)
+            # companion matrix to minimal polynomial of ringGenerator (omega)
+        self._inverseBaseCompanionMatrix=self._computeInverseBaseCompanionMatrix()
+            # inversion of companion matrix of base
         self._weightCoefSet=[]
             #set of potential coefficients
         self._weightCoefSetIncrements=[]
@@ -82,14 +86,7 @@ class AlgorithmForParallelAddition(object):
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
 
-    def addLog(self,_log, latex=False):
-        if self._printLog:
-            if latex and self._printLogLatex:
-                show(_log)
-            else:
-                print _log
-                sys.stdout.flush()
-        self._log.append(_log)
+
 
 #-----------------------------SETTERS AND GETTERS----------------------------------------------------------------------------
 
@@ -127,23 +124,12 @@ class AlgorithmForParallelAddition(object):
                 maxB=self.ring2CC(b)
         self._maximumOfInputAlphabet=maxB
 
-    def setVerbose(self,verb):
-        self._verbose=verb
-
     def setBase(self, base):
         if base in self._ring:
                 self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
         else:
             raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
-
-    def getMinPolynomial(self):
-        #returns modulus of Ring
-        return self._minPolynomial
-
-    def getMinPolynomialOfBase(self):
-        #returns modulus of BaseRing
-        return self._minimalPolynomialOfBase
 
     def getRingGenerator(self):
         #returns generator of Ring
@@ -163,14 +149,22 @@ class AlgorithmForParallelAddition(object):
     def getInputAlphabet(self):
         return self._inputAlphabet
 
-    def getName(self):
-        return self._name
+    def getMinPolynomial(self):
+        #returns modulus of Ring
+        return self._minPolynomial
+
+    def getMinPolynomialOfBase(self):
+        #returns modulus of BaseRing
+        return self._minimalPolynomialOfBase
 
     def getWeightCoefSet(self):
         return self._weightCoefSet
 
     def getWeightFunction(self):
         return self._weightFunction
+
+    def getName(self):
+        return self._name
 
     def getDictOfSetting(self):
         setting={}
@@ -183,21 +177,19 @@ class AlgorithmForParallelAddition(object):
         return setting
 
 #-----------------------------EXTENDING WINDOW METHOD------------------------------------------------------------------------
-    def addWeightCoefSetIncrement(self, increment):
-        self._weightCoefSetIncrements.append(increment)
-
-    def _findWeightCoefSet(self, max_iterations, method):
+    def _findWeightCoefSet(self, max_iterations, method_number):
         #finds and sets Weight Coefficients set
-        weightCoefSet=WeightCoefficientsSetSearch(self,method)
+        weightCoefSet=WeightCoefficientsSetSearch(self,method_number)
         self._weightCoefSet=copy(weightCoefSet.findWeightCoefficientsSet(max_iterations))
         return self._weightCoefSet
 
-    def _findWeightFunction(self, max_input_length,method):
+    def addWeightCoefSetIncrement(self, increment):
+        self._weightCoefSetIncrements.append(increment)
+
+    def _findWeightFunction(self, max_input_length,method_number):
         #finds and sets Weight Function using the set of weight coefficients
-        if not self._weightCoefSet:
-            raise ValueError("There are no values in the weight coefficient set Q.")
-        else:
-            self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method)
+        if self._weightCoefSet:
+            self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method_number)
             self.addLog("Checking one letter inputs...")
             longest=self._weightFunSearch.check_one_letter_inputs(max_input_length)
             self.addLog("The longest inputs are:")
@@ -205,6 +197,8 @@ class AlgorithmForParallelAddition(object):
             self.addLog("Length of one letter input: %s: " %len(longest[0]))
             self.addLog("Number of letters with longest input: %s" %len(longest))
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
+        else:
+            raise ValueError("There are no values in the weight coefficient set Q.")
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
         #finds and sets Weight Function
@@ -221,6 +215,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Info about Weight Function:")
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
         self.addLog("Number of inputs: "+ str(len(self._weightFunction.getMapping().keys())))
+        return self._weightFunction
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
@@ -241,35 +236,6 @@ class AlgorithmForParallelAddition(object):
         z=self.parallelConversion(w)
         return z
 
-    def parallelConversion_old(self,w):
-        #converts w with digits from input alphabet to number in BaseRing with digits in alphabet A
-        if self._verbose== 2 : print "Converting: ", w
-        maxLength=self._weightFunction.getMaxLength()
-        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        #minLength=1
-        z=[]
-        q_i_prev=0
-        for i in range(0,len(w)):
-            if not w[i] in self._inputAlphabet:
-                raise ValueError("Digit %s is not in the input alphabet" %w[i])
-        for i in range(0,len(w)):
-            input_tuple=(w[i],)    #input to weight function
-         #   for k in range(0,minLength-1):
-         #       input_tuple= input_tuple + (w[i-k],)
-            if self._verbose==2 : print "working with ", w[i], "in tuple" , input_tuple
-            shift=1
-            while not input_tuple in self._weightFunction.getMapping():    #until the input is found in the weight function
-                input_tuple=input_tuple + (w[i-shift],)                    #take longer if not
-                shift+=1
-                if shift>maxLength:
-                    raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
-            if self._verbose==2 : print "input of weight function:", input_tuple
-            q_i=self._weightFunction(input_tuple)        #getting of output of weight function
-            z.append(w[i]+q_i_prev-self._base*q_i)                    #conversion to alphabet A
-            q_i_prev=q_i
-            if self._verbose==2 :print "Converted digit:", z[-1]
-        return z
-
     def parallelConversion(self,_w):
         w=copy(_w)
         #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
@@ -282,7 +248,6 @@ class AlgorithmForParallelAddition(object):
         if self._verbose>=2:
             print 'Converting: ', _w
         for i in range(maxLength,len(w)):
-            #input_tuple=w[i:i+maxLength+1]    #input to weight function
             input_tuple=w[i-maxLength:i+1]    #input to weight function
             q_i=self._weightFunction(reversed(input_tuple))        #getting weight coefficient
             z_i=w[i]+q_i_prev-self._base*q_i
@@ -295,6 +260,16 @@ class AlgorithmForParallelAddition(object):
             print '----------> ', z
         return z
 
+    def localConversion(self,w):
+        #outputs digit z_j to w = w_j w_j-1... with digits from input alphabet
+        maxLength=self._weightFunction.getMaxLength()
+        q_i_prev=self._weightFunction(w[1:1+maxLength+1])
+        q_i=self._weightFunction(w[0:maxLength+1])
+        z_i=w[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
+        if not z_i in self._alphabet:
+            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[0],w,z_i))
+        return z_i
+
     def parallelConversion_using_localConversion(self,w):
         #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
         z=[]
@@ -306,17 +281,6 @@ class AlgorithmForParallelAddition(object):
             input_w.reverse()
             z.append(self.localConversion(input_w))
         return z
-
-
-    def localConversion(self,w):
-        #outputs digit z_j to w = w_j w_j-1... with digits from input alphabet
-        maxLength=self._weightFunction.getMaxLength()
-        q_i_prev=self._weightFunction(w[1:1+maxLength+1])
-        q_i=self._weightFunction(w[0:maxLength+1])
-        z_i=w[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
-        if not z_i in self._alphabet:
-            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[0],w,z_i))
-        return z_i
 
 #-----------------------------SANITY CHECK-----------------------------------------------------------------------------------
     def sanityCheck_addition(self, num_digits):
@@ -358,28 +322,6 @@ class AlgorithmForParallelAddition(object):
         return errors
 
 #-----------------------------RING CONVERSIONS, AUXILIARY RING FUNCTIONS-----------------------------------------------------
-
-    def sumOfSets(self,A,B):
-        #outputs set sum of A and B if A and B are subsets of Ring
-        for a in A+B:
-            if not(a in self._ring):
-                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
-        res=Set([])
-        for a in A:
-            for b in B:
-                res=res+Set([a+b])
-        return res.list()
-
-    def ring2NumberField(self, num_from_ring):
-        #converts number from Ring to NumberField
-        res=0
-        coef=num_from_ring.list()
-        coef.reverse()
-        for a in coef:    #Horner scheme
-            res*=self._ratRingGen
-            res+=a
-        return res
-
     def list2BaseRing(self, _digits):
         #converts list [a_0, a_1, ..., a_k] to a_0 + a_1*base + ... + a_k*base^k
         res=0
@@ -400,6 +342,16 @@ class AlgorithmForParallelAddition(object):
             res+=a
         return res
 
+    def ring2NumberField(self, num_from_ring):
+        #converts number from Ring to NumberField
+        res=0
+        coef=num_from_ring.list()
+        coef.reverse()
+        for a in coef:    #Horner scheme
+            res*=self._ratRingGen
+            res+=a
+        return res
+
     def ring2CC(self, num_from_ring):
         #converts numbers from Ring to complex
         return CC(self.ring2NumberField(num_from_ring))
@@ -407,6 +359,99 @@ class AlgorithmForParallelAddition(object):
     def getCoordinates(self, num):
         numCC=self.ring2CC(num)
         return vector([real(numCC), imag(numCC)])
+
+    def sumOfSets(self,A,B):
+        #outputs set sum of A and B if A and B are subsets of Ring
+        for a in A+B:
+            if not(a in self._ring):
+                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
+        res=Set([])
+        for a in A:
+            for b in B:
+                res=res+Set([a+b])
+        return res.list()
+
+    def _computeInverseBaseCompanionMatrix(self):
+        base_list=self._base.list()
+        #Horner scheme:
+        baseCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
+        for base_coef in reversed(base_list):
+            baseCompanionMatrix *= self._ringGenCompanionMatrix
+            baseCompanionMatrix += base_coef
+        return baseCompanionMatrix.inverse()
+
+    def divideByBase(self,divided_number):
+        #returns w divided by base if defined, else returns None
+        num_list=divided_number.list()    #coeffients of divided_number in Ring
+        for i in range(len(divided_number.list()), self._inverseBaseCompanionMatrix.nrows()):
+            num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of ringGenerator
+        num_vect=vector(num_list)
+        res_vect=(self._inverseBaseCompanionMatrix)*num_vect    #division over rational polynomials
+        res_list=[]
+        for val in res_vect.list():        #divided_number is divisible by base if all its coefficients are integers
+            if val.is_integer():
+                res_list.append(Integer(val))
+            else:
+                return None
+        return self.list2Ring(res_list)    #conversion to Ring
+
+#-----------------------------PRINT FUNCTIONS--------------------------------------------------------------------------------
+    def addLog(self,_log, latex=False):
+        if self._printLog:
+            if latex and self._printLogLatex:
+                show(_log)
+            else:
+                print _log
+                sys.stdout.flush()
+        self._log.append(_log)
+
+    def printWeightFunction(self):
+        print "Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        self._weightFunction.printMapping()
+
+    def printWeightFunctionInfo(self):
+        print "Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        if self._weightFunction:
+            self._weightFunction.printInfo()
+        else:
+            "There is no Weight Function."
+
+    def printWeightCoefSet(self):
+        print "Weight Coefficient Set is:"
+        show(self._weightCoefSet)
+        print "Number of elements: ", len(self._weightCoefSet)
+
+    def printLatexInfo(self):
+        def setLatexBraces(_list):
+            return latex(_list).replace('[','\{').replace(']','\}')
+        print "Numeration System:", self._name, '\n'
+        print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
+
+        print "Base $\\beta=" + latex(self.getBase()) + '$\n'
+        print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
+
+        print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
+        if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+            print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
+        else:
+            print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
+
+        if self._weightCoefSet:
+            print 'Phase 1 was succesfull. \n'
+            print "Weight Coefficient Set:"
+            print "\\begin{dmath*}"
+            print ' \\mathcal{Q}='+ setLatexBraces(self._weightCoefSet)
+            print "\\end{dmath*}"
+            print '\n'
+            print "Number of elements in the weight coefficient set $\\mathcal{Q}$ is: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
+        else:
+            print 'Phase 1 was not succesfull. \n'
+        print "Weight function Info:\n"
+        if self._weightFunction:
+            print 'Phase 2 was succesfull. \n'
+            self._weightFunction.printLatexInfo()
+        else:
+            print 'Phase 2 was not succesfull. DOPLNIT PROBLEMATICKY RETEZEC\n'
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
@@ -445,7 +490,7 @@ class AlgorithmForParallelAddition(object):
             p+=circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
         return p
 
-    def plotLattice(self,):
+    def plotLattice(self):
         self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
 
         lattice=[]
@@ -489,8 +534,7 @@ class AlgorithmForParallelAddition(object):
             for point in points:
                     vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
             p= Polyhedron(vertices)
-            tmp=WeightCoefficientsSetSearch(alg)
-            shift_divided=tmp.divideByBase(shift)
+            shift_divided=self.divideByBase(shift)
             return (p.plot(point=False, line=color, polygon=False)
                     +text('$\\beta\\cdot('+latex(shift_divided)+ ')$',
                           self.getCoordinates(shift) + vector([0,-0.2]) ,
@@ -593,10 +637,9 @@ class AlgorithmForParallelAddition(object):
             for point in points:
                     vertices.append(enlargement*self.getCoordinates(point) +self.getCoordinates(shift))
             p= Polyhedron(vertices)
-            tmp=WeightCoefficientsSetSearch(alg)
-            shift_divided=tmp.divideByBase(shift)
+            shift_divided=self.divideByBase(shift)
             return (p.plot(point=False, line=color, polygon=False)
-                    +alg.plot([shift_divided], color='blue', size=circle_big, labeled=False))
+                    +self.plot([shift_divided], color='blue', size=circle_big, labeled=False))
 
         Q_covering=[]#[self._weightCoefSet]
         Q_to_cover=[]
@@ -683,57 +726,27 @@ class AlgorithmForParallelAddition(object):
 
         return imgs2
 
-#-----------------------------PRINT FUNCTIONS--------------------------------------------------------------------------------
-    def printWeightFunction(self):
-        print "Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
-        self._weightFunction.printMapping()
-
-    def printWeightFunctionInfo(self):
-        print "Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
-        if not self._weightFunction is None:
-            self._weightFunction.printInfo()
-        else:
-            "There is no Weight Function."
-
-    def printWeightCoefSet(self):
-        print "Weight Coefficient Set is:"
-        show(self._weightCoefSet)
-        print "Number of elements: ", len(self._weightCoefSet)
-
-    def printLatexInfo(self):
-        print "Numeration System:", self._name, '\n'
-        print "Alphabet: " + '$' + latex(self.getAlphabet()) + '$\n'
-        print "Input alphabet: " + '$' + latex(self.getInputAlphabet()) + '$\n'
-        print "Base: " + '$' + latex(self.getBase()) + '$\n'
-        print "Minimal polynomial of base: " + '$' + latex(self.getBase().minpoly()) + '$\n'
-        print "Weight Coefficient Set:"
-        print "\\begin{dmath*}"
-        print latex(self._weightCoefSet)
-        print "\\end{dmath*}"
-        print '\n'
-        print "Number of elements in the weight coefficient set: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
-        print "Weight function Info:\n"
-        if self._weightFunction:
-            self._weightFunction.printLatexInfo()
 
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
-    def saveInfoToTexFile(self, filename):
+    def saveInfoToTexFile(self, filename, header=True):
         with open(filename+".tex", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
+            if header:
+                print "\\documentclass{article}"
+                print "\\usepackage[utf8]{inputenc}"
+                print "\\usepackage{amsmath, amsthm}"
+                print "\\usepackage{breqn}"
+                print "\n"
 
-            print "\\documentclass{article}"
-            print "\\usepackage[utf8]{inputenc}"
-            print "\\usepackage{amsmath, amsthm}"
-            print "\\usepackage{breqn}"
-            print "\n"
+                print "\\textwidth 17 cm \\textheight 27 cm"
+                print "\n"
 
-            print "\\textwidth 17 cm \\textheight 27 cm"
-            print "\n"
-
-            print "\\begin{document}"
-            self.printLatexInfo()
-            print '\\end{document}'
+                print "\\begin{document}"
+                self.printLatexInfo()
+                print '\\end{document}'
+            else:
+                self.printLatexInfo()
 
             sys.stdout = stdout
         self.addLog("Info about algorithm for parallel addition saved to "+filename+".tex")
@@ -748,39 +761,6 @@ class AlgorithmForParallelAddition(object):
 
             sys.stdout = stdout
         self.addLog("Log saved to "+filename+"_log.txt")
-
-    def saveUnsolvedInputsToCsv(self, filename):
-        with open(filename+"_unsolved_inputs_after_interrupt.csv", 'w') as fp:
-            stdout = sys.stdout
-            sys.stdout = fp
-            self._weightFunSearch._weightFunction.printCsvMapping()
-            self._weightFunSearch.printCsvQww()
-            sys.stdout = stdout
-        self.addLog("Solved and unsolved inputs saved to "+filename+"_unsolved_inputs_after_interrupt.csv")
-
-    def saveLocalConversionToCsvFile(self, filename):
-        self.addLog("Saving local conversion...")
-        with open(filename+"-localConversion.csv", 'w') as fp:
-            stdout = sys.stdout
-            sys.stdout = fp
-
-            header='w_j; '
-            for i in range(1, self._weightFunction.getMaxLength()+1):
-                header=header+ ('w_j-%s; ' %i)
-            header=header+ 'output digit'
-            print header
-
-            allNumbers = list(CartesianProduct(*(self._inputAlphabet for i in range(0,self._weightFunction.getMaxLength()+1))))
-            for num_list in allNumbers:
-                out_digit=self.localConversion(num_list)
-                line=' '
-                for digit in num_list:
-                    line=line+ str(digit)+'; '
-                line=line+ str(out_digit)
-                print line
-
-            sys.stdout = stdout
-        self.addLog("Local conversion ("+str(len(allNumbers))+  " lines) saved to "+filename+"-localConversion.csv")
 
     def saveWeightFunctionToTexFile(self, filename):
         with open(filename+"-weightFunction.tex", 'w') as fp:
@@ -814,6 +794,39 @@ class AlgorithmForParallelAddition(object):
 
             sys.stdout = stdout
         self.addLog("Weight function saved to "+filename+"-weightFunction.csv")
+
+    def saveLocalConversionToCsvFile(self, filename):
+        self.addLog("Saving local conversion...")
+        with open(filename+"-localConversion.csv", 'w') as fp:
+            stdout = sys.stdout
+            sys.stdout = fp
+
+            header='w_j; '
+            for i in range(1, self._weightFunction.getMaxLength()+1):
+                header=header+ ('w_j-%s; ' %i)
+            header=header+ 'output digit'
+            print header
+
+            allNumbers = list(CartesianProduct(*(self._inputAlphabet for i in range(0,self._weightFunction.getMaxLength()+1))))
+            for num_list in allNumbers:
+                out_digit=self.localConversion(num_list)
+                line=' '
+                for digit in num_list:
+                    line=line+ str(digit)+'; '
+                line=line+ str(out_digit)
+                print line
+
+            sys.stdout = stdout
+        self.addLog("Local conversion ("+str(len(allNumbers))+  " lines) saved to "+filename+"-localConversion.csv")
+
+    def saveUnsolvedInputsToCsv(self, filename):
+        with open(filename+"_unsolved_inputs_after_interrupt.csv", 'w') as fp:
+            stdout = sys.stdout
+            sys.stdout = fp
+            self._weightFunSearch._weightFunction.printCsvMapping()
+            self._weightFunSearch.printCsvQww()
+            sys.stdout = stdout
+        self.addLog("Solved and unsolved inputs saved to "+filename+"_unsolved_inputs_after_interrupt.csv")
 
     def inputSettingToSageFile(self, filename):
         with open(filename+".sage", 'w') as fp:

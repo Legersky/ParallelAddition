@@ -5,7 +5,7 @@ class WeightFunction(object):
         self._maxLength=1
         self._mapping={}
         self._inputAlphabet=B
-            #alphabet of inputs (rewritten sequence)
+            #alphabet of input sequence
 
     def __repr__(self):
         return "Instance of WeightFunction"
@@ -30,8 +30,6 @@ class WeightFunction(object):
             if not w[i] in self._inputAlphabet:
                 raise ValueError("Digit %s is not in the input alphabet" %w[i])
         input_tuple=(w[0],)    #input to weight function
-         #   for k in range(0,minLength-1):
-         #       input_tuple= input_tuple + (w[i+k],)
         shift=1
         while not input_tuple in self._mapping:    #until the input is found in the weight function
             input_tuple=input_tuple + (w[shift],)                    #take longer if not
