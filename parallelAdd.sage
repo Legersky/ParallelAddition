@@ -10,8 +10,7 @@ alg_update=False
 
 load(sys.argv[1])
 
-if 1:
-#try:
+try:
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
@@ -73,17 +72,17 @@ if 1:
     if sanityCheck:
         er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
-#except KeyboardInterrupt:
+except KeyboardInterrupt:
     print "Keyboard Interrupt:"
     if saveUnsolved:
         alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
         unsolved_saved=True
 
-#except Exception, e:
+except Exception, e:
     print "Error:"
     print e
 
-#finally:
+finally:
     if saveLog:
         alg.saveLog("./outputs/"+filename+'/'+filename)
     if saveUnsolved and not alg_update and not unsolved_saved:
