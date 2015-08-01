@@ -10,7 +10,8 @@ alg_update=False
 
 load(sys.argv[1])
 
-try:
+if 1:
+#try:
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
@@ -31,22 +32,13 @@ try:
         save(setting,'./examples/'+ filename )
 
     print " "
-    try:
-        max_iterations
-    except:
-        max_iterations=100
-    try:
-        max_input_length
-    except:
-        max_input_length=10
-    try:
-        phase1_images
-        phase2_images
-    except:
-        phase1_images=True
-        phase2_images=True
-        omega=alg.getRingGenerator()
-        phase2_input=(omega,1,omega,1,omega,1,omega,1)
+
+    if alphabet_img:
+        alg.saveImages([alg.plotAlphabet()],'./outputs/'+ filename + '/img','alphabet')
+        alg.saveImages([alg.plot(alg._inputAlphabet, color='blue')+alg.plotAlphabet()],'./outputs/'+ filename + '/img','inputAlphabet')
+
+    if lattice_img:
+        alg.saveImages([alg.plotLattice()],'./outputs/'+ filename + '/img','lattice')
 
     alg.addLog("Maximum iterations: " + str(max_iterations))
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
@@ -66,41 +58,34 @@ try:
         alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename)
     if WFcsv:
         alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
+
     if localConversionCsv:
         alg.saveLocalConversionToCsvFile("./outputs/"+filename+'/'+filename)
-
-    if sanityCheck:
-        er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
     if phase1_images:
         imgs1=alg.plotPhase1()
         alg.saveImages(imgs1,'./outputs/'+ filename + '/img','phase1')
 
     if phase2_images:
-        imgs2=alg.plotPhase2(phase2_input)
+        imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
         alg.saveImages(imgs2,'./outputs/'+ filename + '/img','phase2')
 
-except KeyboardInterrupt:
+    if sanityCheck:
+        er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
+
+#except KeyboardInterrupt:
     print "Keyboard Interrupt:"
     if saveUnsolved:
         alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
         unsolved_saved=True
 
-except Exception, e:
+#except Exception, e:
     print "Error:"
     print e
 
-finally:
+#finally:
     if saveLog:
         alg.saveLog("./outputs/"+filename+'/'+filename)
     if saveUnsolved and not alg_update and not unsolved_saved:
         alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
     print '--------------------------end of '+ filename +'---------------------------------------------'
-
-
-
-
-
-
-
-
