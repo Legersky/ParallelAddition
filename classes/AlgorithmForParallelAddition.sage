@@ -97,7 +97,7 @@ class AlgorithmForParallelAddition(object):
             if a in self._ring:
                 self._alphabet.append(a)    #adding to alphabet
                 if abs(self.ring2CC(a))>maxA:
-                    maxA=self.ring2CC(a)
+                    maxA=abs(self.ring2CC(a))
             else:
                 raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
         self._maximumOfAlphabet=maxA
@@ -121,7 +121,7 @@ class AlgorithmForParallelAddition(object):
         maxB=0
         for b in self._inputAlphabet:
             if abs(self.ring2CC(b))>maxB:
-                maxB=self.ring2CC(b)
+                maxB=abs(self.ring2CC(b))
         self._maximumOfInputAlphabet=maxB
 
     def setBase(self, base):
