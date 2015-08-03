@@ -64,6 +64,7 @@ try:
     if phase1_images:
         imgs1=alg.plotPhase1()
         alg.saveImages(imgs1,'./outputs/'+ filename + '/img','phase1')
+        alg.saveImages(alg.plotWeightCoefSet(estimation=True),'./outputs/'+ filename + '/img','weightCoefSet')
 
     if phase2_images:
         imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
