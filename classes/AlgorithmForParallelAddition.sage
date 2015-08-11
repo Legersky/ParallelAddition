@@ -191,6 +191,7 @@ class AlgorithmForParallelAddition(object):
         return self._weightCoefSet
 
     def addWeightCoefSetIncrement(self, increment):
+        #Save increment from extending intermediate weight coefficients set Q_k to Q_{k+1}.
         self._weightCoefSetIncrements.append(increment)
 
     def _findWeightFunction(self, max_input_length,method_number):

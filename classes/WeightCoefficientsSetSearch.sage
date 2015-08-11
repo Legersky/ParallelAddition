@@ -8,6 +8,8 @@ class WeightCoefficientsSetSearch(object):
             #class AlgorithmForParallelAddition
         self._alphabet = algForParallelAdd.getAlphabet()
             #alphabet
+        self._inputAlphabet=algForParallelAdd.getInputAlphabet()
+            #input alphabet
         self._ringGenerator = algForParallelAdd.getRingGenerator()
             #generator of Ring omega
         self._base=algForParallelAdd.getBase()
@@ -23,7 +25,7 @@ class WeightCoefficientsSetSearch(object):
 
     def _findCandidates(self,C):
         # it finds \forall elem_c \in C the list cand_for_elem(elem_c): \forall x \in cand_for_elem(elem_c): elem_c \in A + \beta x
-        cand_for_all=[]
+        candidates=[]
         for elem_c in C:
             cand_for_elem=[]
             num_cand=0
@@ -34,11 +36,11 @@ class WeightCoefficientsSetSearch(object):
                     num_cand+=1
             if num_cand==0:
                 raise RuntimeError ("There is no element a in the alphabet %s and candidate q in the alphabetRing such that %s = a+ base* q" %(self._alphabet,elem_c ))
-            cand_for_all.append(cand_for_elem)
-        return cand_for_all
+            candidates.append(cand_for_elem)
+        return candidates
 
-    def _chooseQk_FromCandidates(self,cand_for_all):
-        #using candidates in cand_for_all it enlarges Qk1 to Qk so that B + Qk1 \subset A + \beta Qk
+    def _chooseQk_FromCandidates(self,candidates):
+        #using candidates in candidates it enlarges Qk1 to Qk so that B + Qk1 \subset A + \beta Qk
         #returns Qk
         res=Set(self._Qk1)
         added_elem=[]
@@ -46,7 +48,7 @@ class WeightCoefficientsSetSearch(object):
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
         #Method 1 chooses the smallest element (the embedding to CC is necessary here)
         if self._method==1:
-            for cand_for_elem in cand_for_all:
+            for cand_for_elem in candidates:
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=1: print "Searching smallest element."
@@ -66,7 +68,7 @@ class WeightCoefficientsSetSearch(object):
 
         #Method 2 takes first the only possible candidates and then chooses the smallest element (the embedding to CC is necessary here)
         if self._method==2:
-            for cand_for_elem in copy(cand_for_all):
+            for cand_for_elem in copy(candidates):
                 if len(cand_for_elem)==1:
                     weightCoef=cand_for_elem[0]
                     if self._verbose>=2: print "Only element: ", weightCoef
@@ -75,9 +77,9 @@ class WeightCoefficientsSetSearch(object):
                         if self._verbose>=2: print "Added coefficient:"
                         if self._verbose>=2: print weightCoef
                         added_elem.append(weightCoef)
-                    cand_for_all.remove(cand_for_elem)    #remove cand_for_elem from cand_for_all
+                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
 
-            for cand_for_elem in cand_for_all:
+            for cand_for_elem in candidates:
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=2: print "Searching smallest element."
@@ -108,7 +110,7 @@ class WeightCoefficientsSetSearch(object):
         self._algForParallelAdd.addWeightCoefSetIncrement(self._Qk1)
         self._algForParallelAdd.addLog('Starting Q_0:')
         self._algForParallelAdd.addLog(self._Qk1, latex=True)
-        B=self._algForParallelAdd.getInputAlphabet() #sumOfSets(self._alphabet,self._alphabet)    #input alphabet
+        B=self._inputAlphabet   #input alphabet
         self._Qk2=copy(self._Qk1)    #preprevious potential Weight Coefficient Set
 
         self._Qk1=self._getQk(self._algForParallelAdd.sumOfSets(B,self._Qk1))    #get Qk for B+Qk1 \subset alphabet + base* Qk
