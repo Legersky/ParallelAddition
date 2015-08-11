@@ -91,6 +91,7 @@ class AlgorithmForParallelAddition(object):
 #-----------------------------SETTERS AND GETTERS----------------------------------------------------------------------------
 
     def setAlphabet(self,A):
+        #Check if A is subset of Ring. Set alphabet A
         self._alphabet=[]
         maxA=0
         for a in A:
@@ -103,6 +104,7 @@ class AlgorithmForParallelAddition(object):
         self._maximumOfAlphabet=maxA
 
     def setInputAlphabet(self,B):
+        #If B is empty, A+A is used. Set the input alphabet B. Check if A \subsetneq B \subset A+A.
         alphabetPlusAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
         if B:
             self._inputAlphabet=[]
@@ -125,6 +127,7 @@ class AlgorithmForParallelAddition(object):
         self._maximumOfInputAlphabet=maxB
 
     def setBase(self, base):
+        #set base
         if base in self._ring:
                 self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
@@ -132,15 +135,15 @@ class AlgorithmForParallelAddition(object):
             raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
 
     def getRingGenerator(self):
-        #returns generator of Ring
+        #return generator of Ring
         return self._ringGenerator
 
     def getBase(self):
-        #returns base
+        #return base
         return self._base
 
     def getBaseCC(self):
-        #returns complex value of base
+        #return complex value of base
         return self.ring2CC(self._base)
 
     def getAlphabet(self):
@@ -150,23 +153,27 @@ class AlgorithmForParallelAddition(object):
         return self._inputAlphabet
 
     def getMinPolynomial(self):
-        #returns modulus of Ring
+        #return modulus of Ring
         return self._minPolynomial
 
     def getMinPolynomialOfBase(self):
-        #returns modulus of BaseRing
+        #return minimal polynomial of base
         return self._minimalPolynomialOfBase
 
     def getWeightCoefSet(self):
+        #return weight coefficients set Q
         return self._weightCoefSet
 
     def getWeightFunction(self):
+        #return weigh function q. If it is not computed, return None.
         return self._weightFunction
 
     def getName(self):
+        #Return the name of the numeration system.
         return self._name
 
     def getDictOfSetting(self):
+        #Return the dictionary of the attributes of the numeration system.
         setting={}
         setting['alphabet']=str(self._alphabet)
         setting['inputAlphabet']=str(self._inputAlphabet)
@@ -285,7 +292,7 @@ class AlgorithmForParallelAddition(object):
 #-----------------------------SANITY CHECK-----------------------------------------------------------------------------------
     def sanityCheck_addition(self, num_digits):
         #tries to add all possible combinations of numbers with num_digits digits
-        #returns number of errors
+        #return number of errors
         errors=0
         allNumbers = list(CartesianProduct(*(self._alphabet for i in range(0,num_digits))))    #all posible number with num_digits digits from alphabet
         for (ind, a) in enumerate(allNumbers):
@@ -357,6 +364,7 @@ class AlgorithmForParallelAddition(object):
         return CC(self.ring2NumberField(num_from_ring))
 
     def getCoordinates(self, num):
+        #return coordinates of num in the complex plane
         numCC=self.ring2CC(num)
         return vector([real(numCC), imag(numCC)])
 
@@ -372,8 +380,8 @@ class AlgorithmForParallelAddition(object):
         return res.list()
 
     def _computeInverseBaseCompanionMatrix(self):
+        #compute inverse matrix to companion matrix of base using Horner scheme:
         base_list=self._base.list()
-        #Horner scheme:
         baseCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
         for base_coef in reversed(base_list):
             baseCompanionMatrix *= self._ringGenCompanionMatrix
@@ -381,7 +389,7 @@ class AlgorithmForParallelAddition(object):
         return baseCompanionMatrix.inverse()
 
     def divideByBase(self,divided_number):
-        #returns w divided by base if defined, else returns None
+        #return w divided by base if defined, else return None
         num_list=divided_number.list()    #coeffients of divided_number in Ring
         for i in range(len(divided_number.list()), self._inverseBaseCompanionMatrix.nrows()):
             num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of ringGenerator
@@ -397,19 +405,22 @@ class AlgorithmForParallelAddition(object):
 
 #-----------------------------PRINT FUNCTIONS--------------------------------------------------------------------------------
     def addLog(self,_log, latex=False):
+        #save log _log
         if self._printLog:
             if latex and self._printLogLatex:
                 show(_log)
             else:
                 print _log
-                sys.stdout.flush()
+            sys.stdout.flush()
         self._log.append(_log)
 
     def printWeightFunction(self):
+        #print weight function q
         print "Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         self._weightFunction.printMapping()
 
     def printWeightFunctionInfo(self):
+        #print info about weight function q
         print "Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
         if self._weightFunction:
             self._weightFunction.printInfo()
@@ -422,6 +433,7 @@ class AlgorithmForParallelAddition(object):
         print "Number of elements: ", len(self._weightCoefSet)
 
     def printLatexInfo(self):
+        #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
             return latex(_list).replace('[','\{').replace(']','\}')
         print "Numeration System:", self._name, '\n'
@@ -455,7 +467,7 @@ class AlgorithmForParallelAddition(object):
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
-        #plots numbers from Ring
+        #plots nums_from_ring from Ring
         to_plot = []
         allReal=True
         zeros=[]
@@ -482,15 +494,18 @@ class AlgorithmForParallelAddition(object):
         return p
 
     def plotAlphabet(self):
+        #plot alphabet A
         return self.plot(self.getAlphabet())
 
     def plotWeightCoefSet(self,estimation=False):
+        #plot weight coefficients set Q
         p=self.plot(self._weightCoefSet)
         if estimation:
             p+=circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
         return p
 
     def plotLattice(self):
+        #plot points of Ring with shifted tiles of alphabet A
         self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
 
         lattice=[]
@@ -529,6 +544,7 @@ class AlgorithmForParallelAddition(object):
                   circle_big=100, #80,
                   circle_middle=50, #40,
                   circle_small=40): #30):
+        #plot intermediate weight coefficients sets in Phase 1
         def polygon_shifted(points,shift=0, enlargement=1, color='green'):
             vertices=[]
             for point in points:
@@ -631,7 +647,7 @@ class AlgorithmForParallelAddition(object):
                   circle_big=120, #80,
                   circle_middle=60, #40,
                   circle_small=50): #30):
-
+        #plot steps of Phase 2 for input digits
         def polygon_shifted2(points,shift=0, enlargement=1, color='green'):
             vertices=[]
             for point in points:
@@ -729,6 +745,7 @@ class AlgorithmForParallelAddition(object):
 
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
     def saveInfoToTexFile(self, filename, header=True):
+        #save info about numeration system and results of extending window method to .tex file
         with open(filename+".tex", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -752,6 +769,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Info about algorithm for parallel addition saved to "+filename+".tex")
 
     def saveLog(self, filename):
+        #save logs as .txt file
         with open(filename+"_log.txt", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -763,6 +781,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Log saved to "+filename+"_log.txt")
 
     def saveWeightFunctionToTexFile(self, filename):
+        #save computed weight function to .tex file
         with open(filename+"-weightFunction.tex", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -781,6 +800,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Weight function saved to "+filename+"-weightFunction.tex")
 
     def saveWeightFunctionToCsvFile(self, filename):
+        #save computed weight function to .csv file
         with open(filename+"-weightFunction.csv", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -796,6 +816,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Weight function saved to "+filename+"-weightFunction.csv")
 
     def saveLocalConversionToCsvFile(self, filename):
+        #save computed local conversion to .csv file
         self.addLog("Saving local conversion...")
         with open(filename+"-localConversion.csv", 'w') as fp:
             stdout = sys.stdout
@@ -820,6 +841,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Local conversion ("+str(len(allNumbers))+  " lines) saved to "+filename+"-localConversion.csv")
 
     def saveUnsolvedInputsToCsv(self, filename):
+        #save possible weight coefficients for unsolved inputs after interruption
         with open(filename+"_unsolved_inputs_after_interrupt.csv", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -829,6 +851,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Solved and unsolved inputs saved to "+filename+"_unsolved_inputs_after_interrupt.csv")
 
     def inputSettingToSageFile(self, filename):
+        #create SageMath file with input setting. This may be used for cmd calling of parallelAdd.sage
         with open(filename+".sage", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -854,10 +877,10 @@ class AlgorithmForParallelAddition(object):
             print ''
             print '#------------LIMITATIONS----------------'
             print '#maximum of iterations in searching weight coefficient set'
-            print 'max_interations = 100'
+            print 'max_interations = 20'
             print ''
             print '#maximal length of input of weight function'
-            print 'max_input_length =  100'
+            print 'max_input_length =  10'
             print ''
             print '#------------SAVING----------------'
             print '#save general info to .tex file'
@@ -881,10 +904,26 @@ class AlgorithmForParallelAddition(object):
             print '#run sanity check'
             print 'sanityCheck=True'
 
+            print '#---------IMAGES--------------------'
+            print '#save image of the alphabet and input alphabet'
+            print 'alphabet_img=True'
+
+            print '#save image of lattice with shifted alphabet'
+            print 'lattice_img=True'
+
+            print '#save step-by-step images of phase 1'
+            print 'phase1_images=True'
+
+            print '#save step-by-step images of phase 2'
+            print 'phase2_images=True'
+            print '#for input'
+            print "phase2_input='(omega,1,omega,1,omega,1,omega,1)'"
+
 
             sys.stdout = stdout
 
     def saveImages(self,images, folder,name, img_size=10):
+        #save images to folder_name with size given by img_size
         d = os.path.dirname(folder+'/')
         if not os.path.exists(d):
             os.makedirs(d)
