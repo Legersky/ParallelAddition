@@ -110,8 +110,8 @@ class WeightFunctionSearch(object):
             num_prev_comb=len(combinations)
             combinations=self._find_weightCoef_for_comb_B(combinations)
             self._k+=1
-            if self._verbose>=1: print "Processed length: ", self._k,", Saved rules: " ,num_prev_comb*len(self._B) - len(combinations), ", To next turn: " ,len(combinations)
-            self._algForParallelAdd.addLog("Processed length: "+ str(self._k) + ", Saved rules: " + str(num_prev_comb*len(self._B) - len(combinations)) + ", To next turn: " + str(len(combinations)))
+            if self._verbose>=1: print "Length of the window: ", self._k,", Number of saved combinations of input digits: " ,num_prev_comb*len(self._B) - len(combinations), ", To next iteration: " ,len(combinations)
+            self._algForParallelAdd.addLog("Length of the window: "+ str(self._k) + ", Number of saved combinations of input digits: " + str(num_prev_comb*len(self._B) - len(combinations)) + ", To next iteration: " + str(len(combinations)))
         return self._weightFunction
 
     def check_one_letter_inputs(self, max_input_length):

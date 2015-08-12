@@ -72,7 +72,9 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._alphabet, latex=True)
         self.addLog("Input alphabet: ")
         self.addLog(self._inputAlphabet, latex=True)
-        if self._printLogLatex: show(self.plot(self._inputAlphabet, color='blue')+self.plotAlphabet())
+        if self._printLogLatex:
+            self.addLog("Plotting the alphabet and input alphabet: ")
+            show(self.plot(self._inputAlphabet, color='blue')+self.plotAlphabet())
         self.addLog("Minimal polynomial of ring generator: ")
         self.addLog(self.getMinPolynomial(), latex=True)
         self.addLog("Embedding: ")
@@ -82,7 +84,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
         if self._printLogLatex:
-            self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
+            self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
             show(self.plotLattice())
 
     def __repr__(self):
@@ -206,21 +208,24 @@ class AlgorithmForParallelAddition(object):
             self.addLog(longest, latex=True)
             self.addLog("Length of one letter input: %s: " %len(longest[0]))
             self.addLog("Number of letters with longest input: %s" %len(longest))
+            self.addLog("Searching the Weight Function using method %s..." %method_number)
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
         else:
             raise ValueError("There are no values in the weight coefficient set Q.")
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
         #finds and sets Weight Function
-        self.addLog("Searching the Weight Coefficient Set using method %s..." %method_weightCoefSet)
+        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %method_weightCoefSet)
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
         self.addLog("The Weight Coefficient Set is:")
         self.addLog(self._weightCoefSet,latex=True)
         self.addLog("Number of elements: " + str(len(self._weightCoefSet)))
-        if self._printLogLatex: show(self.plotWeightCoefSet(estimation=True))
+        if self._printLogLatex: 
+            self.addLog("Plotting the weight coefficients set with the estimation:")
+            show(self.plotWeightCoefSet(estimation=True))
 
-        self.addLog("Searching the Weight Function using method %s..." %method_weightFunSearch)
+        self.addLog("Phase 2 is starting...")
         self._findWeightFunction(max_input_length, method_weightFunSearch)
         self.addLog("Info about Weight Function:")
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
