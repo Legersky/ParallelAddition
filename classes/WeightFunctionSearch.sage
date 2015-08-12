@@ -31,7 +31,7 @@ class WeightFunctionSearch(object):
         return "Instance of WeightFunctionSearch"
 
 #-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
-    def _find_weightCoef_for_comb_B(self, combinations, max_len):
+    def _find_weightCoef_for_comb_B(self, combinations):
         #finds weight coefficients for combinations + letter from self._B if it is possible, function returns combinations for which wider window is necessary to get weight coefficient
         new_combinations=[]
         for comb in combinations:
@@ -107,7 +107,7 @@ class WeightFunctionSearch(object):
             if self._k>=max_input_length:
                 raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
             num_prev_comb=len(combinations)
-            combinations=self._find_weightCoef_for_comb_B(combinations,self._k)
+            combinations=self._find_weightCoef_for_comb_B(combinations)
             self._k+=1
             if self._verbose>=1: print "Processed length: ", self._k,", Saved rules: " ,num_prev_comb*len(self._B) - len(combinations), ", To next turn: " ,len(combinations)
             self._algForParallelAdd.addLog("Processed length: "+ str(self._k) + ", Saved rules: " + str(num_prev_comb*len(self._B) - len(combinations)) + ", To next turn: " + str(len(combinations)))

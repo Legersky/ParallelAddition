@@ -1,5 +1,5 @@
 class WeightFunction(object):
-    """ukladani prepisovacich pravidel"""
+    """saving of weight function"""
 #-----------------------------CONSTRUCTOR, GETTERS-------------------------------------------------------------------
     def __init__(self,B):
         self._maxLength=1

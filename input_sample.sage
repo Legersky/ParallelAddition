@@ -1,11 +1,11 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Eisenstein_1block_complex'
+name = 'Eisenstein_1-block_complex'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol =' x^2 + x + 1 '
 
-#Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)
+#Embedding (the closest root of the minimal polynomial to this value is taken as the ring generator)
 omegaCC= -0.500000000000000 + 0.866025403784439*I
 
 #Alphabet (use 'omega' as ring generator)
@@ -18,10 +18,10 @@ inputAlphabet = ''
 base ='omega - 1'
 
 #------------LIMITATIONS----------------
-#maximum of iterations in searching weight coefficient set
+#maximum of iterations in searching for the weight coefficient set
 max_iterations = 20
 
-#maximal length of input of weight function
+#maximal length of the input of the weight function
 max_input_length =  10
 
 #------------SAVING----------------
