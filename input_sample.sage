@@ -1,63 +1,39 @@
-#---------------INPUTS---------------
+#------------INPUTS---------------------
 #Name of the numeration system
 name = 'Eisenstein_1-block_complex'
-
 #Minimal polynomial of ring generator (use variable x)
-minPol =' x^2 + x + 1 '
-
+minPol ='x^2 + x + 1'
 #Embedding (the closest root of the minimal polynomial to this value is taken as the ring generator)
-omegaCC= -0.500000000000000 + 0.866025403784439*I
-
+omegaCC= -0.5 + 0.8*I
 #Alphabet (use 'omega' as ring generator)
 alphabet = '[0, 1, -1, omega, -omega, -omega - 1, omega + 1]'
-
 #Input alphabet (if empty, A + A is used)
 inputAlphabet = ''
-
 #Base (use 'omega' as ring generator)
 base ='omega - 1'
 
 #------------LIMITATIONS----------------
-#maximum of iterations in searching for the weight coefficient set
-max_iterations = 20
+max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
+max_input_length = 10    #maximal length of the input of the weight function
 
-#maximal length of the input of the weight function
-max_input_length =  10
+#------------SANITY CHECK---------------
+sanityCheck=False         #run sanity check
 
-#------------SAVING----------------
-#save general info to .tex file
-info=True
+#------------SAVING---------------------
+info=True                #save general info to .tex file
+WFcsv=False              #save weight function to .csv file
+localConversionCsv=False #save local conversion to .csv file
+saveSetting=False        #save inputs setting as a dictionary
+saveLog=True             #save log file
+saveUnsolved=False       #save unsolved combinations after interruption
 
-#save Weight function to .csv file
-WFcsv=False
-
-#save Local conversion to .csv file
-localConversionCsv=False
-
-#save Inputs setting
-saveSetting=False
-
-#save Log file
-saveLog=True
-
-#save Unsolved inputs after interruption
-saveUnsolved=False
-
-#run sanity check
-sanityCheck=False
-
-#---------IMAGES--------------------
-#save image of the alphabet and input alphabet
-alphabet_img=True
-
-#save image of lattice with shifted alphabet
-lattice_img=True
-
-#save step-by-step images of phase 1
-phase1_images=True
-
-#save step-by-step images of phase 2
-phase2_images=True
-#for input
+#------------IMAGES--------------------
+alphabet_img=True        #save image of alphabet and input alphabet
+lattice_img=True         #save image of lattice with shifted alphabet
+phase1_images=True       #save step-by-step images of phase 1
+weightCoefSet_img=True   #save image of the weight coefficient set
+#with estimation given by lemma:
+estimation=True
+phase2_images=True       #save step-by-step images of phase 2
+#for input:
 phase2_input='(omega,1,omega,1,omega,1,omega,1)'
-

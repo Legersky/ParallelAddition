@@ -39,6 +39,7 @@ class WeightFunction(object):
         return self._mapping[input_tuple]
 
     def addWeightCoefToInput(self,_input, coef):
+        #save coef fo _input
         if not type(_input) is tuple:
             raise TypeError("The weight function input must be a tuple.")
         for w_i in _input:

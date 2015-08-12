@@ -43,7 +43,7 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
-            self._inputAlphabet=self.sumOfSets(self._alphabet, self._alphabet)
+            self.setInputAlphabet([])
         self._ringGenCompanionMatrix=matrix.companion(self._minPolynomial)
             # companion matrix to minimal polynomial of ringGenerator (omega)
         self._inverseBaseCompanionMatrix=self._computeInverseBaseCompanionMatrix()
@@ -81,7 +81,9 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._base, latex=True)
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
-        if self._printLogLatex: show(self.plotLattice())
+        if self._printLogLatex:
+            self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
+            show(self.plotLattice())
 
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
@@ -500,14 +502,13 @@ class AlgorithmForParallelAddition(object):
 
     def plotWeightCoefSet(self,estimation=False):
         #plot weight coefficients set Q
-        p=self.plot(self._weightCoefSet)
         if estimation:
-            p+=circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
-        return p
+            return self.plot(self._weightCoefSet) + circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
+        else:
+            return self.plot(self._weightCoefSet)
 
     def plotLattice(self):
         #plot points of Ring with shifted tiles of alphabet A
-        self.addLog("Plotting lattice and shifts of alphabet centered in points divisible by base: ")
 
         lattice=[]
 
@@ -928,8 +929,12 @@ class AlgorithmForParallelAddition(object):
         d = os.path.dirname(folder+'/')
         if not os.path.exists(d):
             os.makedirs(d)
-        k=1
-        for im in images:
-            im.save(folder+'/'+name+ '_image_{0}.png'.format(k), figsize=img_size)
-            k+=1
-        self.addLog("Images "+ name+ ' saved to '+ folder)
+        if len(images)==1:
+            images[0].save(folder+'/'+name+ '.png', figsize=img_size)
+            self.addLog("Image "+ name+ '.png saved to '+ folder)
+        else:
+            k=1
+            for im in images:
+                im.save(folder+'/'+name+ '_image_{0}.png'.format(k), figsize=img_size)
+                k+=1
+            self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)

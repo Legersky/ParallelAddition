@@ -45,6 +45,7 @@ class WeightFunctionSearch(object):
         return new_combinations
 
     def _findQw(self,w_tuple):
+        #find set of possible weight coefficients for input w_tuple
         w_tuple_without_first=w_tuple[1:]
         w0=w_tuple[0]
         if w_tuple_without_first in self._Qw_w:
@@ -114,6 +115,7 @@ class WeightFunctionSearch(object):
         return self._weightFunction
 
     def check_one_letter_inputs(self, max_input_length):
+        #check if there is a unique weight coefficient for inputs given by repetition of one letter
         self._Qw_w[()]=self._weightCoefSet
         longest=[()]
         for a in self._B:
