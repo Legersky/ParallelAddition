@@ -51,7 +51,7 @@ sanityCheck=False
 alphabet_img=True
 
 #save image of lattice with shifted alphabet
-lattice_img=True
+lattice_img=False
 
 #save step-by-step images of phase 1
 phase1_images=True

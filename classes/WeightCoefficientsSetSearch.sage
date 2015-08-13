@@ -98,6 +98,7 @@ class WeightCoefficientsSetSearch(object):
             return res.list()
 
         #Method 3 takes first the only possible candidates and then chooses the smallest element in specific norm
+        #DOES NOT WORK !!!!!!!!
         if self._method==3:
             for cand_for_elem in copy(candidates):
                 if len(cand_for_elem)==1:
@@ -188,9 +189,9 @@ class WeightCoefficientsSetSearch(object):
                 smallest_in=i
         return list_from_Ring[smallest_in]
 
-    def _norm_squares_of_coefficients(num_from_ring):
-        coef=num_from_ring.list()
-        norm=0
-        for c in coef:
-            nurm+=c*c
-        return norm
+ #   def _norm_squares_of_coefficients(self,num_from_ring):
+  #      coef=num_from_ring.list()
+   #     norm=0
+    #    for c in coef:
+     #       norm+=c*c
+      #  return norm
