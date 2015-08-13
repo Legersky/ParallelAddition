@@ -6,7 +6,7 @@ name = 'Quadratic+1-5+3_1-block_integer'
 minPol ='x^2 - 5*x + 3'
 
 #Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)
-omegaCC= 1.00000000000000*I
+omegaCC= 100.00000000000000
 
 #Alphabet (use 'omega' as ring generator)
 alphabet = '[0, 1, 2, 3, 4, 5, 6]'
