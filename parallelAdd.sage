@@ -10,8 +10,7 @@ alg_update=False
 
 load(sys.argv[1])
 
-#try:
-if 1:
+try:
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
@@ -75,8 +74,7 @@ if 1:
 
     if sanityCheck:
         er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
-try:
-    pass
+
 except KeyboardInterrupt:
     print "Keyboard Interrupt:"
     if saveUnsolved:
