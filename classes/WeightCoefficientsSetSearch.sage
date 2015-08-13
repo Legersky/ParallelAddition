@@ -96,6 +96,37 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addLog(added_elem, latex=True)
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
+
+        #Method 3 takes first the only possible candidates and then chooses the smallest element in specific norm
+        if self._method==3:
+            for cand_for_elem in copy(candidates):
+                if len(cand_for_elem)==1:
+                    weightCoef=cand_for_elem[0]
+                    if self._verbose>=2: print "Only element: ", weightCoef
+                    if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
+                        res=res.union(Set([weightCoef]))
+                        if self._verbose>=2: print "Added coefficient:"
+                        if self._verbose>=2: print weightCoef
+                        added_elem.append(weightCoef)
+                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
+
+            for cand_for_elem in candidates:
+                intersect=Set(cand_for_elem).intersection(res)
+                if intersect.is_empty():                #check if there is already some candidate in Qk1
+                    if self._verbose>=2: print "Searching smallest element."
+                    weightCoef=self._findSmallest_norm(cand_for_elem)
+                    res=res.union(Set([weightCoef]))            #add the smallest one
+                    if self._verbose>=2: print "Added coefficient:"
+                    if self._verbose>=2: print weightCoef
+                    added_elem.append(weightCoef)
+                else:
+                    if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
+            if self._verbose>=1: print "Added coefficients:"
+            if self._verbose>=1: print added_elem
+            self._algForParallelAdd.addLog("Added coefficients:")
+            self._algForParallelAdd.addLog(added_elem, latex=True)
+            self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
+            return res.list()
         else:
             raise ValueError("Method number %s for PotentialCoefficientsSet is not implemented" % self._method)
 
@@ -143,3 +174,23 @@ class WeightCoefficientsSetSearch(object):
                 smallestAbs=numAbs
                 smallest_in=i
         return list_from_Ring[smallest_in]
+
+    def _findSmallest_norm(self,list_from_Ring):
+        #finds smallest (in a specific norm) element of list_from_Ring
+        smallestNorm=self._norm_squares_of_coefficients(list_from_Ring[0])
+        smallest_in=0
+        i=0
+        for num in list_from_Ring[1:]:
+            numNorm=self._norm_squares_of_coefficients(num)
+            i+=1
+            if numNorm<smallestNorm:
+                smallestNorm=numNorm
+                smallest_in=i
+        return list_from_Ring[smallest_in]
+
+    def _norm_squares_of_coefficients(num_from_ring):
+        coef=num_from_ring.list()
+        norm=0
+        for c in coef:
+            nurm+=c*c
+        return norm
