@@ -213,7 +213,7 @@ class AlgorithmForParallelAddition(object):
         else:
             raise ValueError("There are no values in the weight coefficient set Q.")
 
-    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
+    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=3, method_weightFunSearch=4):
         #finds and sets Weight Function
         self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %method_weightCoefSet)
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
