@@ -230,6 +230,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Info about Weight Function:")
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
         self.addLog("Number of inputs: "+ str(len(self._weightFunction.getMapping().keys())))
+        self.addLog("Output of weight function for the input 0,0,...,0: "+ str(self._weightFunction((0,))))
         return self._weightFunction
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
