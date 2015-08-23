@@ -1,6 +1,7 @@
 load_attach_path('./classes')
 load('AlgorithmForParallelAddition.sage')
 
+load('input_sample.sage')
 
 import sys
 import time
@@ -54,7 +55,7 @@ try:
     print "Saving..."
     sys.stdout.flush()
     if info:
-        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename)
+        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
     if WFcsv:
         alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
 

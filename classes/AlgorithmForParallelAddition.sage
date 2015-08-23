@@ -51,6 +51,7 @@ class AlgorithmForParallelAddition(object):
         self._weightCoefSet=[]
             #set of potential coefficients
         self._weightCoefSetIncrements=[]
+        self._oneLettersCheck=False
         self._weightFunction = None
             #Weight Function
         self._name=name
@@ -204,6 +205,7 @@ class AlgorithmForParallelAddition(object):
             self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method_number)
             self.addLog("Checking one letter inputs...")
             longest=self._weightFunSearch.check_one_letter_inputs(max_input_length)
+            self._oneLettersCheck=True
             self.addLog("The longest inputs are:")
             self.addLog(longest, latex=True)
             self.addLog("Length of one letter input: %s: " %len(longest[0]))
@@ -441,38 +443,78 @@ class AlgorithmForParallelAddition(object):
         show(self._weightCoefSet)
         print "Number of elements: ", len(self._weightCoefSet)
 
-    def printLatexInfo(self):
+    def printLatexInfo(self, for_researchThesis):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
             return latex(_list).replace('[','\{').replace(']','\}')
-        print "Numeration System:", self._name, '\n'
-        print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
+        if for_researchThesis:
+            forTable='%'
+            print "\\subsection{", self._name.replace('_','\\_') , '}\n'
+            forTable+= self._name.replace('_','\\_') + '&'
+            print "\\label{subsec:", self._name.replace('_',''), '}\n'
+            print 'The parameters of the numeration system are following:\n'
+            print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
 
-        print "Base $\\beta=" + latex(self.getBase()) + '$\n'
-        print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
+            print "Base $\\beta=" + latex(self.getBase()) + '$\n'
+            print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
 
-        print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
-        if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-            print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
-        else:
-            print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
+            print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
+            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
+            else:
+                print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
 
-        if self._weightCoefSet:
-            print 'Phase 1 was succesfull. \n'
-            print "Weight Coefficient Set:"
-            print "\\begin{dmath*}"
-            print ' \\mathcal{Q}='+ setLatexBraces(self._weightCoefSet)
-            print "\\end{dmath*}"
-            print '\n'
-            print "Number of elements in the weight coefficient set $\\mathcal{Q}$ is: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
+            print 'Extending window method:\n'
+            if self._weightCoefSet:
+                print 'Phase 1 was succesfull.'
+                print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n'
+                forTable+= ' \\checkmark ' + '&'
+            else:
+                print 'Phase 1 was not succesfull. \n'
+                forTable+= ' \\times ' + '&'
+            if self._oneLettersCheck:
+                print 'There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
+                forTable+= ' \\checkmark ' + '&'
+            else:
+                print 'There is a unique weight coefficient for input $b,b,\\dots,b$ for some $b\\in\\mathcal{B}$.\n'
+                forTable+= ' \\times ' + '&'
+            if self._weightFunction:
+                print 'Phase 2 was succesfull.'
+                print 'The lenght of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
+                forTable+= ' \\checkmark ' + '\\\\'
+            else:
+                print 'Phase 2 was not succesfull.\n'
+                forTable+= ' \\times ' + '\\\\'
+            print forTable
         else:
-            print 'Phase 1 was not succesfull. \n'
-        print "Weight function Info:\n"
-        if self._weightFunction:
-            print 'Phase 2 was succesfull. \n'
-            self._weightFunction.printLatexInfo()
-        else:
-            print 'Phase 2 was not succesfull. DOPLNIT PROBLEMATICKY RETEZEC\n'
+            print "Numeration System:", self._name, '\n'
+            print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
+
+            print "Base $\\beta=" + latex(self.getBase()) + '$\n'
+            print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
+
+            print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
+            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
+            else:
+                print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
+
+            if self._weightCoefSet:
+                print 'Phase 1 was succesfull. \n'
+                print "Weight Coefficient Set:"
+                print "\\begin{dmath*}"
+                print ' \\mathcal{Q}='+ setLatexBraces(self._weightCoefSet)
+                print "\\end{dmath*}"
+                print '\n'
+                print "Number of elements in the weight coefficient set $\\mathcal{Q}$ is: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
+            else:
+                print 'Phase 1 was not succesfull. \n'
+            print "Weight function Info:\n"
+            if self._weightFunction:
+                print 'Phase 2 was succesfull. \n'
+                self._weightFunction.printLatexInfo()
+            else:
+                print 'Phase 2 was not succesfull.\n'
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
@@ -752,7 +794,7 @@ class AlgorithmForParallelAddition(object):
 
 
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
-    def saveInfoToTexFile(self, filename, header=True):
+    def saveInfoToTexFile(self, filename, header=True, for_researchThesis=False):
         #save info about numeration system and results of extending window method to .tex file
         with open(filename+".tex", 'w') as fp:
             stdout = sys.stdout
@@ -768,10 +810,10 @@ class AlgorithmForParallelAddition(object):
                 print "\n"
 
                 print "\\begin{document}"
-                self.printLatexInfo()
+                self.printLatexInfo(for_researchThesis)
                 print '\\end{document}'
             else:
-                self.printLatexInfo()
+                self.printLatexInfo(for_researchThesis)
 
             sys.stdout = stdout
         self.addLog("Info about algorithm for parallel addition saved to "+filename+".tex")
