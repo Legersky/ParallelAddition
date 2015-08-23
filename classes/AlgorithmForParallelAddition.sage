@@ -545,7 +545,7 @@ class AlgorithmForParallelAddition(object):
 
         return self.plot(lattice)+tiles
 
-    def plotPhase1(self,legend_xshift=8,
+    def plotPhase1(self,legend_xshift=7,
                   font_size=20,
                   font_size_legend=30,
                   axis_fontsize=15,
@@ -601,11 +601,11 @@ class AlgorithmForParallelAddition(object):
         for i in range(0,iterations):
             Q_total+=Q[i]
             q[i]=self.plot(Q_total, color='red', size=circle_big, labeled=False, fontsize=font_size)
-            q_new[i]=self.plot(Q[i], color='blue', size=circle_big, fontsize=font_size)
+            q_new[i]=self.plot(Q[i], color='blue', size=circle_big, labeled=False, fontsize=font_size)
             covered[i]=self.plot(self.sumOfSets(self.getAlphabet(),betaQ[i]), color='orange', size=circle_small, labeled=False, fontsize=font_size)
             to_cover[i]=self.plot(self.sumOfSets(self.getInputAlphabet(),Q[i]), color='black', size=circle_middle, labeled=False,  fontsize=font_size)
 
-        imgs=[q_new[0]+ text('$\\mathcal{Q}_{0}$',(6,2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
+        imgs=[q_new[0]+ text('$\\mathcal{Q}_{0}$',(legend_xshift,2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
 
         q_for_centers=[]
         centers=[]
@@ -619,11 +619,11 @@ class AlgorithmForParallelAddition(object):
                 to_cover[l]+covered[l]+q[l] +legend(l, True, False, False),
                 ]
             if l<iterations-2:
-                imgs+=[to_cover[l]+covered[l]+q[l]+polygon_shifted(self.getAlphabet(),centers[l], 1.2) +legend(l, False, False, q_for_centers[l]),
+                imgs+=[#to_cover[l]+covered[l]+q[l]+polygon_shifted(self.getAlphabet(),centers[l], 1.2) +legend(l, False, False, q_for_centers[l]),
                        to_cover[l]+covered[l]+q[l]+polygon_shifted(self.getAlphabet(),centers[l], 1.2)+q_new[l+1] +legend(l, False, True, q_for_centers[l])]
 
 
-        imgs.append(q[l]+text('$\\mathcal{Q}=\\mathcal{Q}_{'+ str(iterations-2)+ '}$',(6,2), color='red', horizontal_alignment='left', fontsize=font_size_legend))
+        imgs.append(q[l]+text('$\\mathcal{Q}=\\mathcal{Q}_{'+ str(iterations-2)+ '}$',(legend_xshift,2), color='red', horizontal_alignment='left', fontsize=font_size_legend))
 
         xmin=0
         xmax=0
@@ -641,7 +641,7 @@ class AlgorithmForParallelAddition(object):
                 ymax=axes_range['ymax']
 
         for im in imgs:
-            im.set_axes_range(xmin,xmax,ymin,ymax)
+            im.set_axes_range(xmin,xmax-3,ymin,ymax)
             im.fontsize(axis_fontsize)
         return imgs
 
@@ -710,16 +710,16 @@ class AlgorithmForParallelAddition(object):
             covering=(betaQw_plus_A[l]
                         +Qw_plus_w[l]
                       +legend_black)
-            imgs2.append(covering
-                        + text('$?\\, \\subset \\,?$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
-                         +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend))
+           # imgs2.append(covering
+            #            + text('$?\\, \\subset \\,?$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
+             #            +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend))
             imgs2.append(covering
                          + text('$\\subset$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
                          +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend)
                          + Qw_plot[l]
                         +text('$'+Qw_str_covering+'$' ,(xshift,-2*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
-            imgs2.append(Qw_plot[l]
-                        +text('$'+Qw_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
+            #imgs2.append(Qw_plot[l]
+             #           +text('$'+Qw_str_covering+'$' ,(xshift,1*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend))
 
             if l<window_length-1:
                 seq_covering+=','
@@ -727,7 +727,7 @@ class AlgorithmForParallelAddition(object):
             Qw_str_to_cover='\\mathcal{Q}_{['+seq_to_cover+']}'
             seq_to_cover+=','
 
-        imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
+     #   imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
 
         xmin=0
         xmax=0
