@@ -1,4 +1,4 @@
-︠eac5326a-5a9c-437b-b7e3-d16c41cd67f2s︠
+︠eac5326a-5a9c-437b-b7e3-d16c41cd67f2︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -98,8 +98,6 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
         print "Saving..."
         sys.stdout.flush()
-        if info:
-            alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
         if WFcsv:
             alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
         if localConversionCsv:
@@ -115,6 +113,8 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
         print e
 
     finally:
+        if info:
+            alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
         if saveUnsolved and (not alg_update) and (not unsolved_saved):
             alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
         if saveLog:

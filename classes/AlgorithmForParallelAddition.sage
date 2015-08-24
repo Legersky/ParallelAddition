@@ -450,41 +450,45 @@ class AlgorithmForParallelAddition(object):
         if for_researchThesis:
             forTable='%'
             print "\\subsection{", self._name.replace('_','\\_') , '}\n'
-            forTable+= self._name.replace('_','\\_') + '&'
-            print "\\label{subsec:", self._name.replace('_',''), '}\n'
-            print 'The parameters of the numeration system are following:\n'
-            print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
+            forTable+= self._name.replace('_','\\_') + ' &'
+            print "\\label{subsec:" + self._name.replace('_','')+ '}\n'
+            print 'Parameters:'
+            print '\\begin{itemize}'
+            print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
 
-            print "Base $\\beta=" + latex(self.getBase()) + '$\n'
-            print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
+            print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
+            print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
 
-            print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
+            print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
             if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
+                print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
             else:
-                print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
+                print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
+            print '\\end{itemize}\n'
 
-            print 'Extending window method:\n'
+            print '\\noindent Extending window method:'
+            print '\\begin{enumerate}'
             if self._weightCoefSet:
-                print 'Phase 1 was succesfull.'
+                print '    \item Phase 1 was succesfull.'
                 print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n'
-                forTable+= ' \\checkmark ' + '&'
+                forTable+= ' \\checkmark &'
+                if self._oneLettersCheck:
+                    print '    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
+                    forTable+= ' \\checkmark &'
+                    if self._weightFunction:
+                        print '    \item Phase 2 was succesfull.'
+                        print 'The lenght of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
+                        forTable+= ' \\checkmark \\\\'
+                    else:
+                        print '    \item Phase 2 was not succesfull.\n'
+                        forTable+= ' \\xmark \\\\'
+                else:
+                    print '    \item There is not unique weight coefficient for input $b,b,\\dots,b$ for some $b\\in\\mathcal{B}$ for fixed length of window.\n'
+                    forTable+= ' \\xmark & --\\\\'
             else:
-                print 'Phase 1 was not succesfull. \n'
-                forTable+= ' \\times ' + '&'
-            if self._oneLettersCheck:
-                print 'There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
-                forTable+= ' \\checkmark ' + '&'
-            else:
-                print 'There is a unique weight coefficient for input $b,b,\\dots,b$ for some $b\\in\\mathcal{B}$.\n'
-                forTable+= ' \\times ' + '&'
-            if self._weightFunction:
-                print 'Phase 2 was succesfull.'
-                print 'The lenght of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
-                forTable+= ' \\checkmark ' + '\\\\'
-            else:
-                print 'Phase 2 was not succesfull.\n'
-                forTable+= ' \\times ' + '\\\\'
+                print '    \item Phase 1 was not succesfull. \n'
+                forTable+= ' \\xmark & -- & --\\\\'
+            print '\\end{enumerate}'
             print forTable
         else:
             print "Numeration System:", self._name, '\n'

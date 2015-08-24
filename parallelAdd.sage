@@ -54,8 +54,7 @@ try:
 
     print "Saving..."
     sys.stdout.flush()
-    if info:
-        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
+
     if WFcsv:
         alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
 
@@ -87,6 +86,8 @@ except Exception, e:
     print e
 
 finally:
+    if info:
+        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
     if saveLog:
         alg.saveLog("./outputs/"+filename+'/'+filename)
     if saveUnsolved and not alg_update and not unsolved_saved:
