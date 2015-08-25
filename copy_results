@@ -1,0 +1,5 @@
+#!/bin/bash
+find outputs -mindepth 1 -type f -name '*.tex' | while read -r FILE; do
+    DIRNAME=${FILE%/*}
+    mkdir -p "$DIRNAME/tested_info" && mv "$FILE" "$DIRNAME/RAW/"
+done
