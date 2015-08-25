@@ -443,30 +443,33 @@ class AlgorithmForParallelAddition(object):
         show(self._weightCoefSet)
         print "Number of elements: ", len(self._weightCoefSet)
 
-    def printLatexInfo(self, for_researchThesis):
+    def printLatexInfo(self, for_researchThesis, shortInput):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
             return latex(_list).replace('[','\{').replace(']','\}')
         if for_researchThesis:
             forTable='%'
             print "\\subsection{", self._name.replace('_','\\_') , '}\n'
-            forTable+= self._name.replace('_','\\_') + ' &'
+            forTable+= self._name.replace('_','\\_') + ' & \\ref{subsec:' + self._name.replace('_','')+ '} &'
             print "\\label{subsec:" + self._name.replace('_','')+ '}\n'
-            print 'Parameters:'
-            print '\\begin{itemize}'
-            print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
-
-            print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
-            print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
-
-            print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
-            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
+            if not shortInput:
+                print 'Parameters:'
+                print '\\begin{itemize}'
+                print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
+                print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
+                print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
+                print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
+                if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                    print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
+                else:
+                    print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
+                print '\\end{itemize}\n'
             else:
-                print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
-            print '\\end{itemize}\n'
+                print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n'
+                if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                    print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
 
-            print '\\noindent Extending window method:'
+            print '\\noindent The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
                 print '    \item Phase 1 was succesfull.'
@@ -483,7 +486,7 @@ class AlgorithmForParallelAddition(object):
                         print '    \item Phase 2 was not succesfull.\n'
                         forTable+= ' \\xmark \\\\'
                 else:
-                    print '    \item There is not unique weight coefficient for input $b,b,\\dots,b$ for some $b\\in\\mathcal{B}$ for fixed length of window.\n'
+                    print '    \item There is not unique weight coefficient for input $b,b,\\dots,b$ for the $b='+ latex(self._problematicLetter)+ '$ for fixed length of window. Thus Phase 2 does not converge.\n'
                     forTable+= ' \\xmark & --\\\\'
             else:
                 print '    \item Phase 1 was not succesfull. \n'
@@ -798,7 +801,7 @@ class AlgorithmForParallelAddition(object):
 
 
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
-    def saveInfoToTexFile(self, filename, header=True, for_researchThesis=False):
+    def saveInfoToTexFile(self, filename, header=True, for_researchThesis=False, shortInput=False):
         #save info about numeration system and results of extending window method to .tex file
         with open(filename+".tex", 'w') as fp:
             stdout = sys.stdout
@@ -814,10 +817,10 @@ class AlgorithmForParallelAddition(object):
                 print "\n"
 
                 print "\\begin{document}"
-                self.printLatexInfo(for_researchThesis)
+                self.printLatexInfo(for_researchThesis, shortInput)
                 print '\\end{document}'
             else:
-                self.printLatexInfo(for_researchThesis)
+                self.printLatexInfo(for_researchThesis, shortInput)
 
             sys.stdout = stdout
         self.addLog("Info about algorithm for parallel addition saved to "+filename+".tex")
