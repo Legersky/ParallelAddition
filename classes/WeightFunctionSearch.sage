@@ -127,7 +127,8 @@ class WeightFunctionSearch(object):
             prevQww=Set(Qww)
             while len(Qww)>1:
                 if inp_len>=max_input_length:
-                    raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
+                    self._algForParallelAdd.addLog("Inputs are longer than the given maximum: %s" %(max_input_length))
+                    raise RuntimeError("Inputs are longer than the given maximum: %s" %(max_input_length))
                 w_tuple = w_tuple+(a,)
                 Qww=self._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
                 if self._verbose>=1:  print Qww
