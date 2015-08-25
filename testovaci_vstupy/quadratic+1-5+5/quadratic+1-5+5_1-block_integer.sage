@@ -9,7 +9,7 @@ minPol ='x^2 - 5*x + 5'
 omegaCC= 100.00000000000000
 
 #Alphabet (use 'omega' as ring generator)
-alphabet = '[0, 1, 2, 3, 4, 5]'
+alphabet = '[0, 1, 2, 3, 4]'
 
 #Input alphabet (if empty, A + A is used)
 inputAlphabet = ''
