@@ -85,7 +85,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
         self.addLog("Roots of minimal polynomial of base:")
-        self.addLog(self._base.minpoly().roots(), latex=True)
+        self.addLog(complex_roots(self._base.minpoly()), latex=True)
         if self._printLogLatex:
             self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
             show(self.plotLattice())
