@@ -1,15 +1,15 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Quadratic+1-2+2_1-block_complex'
+name = 'Quadratic+1-5+5_1-block_real'
 
 #Minimal polynomial of ring generator (use variable x)
-minPol ='x^2 - 2*x + 2'
+minPol ='x^2 - 5*x + 5'
 
 #Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)
-omegaCC=1+ 1.00000000000000*I
+omegaCC= 100.00000000000000
 
 #Alphabet (use 'omega' as ring generator)
-alphabet = '[0, 1, -1, omega-1, -omega +1]'
+alphabet = '[0, 1, -1, omega, -omega]'
 
 #Input alphabet (if empty, A + A is used)
 inputAlphabet = ''
@@ -51,7 +51,7 @@ sanityCheck=False
 alphabet_img=True
 
 #save image of lattice with shifted alphabet
-lattice_img=True
+lattice_img=False
 
 #save step-by-step images of phase 1
 phase1_images=True
