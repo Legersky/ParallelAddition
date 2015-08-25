@@ -537,7 +537,7 @@ class AlgorithmForParallelAddition(object):
             if labeled:
                 label_plot+=text('$'+latex(num)+ '$', self.getCoordinates(num)+vector([0.1,0.1]) ,
                                  color=color, horizontal_alignment='left', fontsize=fontsize )
-            if not self.ring2CC(num) in RR:
+            if numCC.imag()!=0:
                 allReal=False
         if self._verbose==1:
             print "Plotting:"
