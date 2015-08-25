@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir info_tested
+find ./outputs -name "*.tex" -exec cp {} ./info_tested/ \;
