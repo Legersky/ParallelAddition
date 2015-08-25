@@ -13,7 +13,7 @@ inputAlphabet = ''
 base ='omega'
 
 #------------LIMITATIONS----------------
-max_iterations = 5      #maximum of iterations in searching for the weight coefficient set
+max_iterations = 15      #maximum of iterations in searching for the weight coefficient set
 max_input_length = 15    #maximal length of the input of the weight function
 
 #------------SANITY CHECK---------------
