@@ -133,9 +133,8 @@ class WeightFunctionSearch(object):
                 if self._verbose>=1:  print Qww
                 if prevQww==Set(Qww):
                     self._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
-                    self.%
+                    self._algForParallelAdd._problematicLetter=a
                     raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
-                self._algForParallelAdd._problematicLetter=a
                 if len(Qww)==1:
                     self._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
                 inp_len+=1
