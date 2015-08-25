@@ -91,8 +91,8 @@ class AlgorithmForParallelAddition(object):
         root_print=[]
         abs_values=[]
         for root in roots:
-            root_print.append(root[1])
-            abs_values.append(abs(root[1]))
+            root_print.append(root[0])
+            abs_values.append(abs(root[0]))
         self.addLog(root_print, latex=True)
         self.addLog('With absolute values:')
         self.addLog(abs_values, latex=True)
