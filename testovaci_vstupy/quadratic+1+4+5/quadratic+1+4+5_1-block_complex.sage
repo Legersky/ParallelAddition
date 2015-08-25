@@ -1,6 +1,6 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Quadratic_1+4+5_1-block_complex'
+name = 'Quadratic+1+4+5_1-block_complex'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol =' x^2 + 1 '
