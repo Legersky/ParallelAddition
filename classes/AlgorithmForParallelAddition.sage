@@ -466,10 +466,10 @@ class AlgorithmForParallelAddition(object):
             #    print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
             #print '\\end{itemize}\n'
 
-            print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
+            print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n'
             if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
                 print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
-            print '\\noindent Extending window method:'
+            print '\\noindent The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
                 print '    \item Phase 1 was succesfull.'
