@@ -61,17 +61,6 @@ try:
     if localConversionCsv:
         alg.saveLocalConversionToCsvFile("./outputs/"+filename+'/'+filename)
 
-    if phase1_images:
-        imgs1=alg.plotPhase1()
-        alg.saveImages(imgs1,'./outputs/'+ filename + '/img','phase1')
-
-    if weightCoefSet_img:
-        alg.saveImages([alg.plotWeightCoefSet(estimation)],'./outputs/'+ filename + '/img','weightCoefficientsSet')
-
-    if phase2_images:
-        imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
-        alg.saveImages(imgs2,'./outputs/'+ filename + '/img','phase2')
-
     if sanityCheck:
         er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
@@ -88,8 +77,22 @@ except Exception, e:
 finally:
     if info:
         alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True,shortInput=True)
+
     if saveLog:
         alg.saveLog("./outputs/"+filename+'/'+filename)
+
+    if alg._weightCoefSet:
+        if phase1_images:
+            imgs1=alg.plotPhase1()
+            alg.saveImages(imgs1,'./outputs/'+ filename + '/img','phase1')
+
+        if weightCoefSet_img:
+            alg.saveImages([alg.plotWeightCoefSet(estimation)],'./outputs/'+ filename + '/img','weightCoefficientsSet')
+
+    if phase2_images and alg._weightFunction:
+        imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
+        alg.saveImages(imgs2,'./outputs/'+ filename + '/img','phase2')
+
     if saveUnsolved and not alg_update and not unsolved_saved:
         alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
     print '--------------------------end of '+ filename +'---------------------------------------------'
