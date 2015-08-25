@@ -1,6 +1,6 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Eisenstein_1-block_integer'
+name = 'Eisenstein_1-block_small_complex'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol =' x^2 + x + 1 '
