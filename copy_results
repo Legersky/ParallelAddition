@@ -1,3 +1,5 @@
 #!/bin/bash
-mkdir info_tested
+if [ ! -d "info_tested" ]; then
+    mkdir info_tested
+fi
 find ./outputs -name "*.tex" -exec cp {} ./info_tested/ \;
