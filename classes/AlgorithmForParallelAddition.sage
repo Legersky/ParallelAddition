@@ -2,6 +2,8 @@ load('WeightCoefficientsSetSearch.sage')
 load('WeightFunctionSearch.sage')
 load('WeightFunction.sage')
 
+from sage.rings.polynomial.complex_roots import complex_roots
+
 class AlgorithmForParallelAddition(object):
     """
     zastresujici trida pro hledani algoritmu paralelniho scitani s abecedou v alphabetRing (Z[\omega]) s prepisovacim pravidlem x-base, base \in baseRing \subset alphabetRing
