@@ -1,6 +1,6 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Quadratic+1-2+2-1_block_small_integer'
+name = 'Quadratic+1-2+2_1-block_small_integer'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol ='x^2 - 2*x + 2'
