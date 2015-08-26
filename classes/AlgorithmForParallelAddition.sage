@@ -463,7 +463,7 @@ class AlgorithmForParallelAddition(object):
             forTable='%'
             print '\\begin{exmp}'
             print "\\textbf{", self._name.replace('_','\\_') , '}\n'
-            forTable+= self._name.replace('_','\\_') + ' & \\ref{subsec:' + self._name.replace('_','')+ '} &'
+            forTable+= self._name.replace('_','\\_') + ' & \\ref{ex:' + self._name.replace('_','')+ '} &'
             print "\\label{ex:" + self._name.replace('_','')+ '}\n'
             if not shortInput:
                 print 'Parameters:'
