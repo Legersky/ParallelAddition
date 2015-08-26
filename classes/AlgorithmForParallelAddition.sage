@@ -493,7 +493,7 @@ class AlgorithmForParallelAddition(object):
                     forTable+= ' \\checkmark &'
                     if self._weightFunction:
                         print '    \item Phase 2 was succesful.'
-                        print 'The lenght of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
+                        print 'The length of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
                         forTable+= ' \\checkmark \\\\'
                     else:
                         print '    \item Phase 2 was not succesful.\n'
