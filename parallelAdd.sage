@@ -2,6 +2,7 @@ load_attach_path('./classes')
 load('AlgorithmForParallelAddition.sage')
 
 load('input_sample.sage')
+no_images=True
 
 import sys
 import time
@@ -10,6 +11,13 @@ alg=None
 alg_update=False
 
 load(sys.argv[1])
+
+if no_images:
+    alphabet_img=False        #save image of alphabet and input alphabet
+    lattice_img=False         #save image of lattice with shifted alphabet
+    phase1_images=False       #save step-by-step images of phase 1
+    weightCoefSet_img=False   #save image of the weight coefficient set
+    phase2_images=False       #save step-by-step images of phase 2
 
 try:
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
