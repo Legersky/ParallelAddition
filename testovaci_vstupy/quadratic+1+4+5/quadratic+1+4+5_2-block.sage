@@ -9,7 +9,7 @@ minPol =' x^2 + 1 '
 omegaCC= 1.00000000000000*I
 
 #Alphabet (use 'omega' as ring generator)
-alphabet = ' [0, 1, -1, omega-1, -omega+1, omega -2, -omega +2, omega - 3, -omega +3] '
+alphabet = ' [0, 1, 2, 3, 4, omega - 6, omega - 5, omega - 4, omega - 3, omega - 2, omega, omega + 1, omega + 2, 3*omega - 10, 3*omega - 9, 3*omega - 8, 3*omega - 7, 3*omega - 6, 3*omega - 5, 3*omega - 4, 3*omega - 3, 3*omega - 2, -3*omega + 2, -3*omega + 3, -3*omega + 4, -3*omega + 5, -3*omega + 6, -3*omega + 7, -3*omega + 8, -3*omega + 9, -3*omega + 10, -omega - 1, -omega + 2, 2*omega - 2, -omega, -omega + 1, 2*omega - 8, 2*omega - 7, 2*omega - 6, 2*omega - 5, 2*omega - 4, 2*omega - 3, 2*omega - 1, 2*omega, -2*omega + 3, 4*omega - 12, 4*omega - 11, 4*omega - 10, 4*omega - 9, 4*omega - 8, 4*omega - 7, 4*omega - 6, 4*omega - 5, 4*omega - 4, -2*omega + 5, -2*omega + 4, -2*omega + 6, -4*omega + 4, -4*omega + 5, -4*omega + 6, -4*omega + 7, -4*omega + 8, -4*omega + 9, -4*omega + 10, -4*omega + 11, -4*omega + 12, omega - 1, -omega - 2, -2*omega, -2*omega + 1, -2*omega + 2, -omega + 3, -omega + 4, -omega + 5, -omega + 6, -2*omega + 7, -2*omega + 8, -1, -4, -3, -2] '
 
 #Input alphabet (if empty, A + A is used)
 inputAlphabet = ''
