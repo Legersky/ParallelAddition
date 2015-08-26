@@ -461,9 +461,10 @@ class AlgorithmForParallelAddition(object):
             return latex(_list).replace('[','\{').replace(']','\}')
         if for_researchThesis:
             forTable='%'
-            print "\\subsection{", self._name.replace('_','\\_') , '}\n'
+            print '\\begin{exmp}'
+            print "\\textbf{", self._name.replace('_','\\_') , '}\n'
             forTable+= self._name.replace('_','\\_') + ' & \\ref{subsec:' + self._name.replace('_','')+ '} &'
-            print "\\label{subsec:" + self._name.replace('_','')+ '}\n'
+            print "\\label{ex:" + self._name.replace('_','')+ '}\n'
             if not shortInput:
                 print 'Parameters:'
                 print '\\begin{itemize}'
@@ -481,7 +482,7 @@ class AlgorithmForParallelAddition(object):
                 if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
                     print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
 
-            print '\\noindent The result of the extending window method is:'
+            print 'The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
                 print '    \item Phase 1 was succesful.'
@@ -504,6 +505,7 @@ class AlgorithmForParallelAddition(object):
                 print '    \item Phase 1 was not succesful. \n'
                 forTable+= ' \\xmark & -- & --\\\\'
             print '\\end{enumerate}'
+            print '\\end{exmp}'
             print forTable
         else:
             print "Numeration System:", self._name, '\n'
