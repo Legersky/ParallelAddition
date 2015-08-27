@@ -18,6 +18,9 @@ class WeightCoefficientsSetSearch(object):
 
         self._method=method
 
+        #the following diagonalizing matrix is necessary for construction of the norm for method 3
+        self._diagonalizingMatrix=matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1]
+
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
 
@@ -97,7 +100,7 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
 
-        #Method 3 takes first the only possible candidates and then chooses the smallest element in specific norm
+        #Method 3 takes first the only possible candidates and then chooses the smallest element in the nartural norm
         #DOES NOT WORK !!!!!!!!
         if self._method==3:
             for cand_for_elem in copy(candidates):
@@ -177,21 +180,17 @@ class WeightCoefficientsSetSearch(object):
         return list_from_Ring[smallest_in]
 
     def _findSmallest_norm(self,list_from_Ring):
-        #finds smallest (in a specific norm) element of list_from_Ring
-        smallestNorm=self._norm_squares_of_coefficients(list_from_Ring[0])
+        #finds smallest (in natural norm) element of list_from_Ring
+        smallestNorm=self.naturalNorm(list_from_Ring[0])
         smallest_in=0
         i=0
         for num in list_from_Ring[1:]:
-            numNorm=self._norm_squares_of_coefficients(num)
+            numNorm=self.naturalNorm(num)
             i+=1
             if numNorm<smallestNorm:
                 smallestNorm=numNorm
                 smallest_in=i
         return list_from_Ring[smallest_in]
 
- #   def _norm_squares_of_coefficients(self,num_from_ring):
-  #      coef=num_from_ring.list()
-   #     norm=0
-    #    for c in coef:
-     #       norm+=c*c
-      #  return norm
+    def naturalNorm(self,num):
+        return self._diagonalizingMatrix*vector(num.list()).norm()

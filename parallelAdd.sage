@@ -52,7 +52,7 @@ try:
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
 
     start=time.clock()
-    alg.findWeightFunction(max_iterations,max_input_length)
+    alg.findWeightFunction(max_iterations,max_input_length,method_weightCoefSet=3)
     end=time.clock()
     alg.addLog("Elapsed time: "+ str(end-start))
 
