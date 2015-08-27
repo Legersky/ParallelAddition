@@ -19,7 +19,7 @@ class WeightCoefficientsSetSearch(object):
         self._method=method
 
         #the following diagonalizing matrix is necessary for construction of the norm for method 3
-        self._diagonalizingMatrix=matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1]
+        self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
 
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
