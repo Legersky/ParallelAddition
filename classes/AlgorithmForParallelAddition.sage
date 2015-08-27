@@ -147,7 +147,7 @@ class AlgorithmForParallelAddition(object):
 
     def check_representants_mod_base_minus_one(self):
         repr_missing_for=[]
-        for b in alg._inputAlphabet:
+        for b in self._inputAlphabet:
             repr_for_b=False
             for a in self._alphabet:
                 if self.divide(b-a, self._base-1)!=None:
