@@ -1,6 +1,6 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Eisenstein_1-block_complex'
+name = 'Eisenstein_shifted_1-block_complex'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol =' x^2 + x + 1 '
@@ -15,7 +15,7 @@ alphabet = '[0, 1, -1, omega, -omega, -omega - 1, omega + 1]'
 inputAlphabet = ''
 
 #Base (use 'omega' as ring generator)
-base ='omega - 1'
+base ='omega +1'
 
 #------------LIMITATIONS----------------
 #maximum of iterations in searching weight coefficient set
