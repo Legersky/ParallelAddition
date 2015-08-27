@@ -177,7 +177,9 @@ class WeightCoefficientsSetSearch(object):
             if numAbs<smallestAbs:
                 smallestAbs=numAbs
                 smallest_in=i
-        print 'Searching for the smallest element in the absolute value'
+        if self._verbose>=1:
+            print 'Searching for the smallest element in the absolute value'
+            print smallestAbs
         return list_from_Ring[smallest_in]
 
     def _findSmallest_norm(self,list_from_Ring):
@@ -191,8 +193,9 @@ class WeightCoefficientsSetSearch(object):
             if numNorm<smallestNorm:
                 smallestNorm=numNorm
                 smallest_in=i
-        print 'Searching for the smallest element in the natural norm'
-        print smallestNorm
+        if self._verbose>=1:
+            print 'Searching for the smallest element in the natural norm'
+            print smallestNorm
         return list_from_Ring[smallest_in]
 
     def naturalNorm(self,num):
