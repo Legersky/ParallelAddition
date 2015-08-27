@@ -146,7 +146,7 @@ class WeightFunctionSearch(object):
             elif len(w_tuple)==len(longest[0]):
                 longest.append(w_tuple)
         if self._algForParallelAdd._problematicLetters:
-            raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
+            raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(self._algForParallelAdd._problematicLetters,self._method))
         return longest
 
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
