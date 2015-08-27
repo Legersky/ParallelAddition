@@ -48,7 +48,7 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet([])
         self._ringGenCompanionMatrix=matrix.companion(self._minPolynomial)
             # companion matrix to minimal polynomial of ringGenerator (omega)
-        self._inverseBaseCompanionMatrix=self._computeInverseBaseCompanionMatrix()
+        self._inverseBaseCompanionMatrix=self._computeInverseCompanionMatrix(self._base)
             # inversion of companion matrix of base
         self._weightCoefSet=[]
             #set of potential coefficients
@@ -96,6 +96,8 @@ class AlgorithmForParallelAddition(object):
         self.addLog(root_print, latex=True)
         self.addLog('With absolute values:')
         self.addLog(abs_values, latex=True)
+        self.addLog('Checking representants mod base-1:')
+        self.check_representants_mod_base_minus_one()
         if self._printLogLatex:
             self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
             show(self.plotLattice())
@@ -142,6 +144,23 @@ class AlgorithmForParallelAddition(object):
             if abs(self.ring2CC(b))>maxB:
                 maxB=abs(self.ring2CC(b))
         self._maximumOfInputAlphabet=maxB
+
+    def check_representants_mod_base_minus_one(self):
+        repr_missing_for=[]
+        for b in alg._inputAlphabet:
+            repr_for_b=False
+            for a in self._alphabet:
+                if self.divide(b-a, self._base-1)!=None:
+                    repr_for_b=True
+                    if self._verbose>=1: print b,'=',a,'+(',self.divide(b-a, self._base-1),')*(', (self._base-1),')'
+            if not repr_for_b:
+                repr_missing_for.append(b)
+        if repr_missing_for:
+            self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
+            self.addLog(repr_missing_for, latex=True)
+        else:
+            self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
+        return repr_missing_for
 
     def setBase(self, base):
         #set base
@@ -402,22 +421,23 @@ class AlgorithmForParallelAddition(object):
                 res=res+Set([a+b])
         return res.list()
 
-    def _computeInverseBaseCompanionMatrix(self):
-        #compute inverse matrix to companion matrix of base using Horner scheme:
-        base_list=self._base.list()
-        baseCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
-        for base_coef in reversed(base_list):
-            baseCompanionMatrix *= self._ringGenCompanionMatrix
-            baseCompanionMatrix += base_coef
-        return baseCompanionMatrix.inverse()
+    def _computeInverseCompanionMatrix(self,num):
+        #compute inverse matrix to companion matrix of num using Horner scheme:
+        num_list=num.list()
+        numCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
+        for num_coef in reversed(num_list):
+            numCompanionMatrix *= self._ringGenCompanionMatrix
+            numCompanionMatrix += num_coef
+        return numCompanionMatrix.inverse()
 
-    def divideByBase(self,divided_number):
-        #return w divided by base if defined, else return None
+    def divide(self,divided_number, divide_by):
+        #return divided_number divided by divide_by if defined, else return None
         num_list=divided_number.list()    #coeffients of divided_number in Ring
-        for i in range(len(divided_number.list()), self._inverseBaseCompanionMatrix.nrows()):
+        divisionMatrix=self._computeInverseCompanionMatrix(divide_by)
+        for i in range(len(divided_number.list()), divisionMatrix.nrows()):
             num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of ringGenerator
         num_vect=vector(num_list)
-        res_vect=(self._inverseBaseCompanionMatrix)*num_vect    #division over rational polynomials
+        res_vect=(divisionMatrix)*num_vect    #division over rational polynomials
         res_list=[]
         for val in res_vect.list():        #divided_number is divisible by base if all its coefficients are integers
             if val.is_integer():
@@ -425,6 +445,23 @@ class AlgorithmForParallelAddition(object):
             else:
                 return None
         return self.list2Ring(res_list)    #conversion to Ring
+
+    def divideByBase(self,divided_number):
+        #return w divided by base if defined, else return None
+        if 0:
+            num_list=divided_number.list()    #coeffients of divided_number in Ring
+            for i in range(len(divided_number.list()), self._inverseBaseCompanionMatrix.nrows()):
+                num_list.append(0)    #prolonging to length equal to degree of minimal polynomial of ringGenerator
+            num_vect=vector(num_list)
+            res_vect=(self._inverseBaseCompanionMatrix)*num_vect    #division over rational polynomials
+            res_list=[]
+            for val in res_vect.list():        #divided_number is divisible by base if all its coefficients are integers
+                if val.is_integer():
+                    res_list.append(Integer(val))
+                else:
+                    return None
+            return self.list2Ring(res_list)    #conversion to Ring
+        return self.divide(divided_number, self._base)
 
 #-----------------------------PRINT FUNCTIONS--------------------------------------------------------------------------------
     def addLog(self,_log, latex=False):

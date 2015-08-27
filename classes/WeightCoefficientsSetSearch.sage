@@ -190,6 +190,7 @@ class WeightCoefficientsSetSearch(object):
             if numNorm<smallestNorm:
                 smallestNorm=numNorm
                 smallest_in=i
+        print smallestNorm
         return list_from_Ring[smallest_in]
 
     def naturalNorm(self,num):
