@@ -192,7 +192,8 @@ class WeightCoefficientsSetSearch(object):
                 smallestNorm=numNorm
                 smallest_in=i
         print 'Searching for the smallest element in the natural norm'
+        print smallestNorm
         return list_from_Ring[smallest_in]
 
     def naturalNorm(self,num):
-        return self._diagonalizingMatrix*vector(num.list()).norm()
+        return (self._diagonalizingMatrix*vector(num.list())).norm()
