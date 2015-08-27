@@ -118,6 +118,7 @@ class WeightFunctionSearch(object):
         #check if there is a unique weight coefficient for inputs given by repetition of one letter
         self._Qw_w[()]=self._weightCoefSet
         longest=[()]
+        self._algForParallelAdd._problematicLetters=[]
         for a in self._B:
             if self._verbose>=1: print "Processing input", a,',', a, '...'
             w_tuple=(a,)
@@ -134,8 +135,8 @@ class WeightFunctionSearch(object):
                 if self._verbose>=1:  print Qww
                 if prevQww==Set(Qww):
                     self._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
-                    self._algForParallelAdd._problematicLetter=a
-                    raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
+                    self._algForParallelAdd._problematicLetters.append(a)
+                    break
                 if len(Qww)==1:
                     self._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
                 inp_len+=1
@@ -144,6 +145,8 @@ class WeightFunctionSearch(object):
                 longest=[w_tuple]
             elif len(w_tuple)==len(longest[0]):
                 longest.append(w_tuple)
+        if self._algForParallelAdd._problematicLetters:
+            raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
         return longest
 
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
