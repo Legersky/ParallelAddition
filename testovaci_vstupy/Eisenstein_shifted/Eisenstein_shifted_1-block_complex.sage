@@ -15,7 +15,7 @@ alphabet = '[0, 1, -1, omega, -omega, -omega - 1, omega + 1]'
 inputAlphabet = ''
 
 #Base (use 'omega' as ring generator)
-base ='omega +1'
+base ='omega -2'
 
 #------------LIMITATIONS----------------
 #maximum of iterations in searching weight coefficient set
