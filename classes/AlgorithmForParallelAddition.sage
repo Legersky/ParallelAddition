@@ -485,24 +485,24 @@ class AlgorithmForParallelAddition(object):
             print 'The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
-                print '    \item Phase 1 was succesful.'
+                print '    \item Phase 1 was successful.'
                 print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n'
                 forTable+= ' \\checkmark &'
                 if self._oneLettersCheck:
                     print '    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
                     forTable+= ' \\checkmark &'
                     if self._weightFunction:
-                        print '    \item Phase 2 was succesful.'
+                        print '    \item Phase 2 was successful.'
                         print 'The length of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
                         forTable+= ' \\checkmark \\\\'
                     else:
-                        print '    \item Phase 2 was not succesful.\n'
+                        print '    \item Phase 2 was not successful.\n'
                         forTable+= ' \\xmark \\\\'
                 else:
                     print '    \item There is not unique weight coefficient for input $b,b,\\dots,b$ for the $b='+ latex(self._problematicLetter)+ '$ for fixed length of window. Thus Phase 2 does not converge.\n'
                     forTable+= ' \\xmark & --\\\\'
             else:
-                print '    \item Phase 1 was not succesful. \n'
+                print '    \item Phase 1 was not successful. \n'
                 forTable+= ' \\xmark & -- & --\\\\'
             print '\\end{enumerate}'
             print '\\end{exmp}'
@@ -521,7 +521,7 @@ class AlgorithmForParallelAddition(object):
                 print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
 
             if self._weightCoefSet:
-                print 'Phase 1 was succesful. \n'
+                print 'Phase 1 was successful. \n'
                 print "Weight Coefficient Set:"
                 print "\\begin{dmath*}"
                 print ' \\mathcal{Q}='+ setLatexBraces(self._weightCoefSet)
@@ -529,13 +529,13 @@ class AlgorithmForParallelAddition(object):
                 print '\n'
                 print "Number of elements in the weight coefficient set $\\mathcal{Q}$ is: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
             else:
-                print 'Phase 1 was not succesful. \n'
+                print 'Phase 1 was not successful. \n'
             print "Weight function Info:\n"
             if self._weightFunction:
-                print 'Phase 2 was succesful. \n'
+                print 'Phase 2 was successful. \n'
                 self._weightFunction.printLatexInfo()
             else:
-                print 'Phase 2 was not succesful.\n'
+                print 'Phase 2 was not successful.\n'
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
