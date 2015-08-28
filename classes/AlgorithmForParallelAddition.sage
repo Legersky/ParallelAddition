@@ -97,11 +97,6 @@ class AlgorithmForParallelAddition(object):
         self.addLog('With absolute values:')
         self.addLog(abs_values, latex=True)
 
-        self.addLog('Checking alphabet for representatives mod base:')
-        self.check_alphabet_for_representatives_mod_base()
-        self.addLog('Checking alphabet for representatives mod base-1:')
-        self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1)
-
         if self._printLogLatex:
             self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
             show(self.plotLattice())
@@ -170,13 +165,13 @@ class AlgorithmForParallelAddition(object):
         return repr_missing_for
 
     def check_alphabet_for_representatives_mod_base_minus_one(self):
-        self._missing_representatives_mod_base_minus_one = check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
+        self._missing_representatives_mod_base_minus_one = self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
         if self._missing_representatives_mod_base_minus_one:
             self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
             self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
+            raise ValueError('There are not representatives of elements '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
         else:
             self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
-            raise ValueError('There are not representatives of all elements of input alphabet mod (base-1) in the alphabet.')
 
     def check_alphabet_for_representatives_mod_base(self):
         num_classes=self.number_of_representatives(self._base)
@@ -292,6 +287,11 @@ class AlgorithmForParallelAddition(object):
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
         #finds and sets Weight Function
+        self.addLog('Checking alphabet for representatives mod base:')
+        self.check_alphabet_for_representatives_mod_base()
+        self.addLog('Checking alphabet for representatives mod base-1:')
+        self.check_alphabet_for_representatives_mod_base_minus_one()
+
         self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %method_weightCoefSet)
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
@@ -539,7 +539,7 @@ class AlgorithmForParallelAddition(object):
         show(self._weightCoefSet)
         print "Number of elements: ", len(self._weightCoefSet)
 
-    def printLatexInfo(self, for_researchThesis, shortInput):
+    def printLatexInfo(self, shortInput):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
             return latex(_list).replace('[','\{').replace(']','\}')
@@ -568,11 +568,21 @@ class AlgorithmForParallelAddition(object):
 
         if self._num_missing_classes_mod_base==1:
             print 'There is missing ', self._num_missing_classes_mod_base , ' congruence class modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+            forTable+='no & -- & -- & -- & -- &\\\\'
         elif self._num_missing_classes_mod_base>1:
             print 'There are missing ', self._num_missing_classes_mod_base , ' congruence classes modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+            forTable+='no & -- & -- & -- & -- &\\\\'
         elif self._missing_representatives_mod_base_minus_one:
-            print 'The elements ', setLatexBraces(self._missing_representatives_mod_base_minus_one) , ' have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
+            print 'The elements $', setLatexBraces(self._missing_representatives_mod_base_minus_one) , '$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
+            forTable+='no & -- & -- & -- & -- &\\\\'
         else:
+            forTable+=' yes &'
+            if self.getMinPolynomialOfBase().degree()==1:
+                forTable+=' yes &'
+            elif self.getMinPolynomialOfBase().degree()==2 and imag(self.ring2CC(self._base))!=0:
+                forTable+=' yes &'
+            else:
+                forTable+=' no &'
             print 'The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
@@ -878,7 +888,7 @@ class AlgorithmForParallelAddition(object):
 
 
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
-    def saveInfoToTexFile(self, filename, header=True, for_researchThesis=False, shortInput=False):
+    def saveInfoToTexFile(self, filename, header=True, shortInput=False):
         #save info about numeration system and results of extending window method to .tex file
         with open(filename+".tex", 'w') as fp:
             stdout = sys.stdout
@@ -896,10 +906,10 @@ class AlgorithmForParallelAddition(object):
                 print '\\newtheorem{exmp}{Example}\n'
 
                 print "\\begin{document}"
-                self.printLatexInfo(for_researchThesis, shortInput)
+                self.printLatexInfo( shortInput)
                 print '\\end{document}'
             else:
-                self.printLatexInfo(for_researchThesis, shortInput)
+                self.printLatexInfo( shortInput)
 
             sys.stdout = stdout
         self.addLog("Info about algorithm for parallel addition saved to "+filename+".tex")

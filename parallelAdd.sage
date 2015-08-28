@@ -84,7 +84,7 @@ except Exception, e:
 
 finally:
     if info:
-        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True,shortInput=True)
+        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, shortInput=True)
 
     if saveLog:
         alg.saveLog("./outputs/"+filename+'/'+filename)
