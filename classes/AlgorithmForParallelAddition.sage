@@ -568,13 +568,13 @@ class AlgorithmForParallelAddition(object):
 
         if self._num_missing_classes_mod_base==1:
             print 'There is missing ', self._num_missing_classes_mod_base , ' congruence class modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
-            forTable+='no & -- & -- & -- & -- &\\\\'
+            forTable+='no & -- & -- & -- & -- \\\\'
         elif self._num_missing_classes_mod_base>1:
             print 'There are missing ', self._num_missing_classes_mod_base , ' congruence classes modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
-            forTable+='no & -- & -- & -- & -- &\\\\'
+            forTable+='no & -- & -- & -- & -- \\\\'
         elif self._missing_representatives_mod_base_minus_one:
             print 'The elements $', setLatexBraces(self._missing_representatives_mod_base_minus_one) , '$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
-            forTable+='no & -- & -- & -- & -- &\\\\'
+            forTable+='no & -- & -- & -- & -- \\\\'
         else:
             forTable+=' yes &'
             if self.getMinPolynomialOfBase().degree()==1:
