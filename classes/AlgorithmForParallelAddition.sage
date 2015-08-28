@@ -96,8 +96,12 @@ class AlgorithmForParallelAddition(object):
         self.addLog(root_print, latex=True)
         self.addLog('With absolute values:')
         self.addLog(abs_values, latex=True)
-        self.addLog('Checking representants mod base-1:')
-        self.check_representants_mod_base_minus_one()
+
+        self.addLog('Checking alphabet for representatives mod base:')
+        self.check_alphabet_for_representatives_mod_base()
+        self.addLog('Checking alphabet for representatives mod base-1:')
+        self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1)
+
         if self._printLogLatex:
             self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
             show(self.plotLattice())
@@ -145,22 +149,62 @@ class AlgorithmForParallelAddition(object):
                 maxB=abs(self.ring2CC(b))
         self._maximumOfInputAlphabet=maxB
 
-    def check_representants_mod_base_minus_one(self):
+    def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
+        #check alphabet if there are all representatives of elements of _set mod modulus 
         repr_missing_for=[]
-        for b in self._inputAlphabet:
+        for b in _set:
             repr_for_b=False
             for a in self._alphabet:
-                if self.divide(b-a, self._base-1)!=None:
+                if self.divide(b-a, modulus)!=None:
                     repr_for_b=True
-                    if self._verbose>=1: print b,'=',a,'+(',self.divide(b-a, self._base-1),')*(', (self._base-1),')'
+                    if self._verbose>=1:
+                        print b,'=',a,'+(',self.divide(b-a, modulus),')*(', modulus,')'
             if not repr_for_b:
                 repr_missing_for.append(b)
-        if repr_missing_for:
+        if log:
+            if repr_missing_for:
+                self.addLog('The following elements of set '+ str(_set) + ' mod ('+str(modulus)+') are not in the alphabet:')
+                self.addLog(repr_missing_for, latex=True)
+            else:
+                self.addLog('There are all elements of set '+ str(_set) + ' mod ('+str(modulus)+') in the alphabet.')
+        return repr_missing_for
+
+    def check_alphabet_for_representatives_mod_base_minus_one(self):
+        self._missing_representatives_mod_base_minus_one = check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
+        if self._missing_representatives_mod_base_minus_one:
             self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
-            self.addLog(repr_missing_for, latex=True)
+            self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
         else:
             self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
-        return repr_missing_for
+            raise ValueError('There are not representatives of all elements of input alphabet mod (base-1) in the alphabet.')
+
+    def check_alphabet_for_representatives_mod_base(self):
+        num_classes=self.number_of_representatives(self._base)
+        self.addLog('Number of congruence classes mod base is: '+ str(num_classes))
+        classes=self.divide_into_congruent_classes(self._alphabet,self._base)
+        self.addLog('Alphabet divided into congruence classes:')
+        self.addLog(classes, latex=True)
+        self._num_missing_classes_mod_base = num_classes - len(classes)
+        if self._num_missing_classes_mod_base:
+            self.addLog('=> There are not all representatives mod base in the alphabet.')
+            raise ValueError('There are not all representatives mod base in the alphabet.')
+        else:
+            self.addLog('=> There are all representatives mod base in the alphabet.')
+
+    def divide_into_congruent_classes(self,_set,modulus):
+        classes=[]
+        for a in _set:
+            is_in_class=False
+            for _class in classes:
+                if self.divide(_class[0]-a, modulus)!=None:
+                    _class.append(a)
+                    is_in_class=True
+            if not is_in_class:
+                classes.append([a])
+        return classes
+
+    def number_of_representatives(self,modulus):
+        return self._computeCompanionMatrix(modulus).det()
 
     def setBase(self, base):
         #set base
@@ -421,14 +465,17 @@ class AlgorithmForParallelAddition(object):
                 res=res+Set([a+b])
         return res.list()
 
-    def _computeInverseCompanionMatrix(self,num):
-        #compute inverse matrix to companion matrix of num using Horner scheme:
+    def _computeCompanionMatrix(self,num):
+        #compute  matrix to companion matrix of num using Horner scheme:
         num_list=num.list()
         numCompanionMatrix=matrix(self._ringGenCompanionMatrix.nrows())
         for num_coef in reversed(num_list):
             numCompanionMatrix *= self._ringGenCompanionMatrix
             numCompanionMatrix += num_coef
-        return numCompanionMatrix.inverse()
+        return numCompanionMatrix
+
+    def _computeInverseCompanionMatrix(self,num):
+        return self._computeCompanionMatrix(num).inverse()
 
     def divide(self,divided_number, divide_by):
         #return divided_number divided by divide_by if defined, else return None
@@ -496,29 +543,36 @@ class AlgorithmForParallelAddition(object):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
             return latex(_list).replace('[','\{').replace(']','\}')
-        if for_researchThesis:
-            forTable='%'
-            print '\\begin{exmp}'
-            print "\\textbf{", self._name.replace('_','\\_') , '}\n'
-            forTable+= self._name.replace('_','\\_') + ' & \\ref{ex:' + self._name.replace('_','')+ '} &'
-            print "\\label{ex:" + self._name.replace('_','')+ '}\n'
-            if not shortInput:
-                print 'Parameters:'
-                print '\\begin{itemize}'
-                print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
-                print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
-                print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
-                print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
-                if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                    print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
-                else:
-                    print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
-                print '\\end{itemize}\n'
-            else:
-                print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n'
-                if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                    print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
 
+        forTable='%'
+        print '\\begin{exmp}'
+        print "\\textbf{", self._name.replace('_','\\_') , '}\n'
+        forTable+= self._name.replace('_','\\_') + ' & \\ref{ex:' + self._name.replace('_','')+ '} &'
+        print "\\label{ex:" + self._name.replace('_','')+ '}\n'
+        if not shortInput:
+            print 'Parameters:'
+            print '\\begin{itemize}'
+            print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
+            print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
+            print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
+            print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
+            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
+            else:
+                print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
+            print '\\end{itemize}\n'
+        else:
+            print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n'
+            if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
+
+        if self._num_missing_classes_mod_base==1:
+            print 'There is missing ', self._num_missing_classes_mod_base , ' congruence class modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+        elif self._num_missing_classes_mod_base>1:
+            print 'There are missing ', self._num_missing_classes_mod_base , ' congruence classes modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+        elif self._missing_representatives_mod_base_minus_one:
+            print 'The elements ', setLatexBraces(self._missing_representatives_mod_base_minus_one) , ' have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
+        else:
             print 'The result of the extending window method is:'
             print '\\begin{enumerate}'
             if self._weightCoefSet:
@@ -543,36 +597,8 @@ class AlgorithmForParallelAddition(object):
                 forTable+= ' \\xmark & -- & --\\\\'
             print '\\end{enumerate}'
             print '\\end{exmp}'
-            print forTable
-        else:
-            print "Numeration System:", self._name, '\n'
-            print "Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$\n'
+        print forTable
 
-            print "Base $\\beta=" + latex(self.getBase()) + '$\n'
-            print "Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$\n'
-
-            print "Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$\n'
-            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print "Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$\n"
-            else:
-                print "Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$\n'
-
-            if self._weightCoefSet:
-                print 'Phase 1 was successful. \n'
-                print "Weight Coefficient Set:"
-                print "\\begin{dmath*}"
-                print ' \\mathcal{Q}='+ setLatexBraces(self._weightCoefSet)
-                print "\\end{dmath*}"
-                print '\n'
-                print "Number of elements in the weight coefficient set $\\mathcal{Q}$ is: " + '$' + latex(len(self._weightCoefSet)) + '$\n'
-            else:
-                print 'Phase 1 was not successful. \n'
-            print "Weight function Info:\n"
-            if self._weightFunction:
-                print 'Phase 2 was successful. \n'
-                self._weightFunction.printLatexInfo()
-            else:
-                print 'Phase 2 was not successful.\n'
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
@@ -866,6 +892,8 @@ class AlgorithmForParallelAddition(object):
 
                 print "\\textwidth 17 cm \\textheight 27 cm"
                 print "\n"
+
+                print '\\newtheorem{exmp}{Example}\n'
 
                 print "\\begin{document}"
                 self.printLatexInfo(for_researchThesis, shortInput)
