@@ -606,7 +606,7 @@ class AlgorithmForParallelAddition(object):
                 print '    \item Phase 1 was not successful. \n'
                 forTable+= ' \\xmark & -- & --\\\\'
             print '\\end{enumerate}'
-            print '\\end{exmp}'
+        print '\\end{exmp}'
         print forTable
 
 
