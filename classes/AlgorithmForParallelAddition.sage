@@ -199,7 +199,7 @@ class AlgorithmForParallelAddition(object):
         return classes
 
     def number_of_representatives(self,modulus):
-        return self._computeCompanionMatrix(modulus).det()
+        return abs(self._computeCompanionMatrix(modulus).det())
 
     def setBase(self, base):
         #set base
