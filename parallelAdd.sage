@@ -20,7 +20,7 @@ if no_images:
     phase2_images=False       #save step-by-step images of phase 2
 
 try:
-    alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
+    alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=0)
 
     alg_update=False
     unsolved_saved=False
@@ -52,7 +52,7 @@ try:
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
 
     start=time.clock()
-    alg.findWeightFunction(max_iterations,max_input_length,method_weightCoefSet=3)
+    alg.findWeightFunction(max_iterations,max_input_length,method_weightCoefSet=3,method_weightFunSearch=1)
     end=time.clock()
     alg.addLog("Elapsed time: "+ str(end-start))
 
