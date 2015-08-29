@@ -51,30 +51,33 @@ class WeightFunctionSearch(object):
         if w_tuple_without_first in self._Qw_w:
             C=self._algForParallelAdd.sumOfSets([w0],self._Qw_w[w_tuple_without_first])
 
-            if self._method ==0:    	    #puvodni FUNGUJE
-                Qww=[]
-                Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                if self._verbose>=2:
-                    print 'To be covered:' , C
-                    print 'Previous Qw', Qw_prev
-                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                for q in Qw_prev:
-                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                        #add covering values
-                        if covered_by_q in C_covered_by:
-                            C_covered_by[covered_by_q].append(q)    #next ones
-                        else:
-                            C_covered_by[covered_by_q]=[q]        #first covering value
+            Qww=[]
+            Qw_prev=self._Qw_w[w_tuple[0:-1]]
+            if self._verbose>=2:
+                print 'To be covered:' , C
+                print 'Previous Qw', Qw_prev
+            C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
+            for q in Qw_prev:
+                for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
+                    #add covering values
+                    if covered_by_q in C_covered_by:
+                        C_covered_by[covered_by_q].append(q)    #next ones
+                    else:
+                        C_covered_by[covered_by_q]=[q]        #first covering value
 
-                while C_covered_by:        #while there are uncovered elements
-                    if self._verbose>=2:
-                        print C_covered_by
-                    to_add=[]
+            first_time=True
+            while C_covered_by:        #while there are uncovered elements
+                if self._verbose>=2:
+                    print C_covered_by
+                to_add=[]
+                if first_time:
                     for covered in C_covered_by:
                         if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
                             to_add.append(C_covered_by[covered][0])
                     to_add=Set(to_add).list()
+                    first_time=False
 
+                if self._method ==0:    	    #puvodni FUNGUJE
                     num=2
                     while not to_add:
                         for covered in C_covered_by:
@@ -83,336 +86,69 @@ class WeightFunctionSearch(object):
                                 break
                         num+=1
 
-                    for covered in copy(C_covered_by):
-                        for added in to_add:
-                            if added in C_covered_by[covered]:
-                                C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                break
-                    if self._verbose>=2:
-                        print 'Elements to add:', to_add
-                    Qww+=to_add
-                Qww=Set(Qww).list()
-
-            #choosing from shortest
-            elif self._method in [1,2,3,4,5]:
-
-                Qww=[]
-                Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                if self._verbose>=2:
-                    print 'To be covered:' , C
-                    print 'Previous Qw', Qw_prev
-                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                for q in Qw_prev:
-                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                        #add covering values
-                        if covered_by_q in C_covered_by:
-                            C_covered_by[covered_by_q].append(q)    #next ones
-                        else:
-                            C_covered_by[covered_by_q]=[q]        #first covering value
-
-                while C_covered_by:        #while there are uncovered elements
-                    if self._verbose>=2:
-                        print C_covered_by
-                    to_add=[]
-                    for covered in C_covered_by:
-                        if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                            to_add.append(C_covered_by[covered][0])
-                    to_add=Set(to_add).list()
-
+                elif self._method ==1: #nejmensi mozna ze shortest FUNGUJE
                     num=2
-
                     while not to_add:
                         list_of_shortest=[]
                         for covered in C_covered_by:
                             if len(C_covered_by[covered])==num:    #then add first value of list with length num
                                 list_of_shortest.append(Set(C_covered_by[covered]))
                         if list_of_shortest:
-                            if self._method==1:    	    #nejmensi mozna ze shortest FUNGUJE
-                                to_add=self._minimalCovering(list_of_shortest)[0]
-                            elif self._method==2:    	    #nahodne ze shortest FUNGUJE
-                                to_add.append(sum(list_of_shortest)[ZZ.random_element(len(from_shortest))])    #tady musi byt neco jineho
+                            to_add=self._minimalCovering(list_of_shortest)[0]
                         num+=1
 
-                    for covered in copy(C_covered_by):
-                        for added in to_add:
-                            if added in C_covered_by[covered]:
-                                C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                break
-                    if self._verbose>=2:
-                        print 'Elements to add:', to_add
-                    Qww+=to_add
-                Qww=Set(Qww).list()
-
-                elif self._method==2:    	    #nahodne ze shortest FUNGUJE
-                    Qww=[]
-                    Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                    if self._verbose>=2:
-                        print 'To be covered:' , C
-                        print 'Previous Qw', Qw_prev
-                    C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                    for q in Qw_prev:
-                        for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                            #add covering values
-                            if covered_by_q in C_covered_by:
-                                C_covered_by[covered_by_q].append(q)    #next ones
-                            else:
-                                C_covered_by[covered_by_q]=[q]        #first covering value
-
-                    while C_covered_by:        #while there are uncovered elements
-                        if self._verbose>=2:
-                            print C_covered_by
-                        to_add=[]
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                                to_add.append(C_covered_by[covered][0])
-                        to_add=Set(to_add).list()
-
-                        num=2
-                        while not to_add:
-                            from_shortest=[]
-                            for covered in C_covered_by:
-                                if len(C_covered_by[covered])==num:    #then add first value of list with length num
-                                    from_shortest+=C_covered_by[covered]
-                            if from_shortest:
-                                to_add.append(from_shortest[ZZ.random_element(len(from_shortest))])
-                            num+=1
-
-                        for covered in copy(C_covered_by):
-                            for added in to_add:
-                                if added in C_covered_by[covered]:
-                                    C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                    break
-                        if self._verbose>=2:
-                            print 'Elements to add:', to_add
-                        Qww+=to_add
-                    Qww=Set(Qww).list()
-
-                elif self._method==3:        #pick element podle mrizky ze shortest FUNGUJE
-                    Qww=[]
-                    Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                    if self._verbose>=2:
-                        print 'To be covered:' , C
-                        print 'Previous Qw', Qw_prev
-                    C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                    for q in Qw_prev:
-                        for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                            #add covering values
-                            if covered_by_q in C_covered_by:
-                                C_covered_by[covered_by_q].append(q)    #next ones
-                            else:
-                                C_covered_by[covered_by_q]=[q]        #first covering value
-
-                    while C_covered_by:        #while there are uncovered elements
-                        if self._verbose>=2:
-                            print C_covered_by
-                        to_add=[]
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                                to_add.append(C_covered_by[covered][0])
-                        to_add=Set(to_add).list()
-
-                        num=2
-                        while not to_add:
-                            elements_from_shortest=[]
-                            for covered in C_covered_by:
-                                if len(C_covered_by[covered])==num:    #then add first value of list with length num
-                                    #to_add.append(C_covered_by[covered][0])
-                                    #break
-                                    elements_from_shortest+=C_covered_by[covered]        #adding all shortest
-                            #to_add=self._pick_element(elements_from_shortest)
-                            chosen_element=self._pick_element(elements_from_shortest)
-                            if chosen_element!=None:
-                                to_add=[chosen_element]
-                            num+=1
-
-                        for covered in copy(C_covered_by):
-                            for added in to_add:
-                                if added in C_covered_by[covered]:
-                                    C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                    break
-                        if self._verbose>=2:
-                            print 'Elements to add:', to_add
-                        Qww+=to_add
-                    Qww=Set(Qww).list()
-
-                elif self._method==4:        #pick element co nejbliz teziste podle mrizky ze shortest FUNGUJE
-                    Qww=[]
-                    Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                    if self._verbose>=2:
-                        print 'To be covered:' , C
-                        print 'Previous Qw', Qw_prev
-                    C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                    for q in Qw_prev:
-                        for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                            #add covering values
-                            if covered_by_q in C_covered_by:
-                                C_covered_by[covered_by_q].append(q)    #next ones
-                            else:
-                                C_covered_by[covered_by_q]=[q]        #first covering value
-
-                    while C_covered_by:        #while there are uncovered elements
-                        if self._verbose>=2:
-                            print C_covered_by
-                        to_add=[]
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                                to_add.append(C_covered_by[covered][0])
-                        to_add=Set(to_add).list()
-
-                        num=2
-                        while not to_add:
-                            elements_from_shortest=[]
-                            for covered in C_covered_by:
-                                if len(C_covered_by[covered])==num:    #then add first value of list with length num
-                                    #to_add.append(C_covered_by[covered][0])
-                                    #break
-                                    elements_from_shortest+=C_covered_by[covered]        #adding all shortest
-                            #to_add=self._pick_element(elements_from_shortest)
-                            chosen_element=self._pick_element_close_PoG_by_lattice(elements_from_shortest,self.point_of_gravity(elements_from_shortest))
-                            if chosen_element!=None:
-                                to_add=[chosen_element]
-                            num+=1
-
-                        for covered in copy(C_covered_by):
-                            for added in to_add:
-                                if added in C_covered_by[covered]:
-                                    C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                    break
-                        if self._verbose>=2:
-                            print 'Elements to add:', to_add
-                        Qww+=to_add
-                    Qww=Set(Qww).list()
-
-                elif self._method==5:        #pick element randomly from shortest FUNGUJE
-                Qww=[]
-                Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                if self._verbose>=2:
-                    print 'To be covered:' , C
-                    print 'Previous Qw', Qw_prev
-                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                for q in Qw_prev:
-                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                        #add covering values
-                        if covered_by_q in C_covered_by:
-                            C_covered_by[covered_by_q].append(q)    #next ones
-                        else:
-                            C_covered_by[covered_by_q]=[q]        #first covering value
-
-                while C_covered_by:        #while there are uncovered elements
-                    if self._verbose>=2:
-                        print C_covered_by
-                    to_add=[]
-                    for covered in C_covered_by:
-                        if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                            to_add.append(C_covered_by[covered][0])
-                    to_add=Set(to_add).list()
-
+                elif self._method in [2,3,4,7]:
                     num=2
                     while not to_add:
-                        elements_from_shortest=[]
+                        shortest=[]
                         for covered in C_covered_by:
                             if len(C_covered_by[covered])==num:    #then add first value of list with length num
-                                elements_from_shortest+=C_covered_by[covered]        #adding all shortest
-                        if len(elements_from_shortest)>0:
-                            to_add=[elements_from_shortest[ZZ.random_element(len(elements_from_shortest))]]
-
+                                shortest+=C_covered_by[covered]
+                        if shortest:
+                            if self._method==2:    	    #nahodne ze shortest FUNGUJE
+                                to_add.append(shortest[ZZ.random_element(len(shortest))])
+                            elif self._method==3:        #pick element podle mrizky ze shortest FUNGUJE
+                                chosen_element=self._pick_element(shortest)
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            elif self._method==4:        #pick element co nejbliz teziste podle mrizky ze shortest FUNGUJE
+                                chosen_element=self._pick_element_close_PoG_by_lattice(shortest,self.point_of_gravity(shortest))
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            elif self._method==7:        #pick element co nejbliz teziste ze shortest FUNGUJE
+                                chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
                         num+=1
 
-                    for covered in copy(C_covered_by):
-                        for added in to_add:
-                            if added in C_covered_by[covered]:
-                                C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                break
-                    if self._verbose>=2:
-                        print 'Elements to add:', to_add
-                    Qww+=to_add
-                Qww=Set(Qww).list()
-
-            #choosing from all
-            elif self._method in [6,7]:
-                if self._method==6:        #pick element ze vsech co nejbliz teziste podle mrizky HORSI - WINDOW LENGTH 4
-                    Qww=[]
-                    Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                    if self._verbose>=2:
-                        print 'To be covered:' , C
-                        print 'Previous Qw', Qw_prev
-                    C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                    for q in Qw_prev:
-                        for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                            #add covering values
-                            if covered_by_q in C_covered_by:
-                                C_covered_by[covered_by_q].append(q)    #next ones
-                            else:
-                                C_covered_by[covered_by_q]=[q]        #first covering value
-
-                    while C_covered_by:        #while there are uncovered elements
-                        if self._verbose>=2:
-                            print C_covered_by
-                        to_add=[]
+                elif self._method==5:        #pick element ze vsech co nejbliz teziste podle mrizky HORSI - WINDOW LENGTH 4
+                    if not to_add:
+                        elements=[]
                         for covered in C_covered_by:
-                            if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                                to_add.append(C_covered_by[covered][0])
-                        to_add=Set(to_add).list()
+                            elements+=C_covered_by[covered]        #adding all shortest
+                            to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
 
-
-                        if not to_add:
-                            elements_from_shortest=[]
-                            for covered in C_covered_by:
-                                elements_from_shortest+=C_covered_by[covered]        #adding all shortest
-                            to_add=[self._pick_element_close_PoG_by_lattice(elements_from_shortest, self.point_of_gravity(elements_from_shortest))]
-
-                        for covered in copy(C_covered_by):
-                            for added in to_add:
-                                if added in C_covered_by[covered]:
-                                    C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                    break
-                        if self._verbose>=2:
-                            print 'Elements to add:', to_add
-                        Qww+=to_add
-
-                    Qww=Set(Qww).list()
-
-                elif self._method==7:    	    #nejmensi mozna FUNGUJE
-                Qww=[]
-                Qw_prev=self._Qw_w[w_tuple[0:-1]]
-                if self._verbose>=2:
-                    print 'To be covered:' , C
-                    print 'Previous Qw', Qw_prev
-                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
-                for q in Qw_prev:
-                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
-                        #add covering values
-                        if covered_by_q in C_covered_by:
-                            C_covered_by[covered_by_q].append(q)    #next ones
-                        else:
-                            C_covered_by[covered_by_q]=[q]        #first covering value
-
-                while C_covered_by:        #while there are uncovered elements
-                    if self._verbose>=2:
-                        print C_covered_by
-                    to_add=[]
-                    for covered in C_covered_by:
-                        if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
-                            to_add.append(C_covered_by[covered][0])
-                    to_add=Set(to_add).list()
-
+                elif self._method==6:    	    #nejmensi mozna FUNGUJE
                     if not to_add:
                         list_of_all=[]
                         for covered in C_covered_by:
                             list_of_all.append(Set(C_covered_by[covered]))
                         to_add=self._minimalCovering(list_of_all)[0]
 
-                    for covered in copy(C_covered_by):
-                        for added in to_add:
-                            if added in C_covered_by[covered]:
-                                C_covered_by.pop(covered)    #remove covered elements from dictionary
-                                break
-                    if self._verbose>=2:
-                        print 'Elements to add:', to_add
-                    Qww+=to_add
-                Qww=Set(Qww).list()
-            else:
-                raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
+                else:
+                    raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
+
+                for covered in copy(C_covered_by):
+                    for added in to_add:
+                        if added in C_covered_by[covered]:
+                            C_covered_by.pop(covered)    #remove covered elements from dictionary
+                            break
+                if self._verbose>=2:
+                    print 'Elements to add:', to_add
+                Qww+=to_add
+
+            Qww=Set(Qww).list()
+
             if self._verbose>=2:
                 print "Qw_w for ", w_tuple, " was found: "
                 print Qww
@@ -524,23 +260,14 @@ class WeightFunctionSearch(object):
             chosen=[]
             for elem in elements:
                 chosen.append(self._algForParallelAdd._ring(elem)-PoG)    #coercion into Z[omega], shift to point of gravity
-            k=0
-            print 'PoG', PoG
-            while len(chosen)>1:
-                print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
-                min_k=[chosen[0]]
-                for elem in chosen[1:]:
-                    if abs(elem.list()[k])<abs(min_k[0].list()[k]):
-                        min_k=[elem]
-                    elif abs(elem.list()[k])==abs(min_k[0].list()[k]):
-                        min_k.append(elem)
-                chosen=copy(min_k)
-                k+=1
-                if k==self._algForParallelAdd.getMinPolynomial().degree() and len(chosen)>1:
-                    print chosen
-                    return self._pick_element(chosen)
-            print 'vybrano', chosen[0]
-            return chosen[0]
+
+            min_abs=[chosen[0]]
+            for elem in chosen[1:]:
+                if abs(self._algForParallelAdd.ring2CC(elem))<abs(self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs=[elem]
+                elif abs(self._algForParallelAdd.ring2CC(elem))==abs(self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs.append(elem)
+            return self._pick_element(min_abs)+PoG
         else:
             return None
 
@@ -590,6 +317,6 @@ class WeightFunctionSearch(object):
                     print 'covering',covering_subsets
                 return covering_subsets
             k+=1
-            if k>8:
+            if k>6:
                 self._algForParallelAdd.addLog('Stopped afer searching subsets of size '+str(k-1)+ '.')
                 raise  RuntimeError('Stopped afer searching subsets of size '+str(k-1)+ '.')

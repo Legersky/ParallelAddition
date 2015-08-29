@@ -2,7 +2,7 @@ load_attach_path('./classes')
 load('AlgorithmForParallelAddition.sage')
 
 load('input_sample.sage')
-no_images=False
+no_images=True#False
 
 import sys
 import time
@@ -82,7 +82,7 @@ except KeyboardInterrupt:
 
 except Exception, e:
     print "Error:"
-    print e
+    alg.addLog(e)
 
 finally:
     if info:
