@@ -2,7 +2,7 @@ load_attach_path('./classes')
 load('AlgorithmForParallelAddition.sage')
 
 load('input_sample.sage')
-no_images=True#False
+no_images=False
 
 import sys
 import time
