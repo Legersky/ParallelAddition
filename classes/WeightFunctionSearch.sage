@@ -51,8 +51,6 @@ class WeightFunctionSearch(object):
         if w_tuple_without_first in self._Qw_w:
             C=self._algForParallelAdd.sumOfSets([w0],self._Qw_w[w_tuple_without_first])
 
-
-
             if self._method==0:    	    #nejmensi mozna ze shortest FUNGUJE
                 Qww=[]
                 Qw_prev=self._Qw_w[w_tuple[0:-1]]
@@ -78,6 +76,7 @@ class WeightFunctionSearch(object):
                     to_add=Set(to_add).list()
 
                     num=2
+
                     while not to_add:
                         list_of_shortest=[]
                         for covered in C_covered_by:
@@ -273,7 +272,7 @@ class WeightFunctionSearch(object):
                     Qww+=to_add
                 Qww=Set(Qww).list()
 
-            elif self._method==5:        #pick element ze vsech co nejbliz teziste podle mrizky HORSI - WINDOW LENGTH 5
+            elif self._method==5:        #pick element ze vsech co nejbliz teziste podle mrizky HORSI - WINDOW LENGTH 4
                 Qww=[]
                 Qw_prev=self._Qw_w[w_tuple[0:-1]]
                 if self._verbose>=2:
@@ -298,10 +297,11 @@ class WeightFunctionSearch(object):
                     to_add=Set(to_add).list()
 
 
-                    elements_from_shortest=[]
-                    for covered in C_covered_by:
-                        elements_from_shortest+=C_covered_by[covered]        #adding all shortest
-                    to_add=[self._pick_element_close_PoG_by_lattice(elements_from_shortest, self.point_of_gravity(elements_from_shortest))]
+                    if not to_add:
+                        elements_from_shortest=[]
+                        for covered in C_covered_by:
+                            elements_from_shortest+=C_covered_by[covered]        #adding all shortest
+                        to_add=[self._pick_element_close_PoG_by_lattice(elements_from_shortest, self.point_of_gravity(elements_from_shortest))]
 
                     for covered in copy(C_covered_by):
                         for added in to_add:
@@ -431,10 +431,11 @@ class WeightFunctionSearch(object):
                             to_add.append(C_covered_by[covered][0])
                     to_add=Set(to_add).list()
 
-                    list_of_all=[]
-                    for covered in C_covered_by:
-                        list_of_all.append(Set(C_covered_by[covered]))
-                    to_add=self._minimalCovering(list_of_all)[0]
+                    if not to_add:
+                        list_of_all=[]
+                        for covered in C_covered_by:
+                            list_of_all.append(Set(C_covered_by[covered]))
+                        to_add=self._minimalCovering(list_of_all)[0]
 
                     for covered in copy(C_covered_by):
                         for added in to_add:
@@ -447,7 +448,9 @@ class WeightFunctionSearch(object):
                 Qww=Set(Qww).list()
             else:
                 raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
-            if self._verbose>=2: print "Qw_w for ", w_tuple, " was found"
+            if self._verbose>=2:
+                print "Qw_w for ", w_tuple, " was found: "
+                print Qww
             self._Qw_w[w_tuple]=Qww
             return Qww
         else:
@@ -607,11 +610,12 @@ class WeightFunctionSearch(object):
         for _set in sets_to_cover:
             elements=union(elements,_set)
        # if len(sets_to_cover)>1:
-        #    print 'sets to cover: ',sets_to_cover
-         #   print 'elements: ', elements
+        print 'sets to cover: ',sets_to_cover
+        print 'elements: ', elements
         while 1:
             subsets_k=Subsets(elements,k)
             covering_subsets=[]
+            print 'subsets', subsets_k
             for subset in subsets_k:
                 covered=True
                 for _set in sets_to_cover:
