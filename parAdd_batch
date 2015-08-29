@@ -1,4 +1,7 @@
 #!/bin/bash
-for input_name in $1*.sage
-do sage parallelAdd.sage $input_name
+for i in 0 1 2 .. 8
+do
+    for input_name in $1*.sage
+    do sage parallelAdd.sage $input_name $i
+    done
 done
