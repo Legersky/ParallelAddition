@@ -82,10 +82,63 @@ class WeightFunctionSearch(object):
                                 #to_add.append(C_covered_by[covered][0])
                                 #break
                                 elements_from_shortest+=C_covered_by[covered]        #adding all shortest
+                        #to_add=self._pick_element(elements_from_shortest)
                         chosen_element=self._pick_element(elements_from_shortest)
-                        if chosen_element:
+                        if chosen_element!=None:
                             to_add=[chosen_element]
                         num+=1
+
+                    for covered in copy(C_covered_by):
+                        for added in to_add:
+                            if added in C_covered_by[covered]:
+                                C_covered_by.pop(covered)    #remove covered elements from dictionary
+                                break
+                    if self._verbose>=2:
+                        print 'Elements to add:', to_add
+                    Qww+=to_add
+                Qww=Set(Qww).list()
+
+            elif self._method==5:
+                Qww=[]
+                Qw_prev=self._Qw_w[w_tuple[0:-1]]
+                if self._verbose>=2:
+                    print 'To be covered:' , C
+                    print 'Previous Qw', Qw_prev
+                C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
+                for q in Qw_prev:
+                    for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
+                        #add covering values
+                        if covered_by_q in C_covered_by:
+                            C_covered_by[covered_by_q].append(q)    #next ones
+                        else:
+                            C_covered_by[covered_by_q]=[q]        #first covering value
+
+                while C_covered_by:        #while there are uncovered elements
+                    if self._verbose>=2:
+                        print C_covered_by
+                    to_add=[]
+                    for covered in C_covered_by:
+                        if len(C_covered_by[covered])==1:    #primarily add values which are single covering ones
+                            to_add.append(C_covered_by[covered][0])
+                    to_add=Set(to_add).list()
+
+          #          num=2
+                    #while not to_add:
+         #               for covered in C_covered_by:
+        #                    elements_from_shortest=[]
+       #                     if len(C_covered_by[covered])==num:    #then add first value of list with length num
+      #                          elements_from_shortest+=C_covered_by[covered]        #adding all shortest
+     #                   print 'shortest', elements_from_shortest
+    #                    #to_add=self._pick_element(elements_from_shortest)
+   #                     chosen_element=self._pick_element(elements_from_shortest)
+  #                      if chosen_element!=None:
+ #                           to_add=[chosen_element]
+#                        num+=1
+
+                    elements_from_shortest=[]
+                    for covered in C_covered_by:
+                        elements_from_shortest+=C_covered_by[covered]        #adding all shortest
+                    to_add=[self._pick_element_close_PoG(elements_from_shortest, self.point_of_gravity(elements_from_shortest))]
 
                     for covered in copy(C_covered_by):
                         for added in to_add:
@@ -162,7 +215,7 @@ class WeightFunctionSearch(object):
                 chosen.append(self._algForParallelAdd._ring(elem))    #coercion into Z[omega]
             k=0
             while len(chosen)>1:
-                print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
+                #print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
                 min_k=[chosen[0]]
                 for elem in chosen[1:]:
                     if elem.list()[k]<min_k[0].list()[k]:
@@ -171,6 +224,35 @@ class WeightFunctionSearch(object):
                         min_k.append(elem)
                 chosen=copy(min_k)
                 k+=1
+                if k==self._algForParallelAdd.getMinPolynomial().degree():
+                    #print chosen
+                    break
+            #print 'vybrano', chosen[0]
+            return chosen[0]
+        else:
+            return None
+
+    def _pick_element_close_PoG(self,elements, PoG):
+        #pick the element with smallest absolute, then linear, quadratic... coefficient in Z[omega]
+        if elements:
+            chosen=[]
+            for elem in elements:
+                chosen.append(self._algForParallelAdd._ring(elem)-PoG)    #coercion into Z[omega], shift to point of gravity
+            k=0
+            print 'PoG', PoG
+            while len(chosen)>1:
+                print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
+                min_k=[chosen[0]]
+                for elem in chosen[1:]:
+                    if abs(elem.list()[k])<abs(min_k[0].list()[k]):
+                        min_k=[elem]
+                    elif abs(elem.list()[k])==abs(min_k[0].list()[k]):
+                        min_k.append(elem)
+                chosen=copy(min_k)
+                k+=1
+                if k==self._algForParallelAdd.getMinPolynomial().degree() and len(chosen)>1:
+                    print chosen
+                    return self._pick_element(chosen)
             print 'vybrano', chosen[0]
             return chosen[0]
         else:
@@ -187,3 +269,10 @@ class WeightFunctionSearch(object):
                     line=line+'; '
                 line=line+ str(coef)
                 print line
+
+    def point_of_gravity(self, numbers):
+        point=[]
+        num=len(numbers)
+        for coef in sum(numbers).list():
+            point.append(round(coef/num))
+        return self._algForParallelAdd.list2Ring(point)
