@@ -77,9 +77,14 @@ class WeightFunctionSearch(object):
                     num=2
                     while not to_add:
                         for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:    #then add first value of number num
-                                to_add.append(C_covered_by[covered][0])
-                                break
+                            elements_from_shortest=[]
+                            if len(C_covered_by[covered])==num:    #then add first value of list with length num
+                                #to_add.append(C_covered_by[covered][0])
+                                #break
+                                elements_from_shortest+=C_covered_by[covered]        #adding all shortest
+                        chosen_element=self._pick_element(elements_from_shortest)
+                        if chosen_element:
+                            to_add=[chosen_element]
                         num+=1
 
                     for covered in copy(C_covered_by):
@@ -148,6 +153,28 @@ class WeightFunctionSearch(object):
         if self._algForParallelAdd._problematicLetters:
             raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(self._algForParallelAdd._problematicLetters,self._method))
         return longest
+
+    def _pick_element(self,elements):
+        #pick the element with smallest absolute, then linear, quadratic... coefficient in Z[omega]
+        if elements:
+            chosen=[]
+            for elem in elements:
+                chosen.append(self._algForParallelAdd._ring(elem))    #coercion into Z[omega]
+            k=0
+            while len(chosen)>1:
+                print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
+                min_k=[chosen[0]]
+                for elem in chosen[1:]:
+                    if elem.list()[k]<min_k[0].list()[k]:
+                        min_k=[elem]
+                    elif elem.list()[k]==min_k[0].list()[k]:
+                        min_k.append(elem)
+                chosen=copy(min_k)
+                k+=1
+            print 'vybrano', chosen[0]
+            return chosen[0]
+        else:
+            return None
 
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
     def printCsvQww(self):
