@@ -627,3 +627,6 @@ class WeightFunctionSearch(object):
                 #print 'covering',covering_subsets
                 return covering_subsets
             k+=1
+            if k>8:
+                self._algForParallelAdd.addLog('Stopped afer searching subsets of size '+str(k-1)+ '.')
+                raise  RuntimeError('Stopped afer searching subsets of size '+str(k-1)+ '.')
