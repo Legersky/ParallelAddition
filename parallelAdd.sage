@@ -66,10 +66,10 @@ try:
     sys.stdout.flush()
 
     if WFcsv:
-        alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
+        alg.saveWeightFunctionToCsvFile(output_folder+filename+'/'+filename)
 
     if localConversionCsv:
-        alg.saveLocalConversionToCsvFile("./outputs/"+filename+'/'+filename)
+        alg.saveLocalConversionToCsvFile(output_folder+filename+'/'+filename)
 
     if sanityCheck:
         er=alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
@@ -77,7 +77,7 @@ try:
 except KeyboardInterrupt:
     print "Keyboard Interrupt:"
     if saveUnsolved:
-        alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
+        alg.saveUnsolvedInputsToCsv(output_folder+filename+'/'+filename)
         unsolved_saved=True
 
 except Exception, e:
@@ -86,10 +86,10 @@ except Exception, e:
 
 finally:
     if info:
-        alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, shortInput=True)
+        alg.saveInfoToTexFile(output_folder+filename+'/'+filename, header=False, shortInput=True)
 
     if saveLog:
-        alg.saveLog("./outputs/"+filename+'/'+filename)
+        alg.saveLog(output_folder+filename+'/'+filename)
 
     if alg._weightCoefSet:
         if phase1_images:
@@ -104,5 +104,5 @@ finally:
         alg.saveImages(imgs2,output_folder+ filename + '/img','phase2')
 
     if saveUnsolved and not alg_update and not unsolved_saved:
-        alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
+        alg.saveUnsolvedInputsToCsv(output_folder+filename+'/'+filename)
     print '--------------------------end of '+ filename +'---------------------------------------------'
