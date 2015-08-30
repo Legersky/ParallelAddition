@@ -55,8 +55,7 @@ try:
 
     start=time.clock()
     alg.findWeightFunction(max_iterations,max_input_length,method_weightFunSearch=int(sys.argv[2]))
-    end=time.clock()
-    alg.addLog("Elapsed time: "+ str(end-start))
+
 
     alg_update=True
 
@@ -85,6 +84,9 @@ except Exception, e:
     alg.addLog(e)
 
 finally:
+    end=time.clock()
+    alg.addLog("Elapsed time: "+ str(end-start))
+
     if info:
         alg.saveInfoToTexFile(output_folder+filename+'/'+filename, header=False, shortInput=True)
 
