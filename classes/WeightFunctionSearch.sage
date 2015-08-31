@@ -97,7 +97,7 @@ class WeightFunctionSearch(object):
                             to_add=self._minimalCovering(list_of_shortest)[0]
                         num+=1
 
-                elif self._method in [2,3,4,7]:
+                elif self._method in [2,3,4,7,8]:
                     num=2
                     while not to_add:
                         shortest=[]
@@ -111,22 +111,33 @@ class WeightFunctionSearch(object):
                                 chosen_element=self._pick_element(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
-                            elif self._method==4:        #pick element co nejbliz teziste podle mrizky ze shortest FUNGUJE
+                            elif self._method==4:        #pick element co nejbliz teziste(zaokrouhlene) podle mrizky ze shortest FUNGUJE
                                 chosen_element=self._pick_element_close_PoG_by_lattice(shortest,self.point_of_gravity(shortest))
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
-                            elif self._method==7:        #pick element co nejbliz teziste ze shortest FUNGUJE
+                            elif self._method==7:        #pick element co nejbliz teziste (zaokrouhlene) ze shortest FUNGUJE
                                 chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            elif self._method==8:    #co nejbliz teziste (CC) ze shortest
+                                chosen_element=self._pick_element_close_PoG_CC(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
                         num+=1
 
-                elif self._method==5:        #pick element ze vsech co nejbliz teziste podle mrizky HORSI - WINDOW LENGTH 4
+                elif self._method==5:        #pick element ze vsech co nejbliz teziste(zaokrouhlene) podle mrizky HORSI - WINDOW LENGTH 4
                     if not to_add:
                         elements=[]
                         for covered in C_covered_by:
                             elements+=C_covered_by[covered]        #adding all shortest
-                            to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
+                        to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
+
+                elif self._method==9:        #co nejbliz teziste (CC) ze vsech
+                    if not to_add:
+                        elements=[]
+                        for covered in C_covered_by:
+                            elements+=C_covered_by[covered]        #adding all shortest
+                        to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
 
                 elif self._method==6:    	    #nejmensi mozna FUNGUJE
                     if not to_add:
@@ -233,7 +244,7 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_close_PoG_by_lattice(self,elements, PoG):
-        #pick the element with smallest absolute, then linear, quadratic... coefficient in Z[omega]
+        #pick the element with the smallest absolute, then linear, quadratic... coefficient in Z[omega]
         if elements:
             chosen=[]
             for elem in elements:
@@ -271,6 +282,20 @@ class WeightFunctionSearch(object):
         else:
             return None
 
+    def _pick_element_close_PoG_CC(self,elements):
+        #pick the element from elements which is closest to the point of g
+        if elements:
+            PoG=self.point_of_gravity_CC(elements)
+            min_abs=[elements[0]]
+            for elem in elements[1:]:
+                if abs(PoG-self._algForParallelAdd.ring2CC(elem))<abs(PoG-self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs=[elem]
+                elif abs(PoG-self._algForParallelAdd.ring2CC(elem))==abs(PoG-self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs.append(elem)
+            return self._pick_element(min_abs)
+        else:
+            return None
+
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
     def printCsvQww(self):
         for inp, coef in self._Qw_w.items():
@@ -292,18 +317,27 @@ class WeightFunctionSearch(object):
             point.append(round(coef/num))
         return self._algForParallelAdd.list2Ring(point)
 
+    def point_of_gravity_CC(self, numbers):
+        if numbers:
+            point=0
+            for num in numbers:
+                point+=self._algForParallelAdd.ring2CC(num)
+            return point/len(numbers)
+        else:
+            return None
+
     def _minimalCovering(self, sets_to_cover):
         k=1
         elements=Set([])
         for _set in sets_to_cover:
             elements=union(elements,_set)
-        if self._verbose>=2:
+        if self._verbose>=1:
             print 'sets to cover: ',sets_to_cover
             print 'elements: ', elements
         while 1:
             subsets_k=Subsets(elements,k)
             covering_subsets=[]
-            if self._verbose>=2:
+            if self._verbose>=1:
                 print 'subsets', subsets_k
             for subset in subsets_k:
                 covered=True
