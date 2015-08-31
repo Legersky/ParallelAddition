@@ -19,7 +19,7 @@ base =' omega'
 
 #------------LIMITATIONS----------------
 #maximum of iterations in searching weight coefficient set
-max_iterations = 10
+max_iterations = 40
 
 #maximal length of input of weight function
 max_input_length =  10
