@@ -1,6 +1,6 @@
 #---------------INPUTS---------------
 #Name of the numeration system
-name = 'Quadratic+1+3+5_1-block_complex'
+name = 'Quadratic+1+3+5_1-block_complex_dlouhy'
 
 #Minimal polynomial of ring generator (use variable x)
 minPol =' x^2 + 3*x + 5 '
@@ -22,7 +22,7 @@ base =' omega '
 max_iterations = 20
 
 #maximal length of input of weight function
-max_input_length =  10
+max_input_length =  15
 
 #------------SAVING----------------
 #save general info to .tex file
