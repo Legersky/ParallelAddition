@@ -22,7 +22,7 @@ base =' omega '
 max_iterations = 20
 
 #maximal length of input of weight function
-max_input_length =  10
+max_input_length =  15
 
 #------------SAVING----------------
 #save general info to .tex file
