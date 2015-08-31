@@ -708,10 +708,10 @@ class AlgorithmForParallelAddition(object):
         def legend(k,covered, new, alphabet):
             xshift=legend_xshift
             p=(text('$\\mathcal{Q}_{%s}$' %k,(xshift,2), color='red', horizontal_alignment='left', fontsize=font_size_legend)
-                   + text('$\\mathcal{A} + \\mathcal{A} + \\mathcal{Q}_{%s}$' %k,(xshift,1), color='black', horizontal_alignment='left', fontsize=font_size_legend))
+                   + text('$\\mathcal{B} + \\mathcal{Q}_{%s}$' %k,(xshift,1), color='black', horizontal_alignment='left', fontsize=font_size_legend))
             if covered:
                 p+=(text('$\\mathcal{A} + \\beta \\cdot \\mathcal{Q}_{%s}$' %k,(xshift,-1), color='orange', horizontal_alignment='left', fontsize=font_size_legend)
-                    + text('$?\\, \\subset \\,?$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend))
+                    + text('$ \\, \\, \\overset{\\subset}{?}$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend))
             if new:
                 p+=text('$\\mathcal{Q}_{%s} \\backslash  \\mathcal{Q}_{%s}$' %(k+1,k),(xshift,-2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
             if alphabet:
