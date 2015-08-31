@@ -1,7 +1,7 @@
 #!/bin/bash
-for i in 5
+for i in 0
 do
     for input_name in $1*.sage
-    do sage parallelAdd.sage $input_name $i
+    do cpulimit --limit 40 sage parallelAdd.sage $input_name $i start
     done
 done
