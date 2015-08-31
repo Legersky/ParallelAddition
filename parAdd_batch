@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in 6 7
+for i in 5
 do
     for input_name in $1*.sage
     do sage parallelAdd.sage $input_name $i
