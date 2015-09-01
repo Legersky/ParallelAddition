@@ -137,7 +137,7 @@ class WeightFunctionSearch(object):
                         elements=[]
                         for covered in C_covered_by:
                             elements+=C_covered_by[covered]        #adding all shortest
-                        to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
+                        to_add=[self._pick_element_close_PoG_CC(elements)]
 
                 elif self._method==6:    	    #nejmensi mozna FUNGUJE
                     if not to_add:
@@ -244,7 +244,7 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_close_PoG_by_lattice(self,elements, PoG):
-        #pick the element with the smallest absolute, then linear, quadratic... coefficient in Z[omega]
+        #pick the element with the smallest absolute, then linear, quadratic... coefficient closest to PoG in Z[omega]
         if elements:
             chosen=[]
             for elem in elements:
