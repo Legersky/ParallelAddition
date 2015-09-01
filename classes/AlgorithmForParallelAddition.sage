@@ -573,7 +573,7 @@ class AlgorithmForParallelAddition(object):
             print 'There are missing ', self._num_missing_classes_mod_base , ' congruence classes modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._missing_representatives_mod_base_minus_one:
-            print 'The elements $', setLatexBraces(self._missing_representatives_mod_base_minus_one) , '$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
+            print 'The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
             forTable+='no & -- & -- & -- & -- \\\\'
         else:
             forTable+=' yes &'
@@ -711,7 +711,7 @@ class AlgorithmForParallelAddition(object):
                    + text('$\\mathcal{B} + \\mathcal{Q}_{%s}$' %k,(xshift,1), color='black', horizontal_alignment='left', fontsize=font_size_legend))
             if covered:
                 p+=(text('$\\mathcal{A} + \\beta \\cdot \\mathcal{Q}_{%s}$' %k,(xshift,-1), color='orange', horizontal_alignment='left', fontsize=font_size_legend)
-                    + text('$ \\, \\, \\overset{\\subset}{?}$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend))
+                    + text('$ \\, \\, \\stackrel{?}{\\subset}$',(xshift,0), color='black', horizontal_alignment='left', fontsize=font_size_legend))
             if new:
                 p+=text('$\\mathcal{Q}_{%s} \\backslash  \\mathcal{Q}_{%s}$' %(k+1,k),(xshift,-2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
             if alphabet:

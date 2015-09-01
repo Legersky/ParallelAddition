@@ -1,4 +1,4 @@
-︠eac5326a-5a9c-437b-b7e3-d16c41cd67f2︠
+︠eac5326a-5a9c-437b-b7e3-d16c41cd67f2rs︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -202,6 +202,8 @@ def _(frame_label=text_control('<h3>Construction of the weight function: </h3>',
     except Exception, e:
         print "Error:"
         print e
+︡6e116fd7-f58b-461a-bef1-8cb4358be258︡
+︠124ad330-8476-4fd5-b298-08ca9f0aefc4︠
 
 
 
