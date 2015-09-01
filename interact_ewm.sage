@@ -1,4 +1,3 @@
-︠eac5326a-5a9c-437b-b7e3-d16c41cd67f2︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -114,7 +113,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
     finally:
         if info:
-            alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False, for_researchThesis=True)
+            alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False)
         if saveUnsolved and (not alg_update) and (not unsolved_saved):
             alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
         if saveLog:
@@ -197,17 +196,8 @@ def _(frame_label=text_control('<h3>Construction of the weight function: </h3>',
         imgs=alg.plotPhase2(inp_alpRing, legend_xshift=_legend_xshift, legend_yshift=_legend_yshift,legend_distance_factor=_legend_distance_factor )
         show(imgs)
         if folder:
-            alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase2')
+            alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase2',img_size=_size)
 
     except Exception, e:
         print "Error:"
         print e
-
-
-
-
-
-
-
-
-
