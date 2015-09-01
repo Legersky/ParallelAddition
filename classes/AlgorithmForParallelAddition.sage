@@ -145,7 +145,7 @@ class AlgorithmForParallelAddition(object):
         self._maximumOfInputAlphabet=maxB
 
     def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
-        #check alphabet if there are all representatives of elements of _set mod modulus 
+        #check alphabet if there are all representatives of elements of _set mod modulus
         repr_missing_for=[]
         for b in _set:
             repr_for_b=False
@@ -298,7 +298,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("The Weight Coefficient Set is:")
         self.addLog(self._weightCoefSet,latex=True)
         self.addLog("Number of elements: " + str(len(self._weightCoefSet)))
-        if self._printLogLatex: 
+        if self._printLogLatex:
             self.addLog("Plotting the weight coefficients set with the estimation:")
             show(self.plotWeightCoefSet(estimation=True))
 
@@ -542,7 +542,7 @@ class AlgorithmForParallelAddition(object):
     def printLatexInfo(self, shortInput):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
-            return latex(_list).replace('[','\{').replace(']','\}')
+            return latex(_list).replace('\left[','\{').replace('\right]','\}')
 
         forTable='%'
         print '\\begin{exmp}'
@@ -685,9 +685,9 @@ class AlgorithmForParallelAddition(object):
                   font_size=20,
                   font_size_legend=30,
                   axis_fontsize=15,
-                  circle_big=100, #80,
-                  circle_middle=50, #40,
-                  circle_small=40): #30):
+                  circle_big=100,
+                  circle_middle=50,
+                  circle_small=40):
         #plot intermediate weight coefficients sets in Phase 1
         def polygon_shifted(points,shift=0, enlargement=1, color='green'):
             vertices=[]
@@ -785,12 +785,12 @@ class AlgorithmForParallelAddition(object):
                   legend_xshift=4,
                   legend_yshift=1,
                   legend_distance_factor=1,
-                  font_size=25,
-                  font_size_legend=35,
-                  axis_fontsize=20,
-                  circle_big=120, #80,
-                  circle_middle=60, #40,
-                  circle_small=50): #30):
+                  font_size=20,
+                  font_size_legend=30,
+                  axis_fontsize=15,
+                  circle_big=100,
+                  circle_middle=50,
+                  circle_small=40):
         #plot steps of Phase 2 for input digits
         def polygon_shifted2(points,shift=0, enlargement=1, color='green'):
             vertices=[]
@@ -801,7 +801,7 @@ class AlgorithmForParallelAddition(object):
             return (p.plot(point=False, line=color, polygon=False)
                     +self.plot([shift_divided], color='blue', size=circle_big, labeled=False))
 
-        Q_covering=[]#[self._weightCoefSet]
+        Q_covering=[]
         Q_to_cover=[]
         window_length=len(digits)
         for i in range(0,len(digits)+1):
@@ -846,7 +846,7 @@ class AlgorithmForParallelAddition(object):
             covering=(betaQw_plus_A[l]
                         +Qw_plus_w[l]
                       +legend_black)
-           # imgs2.append(covering
+            # imgs2.append(covering
             #            + text('$?\\, \\subset \\,?$',(xshift,0*legend_distance_factor+legend_yshift), color='black', horizontal_alignment='left', fontsize=font_size_legend)
              #            +text('$\\mathcal{A} + \\beta \\cdot '+Qw_str_covering+'$',(xshift,-1*legend_distance_factor+legend_yshift), color='green', horizontal_alignment='left', fontsize=font_size_legend))
             imgs2.append(covering
@@ -863,7 +863,7 @@ class AlgorithmForParallelAddition(object):
             Qw_str_to_cover='\\mathcal{Q}_{['+seq_to_cover+']}'
             seq_to_cover+=','
 
-     #   imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
+        #   imgs2[-1]+=text('$=q('+seq_covering+')$' ,(xshift,0*legend_distance_factor+legend_yshift), color='blue', horizontal_alignment='left', fontsize=font_size_legend)
 
         xmin=0
         xmax=0
