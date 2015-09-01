@@ -23,41 +23,21 @@ max_iterations = 20
 
 #maximal length of input of weight function
 max_input_length =  10
+sanityCheck=False        #run sanity check
 
-#------------SAVING----------------
-#save general info to .tex file
-info=True
+#------------SAVING---------------------
+info=True                #save general info to .tex file
+WFcsv=False              #save weight function to .csv file
+localConversionCsv=False #save local conversion to .csv file
+saveSetting=False        #save inputs setting as a dictionary
+saveLog=True             #save log file
+saveUnsolved=False       #save unsolved combinations after interruption
 
-#save Weight function to .csv file
-WFcsv=False
-
-#save Local conversion to .csv file
-localConversionCsv=False
-
-#save Inputs setting
-saveSetting=True
-
-#save Log file
-saveLog=True
-
-#save Unsolved inputs after interruption
-saveUnsolved=False
-
-#run sanity check
-sanityCheck=False
-
-#---------IMAGES--------------------
-#save image of the alphabet and input alphabet
-alphabet_img=True
-
-#save image of lattice with shifted alphabet
-lattice_img=True
-
-#save step-by-step images of phase 1
-phase1_images=True
-
-#save step-by-step images of phase 2
-phase2_images=True
-#for input
+#------------IMAGES--------------------
+alphabet_img=True        #save image of alphabet and input alphabet
+lattice_img=True         #save image of lattice
+phase1_images=True       #save images of steps of phase 1
+weightCoefSet_img=True   #save image of the weight coefficient set with the estimation given by lemma:
+estimation=True
+phase2_images=True       #save images of steps of phase 2 for the input:
 phase2_input='(omega,1,omega,1,omega,1,omega,1)'
-
