@@ -1,0 +1,64 @@
+Inicialization...
+Numeration system: 
+base_2
+Alphabet: 
+[0, 1, -1]
+Input alphabet: 
+[0, 1, 2, -1, -2]
+Minimal polynomial of ring generator: 
+t - 1
+Embedding: 
+1.00000000000000
+Base: 
+2
+Minimal polynomial of base:
+x - 2
+Roots of minimal polynomial of base:
+[2]
+With absolute values:
+[2]
+Image alphabet.png saved to ./outputs/base_2/img
+Image inputAlphabet.png saved to ./outputs/base_2/img
+Image lattice.png saved to ./outputs/base_2/img
+Maximum iterations: 20
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 2
+Alphabet divided into congruence classes:
+[[0], [1, -1]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+There are all elements of the input alphabet mod base-1 in the alphabet.
+Phase 1 - Searching for the Weight Coefficient Set using method 2...
+Starting Q_0:
+[0]
+Number of elements in Qk: 1
+Added coefficients:
+[1, -1]
+Number of elements in Qk: 3
+Added coefficients:
+[]
+The Weight Coefficient Set is:
+[0, 1, -1]
+Number of elements: 3
+Phase 2 is starting...
+Checking one letter inputs...
+The longest inputs are:
+[(1, 1), (-1, -1)]
+Length of one letter input: 2: 
+Number of letters with longest input: 2
+Searching the Weight Function using method 4...
+Length of the window: 1, Number of saved combinations of input digits: 3, To next iteration: 2
+Length of the window: 2, Number of saved combinations of input digits: 10, To next iteration: 0
+Info about Weight Function:
+Maximal input length: 2
+Number of inputs: 13
+Output of weight function for the input 0,0,...,0: 0
+Weight function saved to ./outputs/base_2/base_2-weightFunction.csv
+Saving local conversion...
+Local conversion (125 lines) saved to ./outputs/base_2/base_2-localConversion.csv
+Sanity check of 3 digits...
+Tested: 125
+Number of errors: 0
+Elapsed time: 0.305309
+Info about algorithm for parallel addition saved to ./outputs/base_2/base_2.tex

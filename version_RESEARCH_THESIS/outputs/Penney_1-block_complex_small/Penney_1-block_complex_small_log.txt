@@ -1,0 +1,35 @@
+Inicialization...
+Numeration system: 
+Penney_1-block_complex_small
+Alphabet: 
+[0, 1, omega]
+Input alphabet: 
+[0, 1, 2, omega, omega + 1, 2*omega]
+Minimal polynomial of ring generator: 
+t^2 + 1
+Embedding: 
+1.00000000000000*I
+Base: 
+omega - 1
+Minimal polynomial of base:
+x^2 + 2*x + 2
+Roots of minimal polynomial of base:
+[-1 - 1*I, -1 + 1*I]
+With absolute values:
+[1.414213562373095?, 1.414213562373095?]
+Image alphabet.png saved to ./outputs/Penney_1-block_complex_small/img
+Image inputAlphabet.png saved to ./outputs/Penney_1-block_complex_small/img
+Image lattice.png saved to ./outputs/Penney_1-block_complex_small/img
+Maximum iterations: 20
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 2
+Alphabet divided into congruence classes:
+[[0], [1, omega]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+The following elements of the input alphabet mod base-1 are not in the alphabet:
+[omega + 1, 2*omega]
+There are not representatives of elements [omega + 1, 2*omega] from the input alphabet mod (base-1) in the alphabet.
+Elapsed time: 0.011401
+Info about algorithm for parallel addition saved to ./outputs/Penney_1-block_complex_small/Penney_1-block_complex_small.tex

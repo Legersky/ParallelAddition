@@ -1,0 +1,64 @@
+Inicialization...
+Numeration system: 
+base_4
+Alphabet: 
+[0, 1, -1, 2, -2]
+Input alphabet: 
+[0, 1, 2, 3, 4, -1, -4, -3, -2]
+Minimal polynomial of ring generator: 
+t - 1
+Embedding: 
+1.00000000000000
+Base: 
+4
+Minimal polynomial of base:
+x - 4
+Roots of minimal polynomial of base:
+[4]
+With absolute values:
+[4]
+Image alphabet.png saved to ./outputs/base_4/img
+Image inputAlphabet.png saved to ./outputs/base_4/img
+Image lattice.png saved to ./outputs/base_4/img
+Maximum iterations: 20
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 4
+Alphabet divided into congruence classes:
+[[0], [1], [-1], [2, -2]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+There are all elements of the input alphabet mod base-1 in the alphabet.
+Phase 1 - Searching for the Weight Coefficient Set using method 2...
+Starting Q_0:
+[0]
+Number of elements in Qk: 1
+Added coefficients:
+[1, -1]
+Number of elements in Qk: 3
+Added coefficients:
+[]
+The Weight Coefficient Set is:
+[0, 1, -1]
+Number of elements: 3
+Phase 2 is starting...
+Checking one letter inputs...
+The longest inputs are:
+[(2, 2), (-2, -2)]
+Length of one letter input: 2: 
+Number of letters with longest input: 2
+Searching the Weight Function using method 4...
+Length of the window: 1, Number of saved combinations of input digits: 7, To next iteration: 2
+Length of the window: 2, Number of saved combinations of input digits: 18, To next iteration: 0
+Info about Weight Function:
+Maximal input length: 2
+Number of inputs: 25
+Output of weight function for the input 0,0,...,0: 0
+Weight function saved to ./outputs/base_4/base_4-weightFunction.csv
+Saving local conversion...
+Local conversion (729 lines) saved to ./outputs/base_4/base_4-localConversion.csv
+Sanity check of 3 digits...
+Tested: 729
+Number of errors: 0
+Elapsed time: 1.284078
+Info about algorithm for parallel addition saved to ./outputs/base_4/base_4.tex

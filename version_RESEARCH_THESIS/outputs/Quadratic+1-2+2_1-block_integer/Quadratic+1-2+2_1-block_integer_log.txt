@@ -1,0 +1,69 @@
+Inicialization...
+Numeration system: 
+Quadratic+1-2+2_1-block_integer
+Alphabet: 
+[0, 1, -1, 2, -2]
+Input alphabet: 
+[0, 1, 2, 3, 4, -1, -4, -3, -2]
+Minimal polynomial of ring generator: 
+t^2 - 2*t + 2
+Embedding: 
+1.00000000000000 + 1.00000000000000*I
+Base: 
+omega
+Minimal polynomial of base:
+x^2 - 2*x + 2
+Roots of minimal polynomial of base:
+[1 - 1*I, 1 + 1*I]
+With absolute values:
+[1.414213562373095?, 1.414213562373095?]
+Image alphabet.png saved to ./outputs/Quadratic+1-2+2_1-block_integer/img
+Image inputAlphabet.png saved to ./outputs/Quadratic+1-2+2_1-block_integer/img
+Image lattice.png saved to ./outputs/Quadratic+1-2+2_1-block_integer/img
+Maximum iterations: 10
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 2
+Alphabet divided into congruence classes:
+[[0, 2, -2], [1, -1]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+There are all elements of the input alphabet mod base-1 in the alphabet.
+Phase 1 - Searching for the Weight Coefficient Set using method 2...
+Starting Q_0:
+[0]
+Number of elements in Qk: 1
+Added coefficients:
+[-omega + 2, omega - 2]
+Number of elements in Qk: 3
+Added coefficients:
+[omega - 1, 2*omega - 3, 1, -1, -omega + 1, -2*omega + 3]
+Number of elements in Qk: 9
+Added coefficients:
+[omega, 3*omega - 4, 2, -2*omega + 4, -omega + 3, omega - 3, -2, -omega, -2*omega + 2, -3*omega + 4, 2*omega - 4]
+Number of elements in Qk: 20
+Added coefficients:
+[-omega - 1, omega + 1, -2*omega + 1, -3*omega + 3, 3*omega - 5, -3*omega + 5, 3*omega - 3]
+Number of elements in Qk: 27
+Added coefficients:
+[-4*omega + 5, -3, 3, 2*omega - 5, -2*omega + 5, omega - 4, 4*omega - 5]
+Number of elements in Qk: 34
+Added coefficients:
+[-omega - 2, -3*omega + 6, -2*omega, -3*omega + 2, -4*omega + 4, 4*omega - 6, 4*omega - 4, 2*omega, omega + 2, -4*omega + 6, 3*omega - 6]
+Number of elements in Qk: 45
+Added coefficients:
+[-omega + 4]
+Number of elements in Qk: 46
+Added coefficients:
+[]
+The Weight Coefficient Set is:
+[0, 1, 2, 3, -omega, -omega + 1, 2*omega - 5, 2*omega - 4, -2*omega + 2, 2*omega, -2*omega + 3, omega - 4, omega - 3, omega - 2, omega, omega + 1, 4*omega - 5, 4*omega - 4, -3, -2*omega + 4, 3*omega - 6, 3*omega - 5, 3*omega - 4, 3*omega - 3, -4*omega + 4, -4*omega + 5, -4*omega + 6, -3*omega + 2, -3*omega + 3, -3*omega + 4, -3*omega + 5, -3*omega + 6, omega - 1, 4*omega - 6, omega + 2, -omega - 1, -2*omega, -2*omega + 1, -omega + 2, -omega + 3, -omega + 4, -2*omega + 5, -1, -omega - 2, -2, 2*omega - 3]
+Number of elements: 46
+Phase 2 is starting...
+Checking one letter inputs...
+There is no unique weight coefficient for finite input gained by repetition of letter 2 using method number 4
+There is no unique weight coefficient for finite input gained by repetition of letter -1 using method number 4
+There is no unique weight coefficient for finite input gained by repetition of letter -2 using method number 4
+There is no unique weight coefficient for finite input gained by repetition of letters [2, -1, -2] using method number 4
+Elapsed time: 2.654849
+Info about algorithm for parallel addition saved to ./outputs/Quadratic+1-2+2_1-block_integer/Quadratic+1-2+2_1-block_integer.tex

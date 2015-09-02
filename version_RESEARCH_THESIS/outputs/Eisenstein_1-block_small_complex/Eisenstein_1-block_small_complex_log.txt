@@ -1,0 +1,35 @@
+Inicialization...
+Numeration system: 
+Eisenstein_1-block_small_complex
+Alphabet: 
+[0, 1, omega, omega + 1]
+Input alphabet: 
+[0, 1, 2, omega, omega + 1, omega + 2, 2*omega, 2*omega + 1, 2*omega + 2]
+Minimal polynomial of ring generator: 
+t^2 + t + 1
+Embedding: 
+-0.500000000000000 + 0.866025403784439*I
+Base: 
+omega - 1
+Minimal polynomial of base:
+x^2 + 3*x + 3
+Roots of minimal polynomial of base:
+[-1.500000000000000? - 0.866025403784439?*I, -1.500000000000000? + 0.866025403784439?*I]
+With absolute values:
+[1.732050807568877?, 1.732050807568877?]
+Image alphabet.png saved to ./outputs/Eisenstein_1-block_small_complex/img
+Image inputAlphabet.png saved to ./outputs/Eisenstein_1-block_small_complex/img
+Image lattice.png saved to ./outputs/Eisenstein_1-block_small_complex/img
+Maximum iterations: 20
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 3
+Alphabet divided into congruence classes:
+[[0], [1, omega], [omega + 1]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+The following elements of the input alphabet mod base-1 are not in the alphabet:
+[omega + 2, 2*omega, 2*omega + 1, 2*omega + 2]
+There are not representatives of elements [omega + 2, 2*omega, 2*omega + 1, 2*omega + 2] from the input alphabet mod (base-1) in the alphabet.
+Elapsed time: 0.020345
+Info about algorithm for parallel addition saved to ./outputs/Eisenstein_1-block_small_complex/Eisenstein_1-block_small_complex.tex

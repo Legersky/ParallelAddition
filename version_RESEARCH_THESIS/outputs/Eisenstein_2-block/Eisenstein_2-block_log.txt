@@ -1,0 +1,35 @@
+Inicialization...
+Numeration system: 
+Eisenstein_2-block
+Alphabet: 
+[0, 1, -1, omega, -omega, omega - 1, -omega + 1, omega - 2, -omega + 2]
+Input alphabet: 
+[0, 1, 2, 2*omega - 1, omega - 1, -omega, -omega + 1, 2*omega - 4, -omega + 2, 2*omega - 2, 2*omega, -omega + 3, omega - 3, omega - 2, omega, omega + 1, -omega - 1, -2*omega, -2*omega + 1, -2*omega + 2, -2*omega + 3, -2*omega + 4, -1, -2, 2*omega - 3]
+Minimal polynomial of ring generator: 
+t^2 + t + 1
+Embedding: 
+-0.500000000000000 + 0.866025403784439*I
+Base: 
+-3*omega
+Minimal polynomial of base:
+x^2 - 3*x + 9
+Roots of minimal polynomial of base:
+[1.5000000000000000? - 2.598076211353316?*I, 1.5000000000000000? + 2.598076211353316?*I]
+With absolute values:
+[3.000000000000000?, 3.000000000000000?]
+Image alphabet.png saved to ./outputs/Eisenstein_2-block/img
+Image inputAlphabet.png saved to ./outputs/Eisenstein_2-block/img
+Image lattice.png saved to ./outputs/Eisenstein_2-block/img
+Maximum iterations: 20
+Maximum length of input of weight function: 10
+Checking alphabet for representatives mod base:
+Number of congruence classes mod base is: 9
+Alphabet divided into congruence classes:
+[[0], [1], [-1], [omega], [-omega], [omega - 1], [-omega + 1], [omega - 2], [-omega + 2]]
+=> There are all representatives mod base in the alphabet.
+Checking alphabet for representatives mod base-1:
+The following elements of the input alphabet mod base-1 are not in the alphabet:
+[2*omega - 1, 2*omega, omega + 1, -omega - 1, -2*omega, -2*omega + 1]
+There are not representatives of elements [2*omega - 1, 2*omega, omega + 1, -omega - 1, -2*omega, -2*omega + 1] from the input alphabet mod (base-1) in the alphabet.
+Elapsed time: 0.103872
+Info about algorithm for parallel addition saved to ./outputs/Eisenstein_2-block/Eisenstein_2-block.tex
