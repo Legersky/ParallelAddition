@@ -285,7 +285,7 @@ class AlgorithmForParallelAddition(object):
         else:
             raise ValueError("There are no values in the weight coefficient set Q.")
 
-    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=2, method_weightFunSearch=4):
+    def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=None, method_weightFunSearch=None):
         #finds and sets Weight Function
         self.addLog('Checking alphabet for representatives mod base:')
         self.check_alphabet_for_representatives_mod_base()

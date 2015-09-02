@@ -17,6 +17,8 @@ class WeightCoefficientsSetSearch(object):
         self._verbose=algForParallelAdd._verbose
 
         self._method=method
+        if self._method==None:
+            self._method=2     #set the default method
 
         #the following diagonalizing matrix is necessary for construction of the norm for method 3
         self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
