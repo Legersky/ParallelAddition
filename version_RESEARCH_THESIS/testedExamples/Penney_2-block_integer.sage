@@ -23,12 +23,12 @@ max_iterations = 20
 
 #maximal length of input of weight function
 max_input_length =  10
-sanityCheck=True        #run sanity check
+sanityCheck=False        #run sanity check
 
 #------------SAVING---------------------
 info=True                #save general info to .tex file
 WFcsv=True              #save weight function to .csv file
-localConversionCsv=True #save local conversion to .csv file
+localConversionCsv=False #save local conversion to .csv file
 saveSetting=False        #save inputs setting as a dictionary
 saveLog=True             #save log file
 saveUnsolved=False       #save unsolved combinations after interruption
