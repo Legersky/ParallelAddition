@@ -600,7 +600,7 @@ class AlgorithmForParallelAddition(object):
                         print '    \item Phase 2 was not successful.\n'
                         forTable+= ' \\xmark \\\\'
                 else:
-                    print '    \item There is not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for fixed length of window. Thus Phase 2 does not converge.\n'
+                    print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for a fixed length of window. Thus Phase 2 does not converge.\n'
                     forTable+= ' \\xmark & --\\\\'
             else:
                 print '    \item Phase 1 was not successful. \n'
