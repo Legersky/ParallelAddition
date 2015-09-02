@@ -262,6 +262,7 @@ class AlgorithmForParallelAddition(object):
     def _findWeightCoefSet(self, max_iterations, method_number):
         #finds and sets Weight Coefficients set
         weightCoefSet=WeightCoefficientsSetSearch(self,method_number)
+        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %weightCoefSet._method)
         self._weightCoefSet=copy(weightCoefSet.findWeightCoefficientsSet(max_iterations))
         return self._weightCoefSet
 
@@ -280,7 +281,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog(longest, latex=True)
             self.addLog("Length of one letter input: %s: " %len(longest[0]))
             self.addLog("Number of letters with longest input: %s" %len(longest))
-            self.addLog("Searching the Weight Function using method %s..." %method_number)
+            self.addLog("Searching the Weight Function using method %s..." %self._weightFunSearch._method)
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
         else:
             raise ValueError("There are no values in the weight coefficient set Q.")
@@ -292,7 +293,6 @@ class AlgorithmForParallelAddition(object):
         self.addLog('Checking alphabet for representatives mod base-1:')
         self.check_alphabet_for_representatives_mod_base_minus_one()
 
-        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %method_weightCoefSet)
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
         self.addLog("The Weight Coefficient Set is:")

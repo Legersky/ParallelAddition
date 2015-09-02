@@ -4,13 +4,15 @@ import time
 
 alg=None
 alg_update=False
+
+if not os.path.exists('./examples/'):
+    os.makedirs('./examples/')
+
 try:
     setting_global=load('./examples/last')
 except:
-    setting_global=load('./examples/default')
+    setting_global={'name': 'eisenstein', 'inputAlphabet': '', 'alphabet': '[0, 1, -1, omega, -omega, -omega - 1, omega + 1]', 'base': 'omega - 1', 'minPol_alpGen': 'x^2 + x + 1', 'embedding': -0.500000000000000 + 0.866025403784439*I}
 
-if not 'inputAlphabet' in setting_global:
-                setting_global['inputAlphabet']=''
 
 #-----------------Loading-------------------------------------------------------------------
 @interact(auto_update=False)
