@@ -2,7 +2,7 @@ load('WeightFunction.sage')
 
 class WeightFunctionSearch(object):
     """
-    searching Weight Function
+    searching for Weight Function
     """
 #-----------------------------CONSTRUCTOR, SETTERS-------------------------------------------------------------------
     def __init__(self, algForParallelAdd, weightCoefSet, method):
@@ -25,6 +25,8 @@ class WeightFunctionSearch(object):
         self._Qw_w={}
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
+        if self._method==None:
+            self._method=4     #set the default method
         self._k=0
 
     def __repr__(self):
@@ -77,7 +79,7 @@ class WeightFunctionSearch(object):
                     to_add=Set(to_add).list()
                     first_time=False
 
-                if self._method ==0:    	    #puvodni FUNGUJE
+                if self._method ==0:    	    #original - add the first element in the first shortest list
                     num=2
                     while not to_add:
                         for covered in C_covered_by:
@@ -86,12 +88,12 @@ class WeightFunctionSearch(object):
                                 break
                         num+=1
 
-                elif self._method ==1: #nejmensi mozna ze shortest FUNGUJE
+                elif self._method ==1: #find the smallest covering coefficients from the shortest lists
                     num=2
                     while not to_add:
                         list_of_shortest=[]
                         for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:    #then add first value of list with length num
+                            if len(C_covered_by[covered])==num:
                                 list_of_shortest.append(Set(C_covered_by[covered]))
                         if list_of_shortest:
                             to_add=self._minimalCovering(list_of_shortest)[0]
@@ -102,44 +104,44 @@ class WeightFunctionSearch(object):
                     while not to_add:
                         shortest=[]
                         for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:    #then add first value of list with length num
+                            if len(C_covered_by[covered])==num:
                                 shortest+=C_covered_by[covered]
                         if shortest:
-                            if self._method==2:    	    #nahodne ze shortest FUNGUJE
+                            if self._method==2:    	    #random from the shortest lists
                                 to_add.append(shortest[ZZ.random_element(len(shortest))])
-                            elif self._method==3:        #pick element podle mrizky ze shortest FUNGUJE
+                            elif self._method==3:        #pick element from the shortest lists lexicographically according to coordinates in lattice
                                 chosen_element=self._pick_element(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
-                            elif self._method==4:        #pick element co nejbliz teziste(zaokrouhlene) podle mrizky ze shortest FUNGUJE
+                            elif self._method==4:        #pick element from the shortest list which is the closest (according to lattice) to rounded center of gravity of points in shortest lists
                                 chosen_element=self._pick_element_close_PoG_by_lattice(shortest,self.point_of_gravity(shortest))
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
-                            elif self._method==7:        #pick element co nejbliz teziste (zaokrouhlene) ze shortest FUNGUJE
+                            elif self._method==7:        #pick element from the shortest list which is the closest (in absolute value) to rounded center of gravity of points in shortest lists
                                 chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
-                            elif self._method==8:    #co nejbliz teziste (CC) ze shortest
+                            elif self._method==8:    #pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
                                 chosen_element=self._pick_element_close_PoG_CC(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
                         num+=1
 
-                elif self._method==5:        #pick element ze vsech co nejbliz teziste(zaokrouhlene) podle mrizky HORSI - WINDOW LENGTH 4
+                elif self._method==5:        #pick element from all resting list which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
                     if not to_add:
                         elements=[]
                         for covered in C_covered_by:
-                            elements+=C_covered_by[covered]        #adding all shortest
+                            elements+=C_covered_by[covered]        #adding all
                         to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
 
-                elif self._method==9:        #co nejbliz teziste (CC) ze vsech
+                elif self._method==9:        #pick element from all resting list which is the closest (in absolute value) to center of gravity of points in all resting lists
                     if not to_add:
                         elements=[]
                         for covered in C_covered_by:
-                            elements+=C_covered_by[covered]        #adding all shortest
+                            elements+=C_covered_by[covered]        #adding all
                         to_add=[self._pick_element_close_PoG_CC(elements)]
 
-                elif self._method==6:    	    #nejmensi mozna FUNGUJE
+                elif self._method==6:    	    #find the smallest covering coefficients from all resting lists
                     if not to_add:
                         list_of_all=[]
                         for covered in C_covered_by:
@@ -219,14 +221,13 @@ class WeightFunctionSearch(object):
         return longest
 
     def _pick_element(self,elements):
-        #pick the element with smallest absolute, then linear, quadratic... coefficient in Z[omega]
+        #pick the element with smallest absolute, then linear, quadratic... coefficient in Z[omega] (lexicographically)
         if elements:
             chosen=[]
             for elem in elements:
                 chosen.append(self._algForParallelAdd._ring(elem))    #coercion into Z[omega]
             k=0
             while len(chosen)>1:
-                #print 'vybiram z ', chosen , 'pomoci ',k, '. koeficientu'
                 min_k=[chosen[0]]
                 for elem in chosen[1:]:
                     if elem.list()[k]<min_k[0].list()[k]:
@@ -236,9 +237,7 @@ class WeightFunctionSearch(object):
                 chosen=copy(min_k)
                 k+=1
                 if k==self._algForParallelAdd.getMinPolynomial().degree():
-                    #print chosen
                     break
-            #print 'vybrano1', chosen[0]
             return chosen[0]
         else:
             return None
@@ -266,7 +265,7 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_close_PoG(self,elements, PoG):
-        #pick the element from elements which is closest to the point of g
+        #pick the element from elements which is closest in absolute value to the center of gravity PoG from Zomega
         if elements:
             chosen=[]
             for elem in elements:
@@ -283,7 +282,7 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_close_PoG_CC(self,elements):
-        #pick the element from elements which is closest to the point of g
+        #pick the element from elements which is closest in absolute to the center of gravity in CC
         if elements:
             PoG=self.point_of_gravity_CC(elements)
             min_abs=[elements[0]]

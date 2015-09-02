@@ -1,6 +1,6 @@
 class WeightCoefficientsSetSearch(object):
     """
-    Searching set of Weight Coefficients
+    Class for searching for Weight Coefficients set
     """
 #-----------------------------CONSTRUCTOR-------------------------------------------------------------------
     def __init__(self, algForParallelAdd, method):
@@ -17,6 +17,8 @@ class WeightCoefficientsSetSearch(object):
         self._verbose=algForParallelAdd._verbose
 
         self._method=method
+        if self._method==None:
+            self._method=2     #set the default method
 
         #the following diagonalizing matrix is necessary for construction of the norm for method 3
         self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
@@ -101,7 +103,6 @@ class WeightCoefficientsSetSearch(object):
             return res.list()
 
         #Method 3 takes first the only possible candidates and then chooses the smallest element in the nartural norm
-        #DOES NOT WORK !!!!!!!!
         if self._method==3:
             for cand_for_elem in copy(candidates):
                 if len(cand_for_elem)==1:
