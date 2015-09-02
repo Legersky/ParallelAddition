@@ -267,18 +267,18 @@ class AlgorithmForParallelAddition(object):
         if log:
             if repr_missing_for:
                 self.addLog('The following elements of set '+ str(_set) + ' mod ('+str(modulus)+') are not in the alphabet:')
-                self.addLog(repr_missing_for, latex=True)
+                self.addLog(self.divide_into_congruent_classes(repr_missing_for,modulus), latex=True)
             else:
                 self.addLog('There are all elements of set '+ str(_set) + ' mod ('+str(modulus)+') in the alphabet.')
-        return repr_missing_for
+        return self.divide_into_congruent_classes(repr_missing_for,modulus)
 
     def check_alphabet_for_representatives_mod_base_minus_one(self):
         #check if there are all elements of the input alphabet modulo base -1 in the alphabet
         self._missing_representatives_mod_base_minus_one = self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
         if self._missing_representatives_mod_base_minus_one:
-            self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
+            self.addLog('The following congruence classes of the input alphabet mod base-1 are not in the alphabet:')
             self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
-            raise ValueError('There are not representatives of elements '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
+            raise ValueError('There are not representatives of the congruence classes '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
         else:
             self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
 
@@ -289,10 +289,13 @@ class AlgorithmForParallelAddition(object):
         classes=self.divide_into_congruent_classes(self._alphabet,self._base)
         self.addLog('Alphabet divided into congruence classes:')
         self.addLog(classes, latex=True)
-        self._num_missing_classes_mod_base = num_classes - len(classes)
+        self._num_missing_classes_mod_base=num_classes - len(classes)
         if self._num_missing_classes_mod_base:
-            self.addLog('=> There are not all representatives mod base in the alphabet.')
-            raise ValueError('There are not all representatives mod base in the alphabet.')
+            self._missing_classes_mod_base = self.check_alphabet_for_representatives_from_set(self.findRepresentatives(self._base),self._base,log=False)
+            self.addLog('=> There are not all representatives mod base in the alphabet. The following congruence classes are missing:')
+            self.addLog(self._missing_classes_mod_base,latex=True)
+            raise ValueError('There are not all representatives mod base in the alphabet. The following congruence classes are missing: '
+                              +str(self._missing_classes_mod_base))
         else:
             self.addLog('=> There are all representatives mod base in the alphabet.')
 
@@ -312,6 +315,27 @@ class AlgorithmForParallelAddition(object):
     def number_of_representatives(self,modulus):
         #return number of congruence classes mod modulus
         return abs(self._computeCompanionMatrix(modulus).det())
+
+    def findRepresentatives(self,modulus):
+        #return list of all representatives mod modulus
+        num_classes=self.number_of_representatives(modulus)
+        representatives=[]
+        for max_coef in range(0,10):
+            comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
+            for (ind, a) in enumerate(comb):
+                cand=-self.list2Ring(a)
+                is_in_representatives=False
+                for repre in representatives:
+                    if self.divide(repre-cand, modulus)!=None:
+                        is_in_representatives=True
+                        break
+                if not is_in_representatives:
+                    representatives.append(cand)
+
+                if len(representatives)==num_classes:
+                    return representatives
+        raise RuntimeError('Only these representatives found: '+str(representatives)+'. Number of missing: '+str(num_classes-len(representatives)))
+
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
@@ -545,7 +569,7 @@ class AlgorithmForParallelAddition(object):
     def printLatexInfo(self, shortInput):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
-            return latex(_list).replace('\left[','\{').replace('\right]','\}')
+            return latex(_list).replace('\left[','\{').replace('right]','}')
 
         forTable='%'
         print '\\begin{exmp}'
@@ -570,10 +594,10 @@ class AlgorithmForParallelAddition(object):
                 print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
 
         if self._num_missing_classes_mod_base==1:
-            print 'There is missing ', self._num_missing_classes_mod_base , ' congruence class modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+            print 'There is missing a congruence class modulo $\\beta$ with the representative ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.'
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._num_missing_classes_mod_base>1:
-            print 'There are missing ', self._num_missing_classes_mod_base , ' congruence classes modulo $\\beta$ in the alphabet $\\mathcal{A}$.'
+            print 'There are missing  congruence classes modulo $\\beta$ with the representatives ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.'
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._missing_representatives_mod_base_minus_one:
             print 'The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
@@ -603,7 +627,7 @@ class AlgorithmForParallelAddition(object):
                         print '    \item Phase 2 was not successful.\n'
                         forTable+= ' \\xmark \\\\'
                 else:
-                    print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for a fixed length of window. Thus Phase 2 does not converge.\n'
+                    print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for some fixed length of window. Thus Phase 2 does not converge.\n'
                     forTable+= ' \\xmark & --\\\\'
             else:
                 print '    \item Phase 1 was not successful. \n'
