@@ -6,7 +6,7 @@ from sage.rings.polynomial.complex_roots import complex_roots
 
 class AlgorithmForParallelAddition(object):
     """
-    zastresujici trida pro hledani algoritmu paralelniho scitani s abecedou v alphabetRing (Z[\omega]) s prepisovacim pravidlem x-base, base \in baseRing \subset alphabetRing
+    Class for construction of parallel addition algorithms with the rewriting rule x-beta
     """
 #-----------------------------CONSTRUCTOR------------------------------------------------------------------------------------
     def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0):
@@ -104,8 +104,6 @@ class AlgorithmForParallelAddition(object):
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
 
-
-
 #-----------------------------SETTERS AND GETTERS----------------------------------------------------------------------------
 
     def setAlphabet(self,A):
@@ -143,63 +141,6 @@ class AlgorithmForParallelAddition(object):
             if abs(self.ring2CC(b))>maxB:
                 maxB=abs(self.ring2CC(b))
         self._maximumOfInputAlphabet=maxB
-
-    def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
-        #check alphabet if there are all representatives of elements of _set mod modulus
-        repr_missing_for=[]
-        for b in _set:
-            repr_for_b=False
-            for a in self._alphabet:
-                if self.divide(b-a, modulus)!=None:
-                    repr_for_b=True
-                    if self._verbose>=1:
-                        print b,'=',a,'+(',self.divide(b-a, modulus),')*(', modulus,')'
-            if not repr_for_b:
-                repr_missing_for.append(b)
-        if log:
-            if repr_missing_for:
-                self.addLog('The following elements of set '+ str(_set) + ' mod ('+str(modulus)+') are not in the alphabet:')
-                self.addLog(repr_missing_for, latex=True)
-            else:
-                self.addLog('There are all elements of set '+ str(_set) + ' mod ('+str(modulus)+') in the alphabet.')
-        return repr_missing_for
-
-    def check_alphabet_for_representatives_mod_base_minus_one(self):
-        self._missing_representatives_mod_base_minus_one = self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
-        if self._missing_representatives_mod_base_minus_one:
-            self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
-            self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
-            raise ValueError('There are not representatives of elements '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
-        else:
-            self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
-
-    def check_alphabet_for_representatives_mod_base(self):
-        num_classes=self.number_of_representatives(self._base)
-        self.addLog('Number of congruence classes mod base is: '+ str(num_classes))
-        classes=self.divide_into_congruent_classes(self._alphabet,self._base)
-        self.addLog('Alphabet divided into congruence classes:')
-        self.addLog(classes, latex=True)
-        self._num_missing_classes_mod_base = num_classes - len(classes)
-        if self._num_missing_classes_mod_base:
-            self.addLog('=> There are not all representatives mod base in the alphabet.')
-            raise ValueError('There are not all representatives mod base in the alphabet.')
-        else:
-            self.addLog('=> There are all representatives mod base in the alphabet.')
-
-    def divide_into_congruent_classes(self,_set,modulus):
-        classes=[]
-        for a in _set:
-            is_in_class=False
-            for _class in classes:
-                if self.divide(_class[0]-a, modulus)!=None:
-                    _class.append(a)
-                    is_in_class=True
-            if not is_in_class:
-                classes.append([a])
-        return classes
-
-    def number_of_representatives(self,modulus):
-        return abs(self._computeCompanionMatrix(modulus).det())
 
     def setBase(self, base):
         #set base
@@ -309,6 +250,68 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Number of inputs: "+ str(len(self._weightFunction.getMapping().keys())))
         self.addLog("Output of weight function for the input 0,0,...,0: "+ str(self._weightFunction((0,))))
         return self._weightFunction
+
+#-----------------------------ALPHABET CONTROL-------------------------------------------------------------------------------
+    def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
+        #check alphabet if there are all representatives of elements of _set mod modulus
+        repr_missing_for=[]
+        for b in _set:
+            repr_for_b=False
+            for a in self._alphabet:
+                if self.divide(b-a, modulus)!=None:
+                    repr_for_b=True
+                    if self._verbose>=1:
+                        print b,'=',a,'+(',self.divide(b-a, modulus),')*(', modulus,')'
+            if not repr_for_b:
+                repr_missing_for.append(b)
+        if log:
+            if repr_missing_for:
+                self.addLog('The following elements of set '+ str(_set) + ' mod ('+str(modulus)+') are not in the alphabet:')
+                self.addLog(repr_missing_for, latex=True)
+            else:
+                self.addLog('There are all elements of set '+ str(_set) + ' mod ('+str(modulus)+') in the alphabet.')
+        return repr_missing_for
+
+    def check_alphabet_for_representatives_mod_base_minus_one(self):
+        #check if there are all elements of the input alphabet modulo base -1 in the alphabet
+        self._missing_representatives_mod_base_minus_one = self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
+        if self._missing_representatives_mod_base_minus_one:
+            self.addLog('The following elements of the input alphabet mod base-1 are not in the alphabet:')
+            self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
+            raise ValueError('There are not representatives of elements '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
+        else:
+            self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
+
+    def check_alphabet_for_representatives_mod_base(self):
+        #check if there are all representatives mod base in the alphabet
+        num_classes=self.number_of_representatives(self._base)
+        self.addLog('Number of congruence classes mod base is: '+ str(num_classes))
+        classes=self.divide_into_congruent_classes(self._alphabet,self._base)
+        self.addLog('Alphabet divided into congruence classes:')
+        self.addLog(classes, latex=True)
+        self._num_missing_classes_mod_base = num_classes - len(classes)
+        if self._num_missing_classes_mod_base:
+            self.addLog('=> There are not all representatives mod base in the alphabet.')
+            raise ValueError('There are not all representatives mod base in the alphabet.')
+        else:
+            self.addLog('=> There are all representatives mod base in the alphabet.')
+
+    def divide_into_congruent_classes(self,_set,modulus):
+        #divide _set into congruence classes mod modulus
+        classes=[]
+        for a in _set:
+            is_in_class=False
+            for _class in classes:
+                if self.divide(_class[0]-a, modulus)!=None:
+                    _class.append(a)
+                    is_in_class=True
+            if not is_in_class:
+                classes.append([a])
+        return classes
+
+    def number_of_representatives(self,modulus):
+        #return number of congruence classes mod modulus
+        return abs(self._computeCompanionMatrix(modulus).det())
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
@@ -609,7 +612,6 @@ class AlgorithmForParallelAddition(object):
         print '\\end{exmp}'
         print forTable
 
-
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
         #plots nums_from_ring from Ring
@@ -886,7 +888,6 @@ class AlgorithmForParallelAddition(object):
 
         return imgs2
 
-
 #-----------------------------SAVE FUNCTIONS---------------------------------------------------------------------------------
     def saveInfoToTexFile(self, filename, header=True, shortInput=False):
         #save info about numeration system and results of extending window method to .tex file
@@ -997,7 +998,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Solved and unsolved inputs saved to "+filename+"_unsolved_inputs_after_interrupt.csv")
 
     def inputSettingToSageFile(self, filename):
-        #create SageMath file with input setting. This may be used for cmd calling of parallelAdd.sage
+        #create SageMath file with input setting. This may be used for cmd calling of extending_window_method.sage
         with open(filename+".sage", 'w') as fp:
             stdout = sys.stdout
             sys.stdout = fp
@@ -1021,50 +1022,27 @@ class AlgorithmForParallelAddition(object):
             print '#Base (use \'omega\' as ring generator)'
             print 'base =\'' ,self._base, "'"
             print ''
-            print '#------------LIMITATIONS----------------'
-            print '#maximum of iterations in searching weight coefficient set'
-            print 'max_interations = 20'
+            print '#------------SETTING--------------------'
+            print 'max_iterations = 20      #maximum of iterations in the search for the weight coefficient set'
+            print 'max_input_length = 10    #maximal length of the input of the weight function'
+            print 'sanityCheck=True         #run sanity check'
             print ''
-            print '#maximal length of input of weight function'
-            print 'max_input_length =  10'
+            print '#------------SAVING---------------------'
+            print 'info=True                #save general info to .tex file'
+            print 'WFcsv=True               #save weight function to .csv file'
+            print 'localConversionCsv=True  #save local conversion to .csv file'
+            print 'saveSetting=False        #save inputs setting as a dictionary'
+            print 'saveLog=True             #save log file'
+            print 'saveUnsolved=False       #save unsolved combinations after interruption'
             print ''
-            print '#------------SAVING----------------'
-            print '#save general info to .tex file'
-            print 'info=True'
-            print ''
-            print '#save Weight function to .csv file'
-            print 'WFcsv=True'
-            print ''
-            print '#save Local conversion to .csv file'
-            print 'localConversionCsv=False'
-            print ''
-            print '#save Inputs setting'
-            print 'saveSetting=False'
-            print ''
-            print '#save Log file'
-            print 'saveLog=True'
-            print ''
-            print '#save Unsolved inputs after interruption'
-            print 'saveUnsolved=True'
-            print ''
-            print '#run sanity check'
-            print 'sanityCheck=True'
-
-            print '#---------IMAGES--------------------'
-            print '#save image of the alphabet and input alphabet'
-            print 'alphabet_img=True'
-
-            print '#save image of lattice with shifted alphabet'
-            print 'lattice_img=True'
-
-            print '#save step-by-step images of phase 1'
-            print 'phase1_images=True'
-
-            print '#save step-by-step images of phase 2'
-            print 'phase2_images=True'
-            print '#for input'
+            print '#------------IMAGES--------------------'
+            print 'alphabet_img=True        #save image of alphabet and input alphabet'
+            print 'lattice_img=True         #save image of Z[omega]'
+            print 'phase1_images=True       #save images of steps of phase 1'
+            print 'weightCoefSet_img=True   #save image of the weight coefficient set with the estimation given by lemma 3.1:'
+            print 'estimation=True'
+            print 'phase2_images=True       #save images of steps of phase 2 for the input:'
             print "phase2_input='(omega,1,omega,1,omega,1,omega,1)'"
-
 
             sys.stdout = stdout
 
