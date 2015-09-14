@@ -165,7 +165,11 @@ class WeightFunctionSearch(object):
             if self._verbose>=2:
                 print "Qw_w for ", w_tuple, " was found: "
                 print Qww
+
+            #self._Qw_w[w_tuple]=self.convex(w_tuple,Qww)
             self._Qw_w[w_tuple]=Qww
+
+#            self.opravy(w_tuple)
             return Qww
         else:
             raise RuntimeError("There is no Qww for: ", w_tuple_without_first)
@@ -353,3 +357,34 @@ class WeightFunctionSearch(object):
             if k>6:
                 self._algForParallelAdd.addLog('Stopped afer searching subsets of size '+str(k-1)+ '.')
                 raise  RuntimeError('Stopped afer searching subsets of size '+str(k-1)+ '.')
+
+    def opravy(self, w_tuple):
+        omega=alg.getRingGenerator()
+        if w_tuple==(4,):
+            self._Qw_w[w_tuple]+=[-omega-2,-2*omega-2]
+        if w_tuple==(-4,):
+            self._Qw_w[w_tuple]+=[omega+2,2*omega+2]
+        if w_tuple==(3,):
+            self._Qw_w[w_tuple]+=[-2, -2-omega, 0, -omega, -2+omega]
+        if w_tuple==(3,3):
+            self._Qw_w[w_tuple]+=[-2, 0]
+        if w_tuple==(-3,):
+            self._Qw_w[w_tuple]+=[2, 2+omega, 0, omega, 2-omega]
+        if w_tuple==(-3,-3):
+            self._Qw_w[w_tuple]+=[2, 0]
+        if w_tuple==(2,):
+            self._Qw_w[w_tuple]+=[ -3]
+        if w_tuple==(-2,):
+            self._Qw_w[w_tuple]+=[ 3]
+
+    def convex(self, w_tuple, Qww):
+        not_added=Set(self._Qw_w[w_tuple[0:-1]]).difference(Qww)
+        pairs=Subsets(Qww,2)
+        to_add=[]
+        for el in not_added:
+            for pair in pairs:
+                ratio= self._algForParallelAdd.ring2NumberField(el-pair.list()[1])/self._algForParallelAdd.ring2NumberField(pair.list()[0]-pair.list()[1])
+                if ratio in RR and 0<ratio and ratio<1:
+                    to_add.append(el)
+                    break
+        return Set(Qww+to_add).list()

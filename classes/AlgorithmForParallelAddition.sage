@@ -97,9 +97,9 @@ class AlgorithmForParallelAddition(object):
         self.addLog('With absolute values:')
         self.addLog(abs_values, latex=True)
 
-        if self._printLogLatex:
-            self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
-            show(self.plotLattice())
+        #if self._printLogLatex:
+         #   self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
+          #  show(self.plotLattice())
 
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
@@ -249,7 +249,20 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Maximal input length: %s" %self._weightFunction.getMaxLength())
         self.addLog("Number of inputs: "+ str(len(self._weightFunction.getMapping().keys())))
         self.addLog("Output of weight function for the input 0,0,...,0: "+ str(self._weightFunction((0,))))
+        if Set(self.usedWeightCoefficients())==Set(self._weightCoefSet):
+            self.addLog('All elements of the weight coefficient set are used.')
+        else:
+            self.addLog('Used weight coefficients are following:')
+            self.addLog(self.usedWeightCoefficients(), latex=True)
+            self.addLog('The following elements of the weigth coefficient set are not used:')
+            self.addLog(Set(self._weightCoefSet).difference(self.usedWeightCoefficients()).list(), latex=True)
         return self._weightFunction
+
+    def usedWeightCoefficients(self):
+        if self._weightFunction:
+            return Set(self._weightFunction.getMapping().values()).list()
+        else:
+            raise RuntimeError('Weight function must be computed first to get used weight coefficients.')
 
 #-----------------------------ALPHABET CONTROL-------------------------------------------------------------------------------
     def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
@@ -274,6 +287,8 @@ class AlgorithmForParallelAddition(object):
 
     def check_alphabet_for_representatives_mod_base_minus_one(self):
         #check if there are all elements of the input alphabet modulo base -1 in the alphabet
+        num_classes=self.number_of_representatives(self._base-1)
+        self.addLog('Number of congruence classes mod base - 1 is: '+ str(num_classes))
         self._missing_representatives_mod_base_minus_one = self.check_alphabet_for_representatives_from_set(self._inputAlphabet,self._base-1,log=False)
         if self._missing_representatives_mod_base_minus_one:
             self.addLog('The following congruence classes of the input alphabet mod base-1 are not in the alphabet:')
@@ -765,8 +780,7 @@ class AlgorithmForParallelAddition(object):
             q[i]=self.plot(Q_total, color='red', size=circle_big, labeled=False, fontsize=font_size)
             q_new[i]=self.plot(Q[i], color='blue', size=circle_big, labeled=False, fontsize=font_size)
             covered[i]=self.plot(self.sumOfSets(self.getAlphabet(),betaQ[i]), color='orange', size=circle_small, labeled=False, fontsize=font_size)
-            to_cover[i]=self.plot(self.sumOfSets(self.getInputAlphabet(),Q[i]), color='black', size=circle_middle, labeled=False,  fontsize=font_size)
-
+            to_cover[i]=self.plot(self.sumOfSets(self.getInputAlphabet(),Q_total), color='black', size=circle_middle, labeled=False,  fontsize=font_size)
         imgs=[q_new[0]+ text('$\\mathcal{Q}_{0}$',(legend_xshift,2), color='blue', horizontal_alignment='left', fontsize=font_size_legend)]
 
         q_for_centers=[]

@@ -190,8 +190,6 @@ def _(frame_label=text_control('<h3>Construction of the weight function: </h3>',
     try:
         global alg
         global alg_update
-        if not alg_update:
-            raise RuntimeError("Weight function search must be updated first.")
 
         inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
 
