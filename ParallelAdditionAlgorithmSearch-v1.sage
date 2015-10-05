@@ -28,17 +28,18 @@ saveLog=True             #save log file
 saveUnsolved=False       #save unsolved combinations after interruption
 
 #------------IMAGES--------------------
-alphabet_img=True        #save image of alphabet and input alphabet
-lattice_img=True         #save image of lattice with shifted alphabet
-phase1_images=True       #save step-by-step images of phase 1
-weightCoefSet_img=True   #save image of the weight coefficient set
+alphabet_img=False        #save image of alphabet and input alphabet
+lattice_img=False         #save image of lattice with shifted alphabet
+phase1_images=False       #save step-by-step images of phase 1
+weightCoefSet_img=False   #save image of the weight coefficient set
 #with estimation given by lemma:
-estimation=True
-phase2_images=True       #save step-by-step images of phase 2
+estimation=False
+phase2_images=False       #save step-by-step images of phase 2
 #for input:
 phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
-
-load_attach_path('/home/legerjan/ParallelAddition')
 load_attach_path('../')
+
+folder_path=os.path.dirname(__file__)
+load_attach_path('/home/legerjan/ParallelAddition')
 load('ewm.sage')

@@ -16,7 +16,7 @@ try:
     unsolved_saved=False
 
     filename=alg.getName()
-    output_folder='./outputs/'
+    output_folder=folder_path+'/outputs/'
 
     if filename:
         d = os.path.dirname(output_folder+filename+'/')
