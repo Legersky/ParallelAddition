@@ -39,4 +39,5 @@ phase2_images=True       #save step-by-step images of phase 2
 phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 
-load_attach_path('/home/legerjan/sage/ParralleAddition/classes')
+load_attach_path('/home/legerjan/ParallelAddition')
+load('ewm.sage')
