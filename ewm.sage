@@ -2,7 +2,11 @@ import os
 import time
 import sys
 
-load_attach_path(os.path.dirname(__file__)+'/classes/')
+if os.path.dirname(__file__):
+    load_attach_path(os.path.dirname(__file__)+'/classes/')
+else:
+    load_attach_path('./classes/')
+
 load('AlgorithmForParallelAddition.sage')
 
 
