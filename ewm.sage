@@ -1,8 +1,10 @@
-load_attach_path('classes/')
+import os
+import time
+import sys
+
+load_attach_path(os.path.dirname(__file__)+'/classes/')
 load('AlgorithmForParallelAddition.sage')
 
-import sys
-import time
 
 alg=None
 alg_update=False

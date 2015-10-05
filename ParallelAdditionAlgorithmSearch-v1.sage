@@ -40,4 +40,5 @@ phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 
 load_attach_path('/home/legerjan/ParallelAddition')
+load_attach_path('../')
 load('ewm.sage')
