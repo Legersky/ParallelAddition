@@ -1127,4 +1127,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog("Some problem with saving to google spreadsheet:")
             self.addLog(e)
             self.addLog('The following results can be saved to google spreadsheet ParallelAddition_results')
-            self.addLog(str(results))
+            results_csv=''
+            for r in results:
+                results_csv=results_csv+str(r)+'; '
+            self.addLog(results_csv)

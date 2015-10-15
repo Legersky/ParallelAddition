@@ -151,7 +151,7 @@ gc = gspread.authorize(credentials)
 
 wks = gc.open("Where is the money Lebowski?").sheet1
 ︡0e631895-9bd6-46cf-9f32-6b6fa0c4996e︡{"stderr":"Error in lines 2-2\nTraceback (most recent call last):\n  File \"/projects/583d857d-54f0-48f2-9377-fb66dca7659a/.sagemathcloud/sage_server.py\", line 881, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nImportError: No module named gspread\n"}︡
-︠613b59ac-705b-46b0-8809-0edd10356a85s︠
+︠613b59ac-705b-46b0-8809-0edd10356a85︠
 import json
 import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
 from oauth2client.client import SignedJwtAssertionCredentials
@@ -168,8 +168,6 @@ worksheet=s.worksheet('results')
 worksheet.update_acell('B1', 'Bingo!')
 
 worksheet.append_row(["D", "E", "C"]) 
-︡fb4bc6be-31fd-40f9-9561-84e85b801970︡
-︠306799a8-ec33-44e0-8a4d-42c551df47a5︠
 
 
 
