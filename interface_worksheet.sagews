@@ -1,4 +1,4 @@
-︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2s︠
+︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -126,13 +126,50 @@ for a in [4]:
         longest.append(w_tuple)
 if wfs._algForParallelAdd._problematicLetters:
     raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(wfs._algForParallelAdd._problematicLetters,wfs._method))
-︠f8002e9e-6079-47fd-aaf5-e0ad1dc0e33es︠
 
 
 
-len([0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -2*omega - 1, -omega - 2, -2*omega, -omega + 1, -1, -2*omega - 2, -omega - 1, -2])
-︡29086692-35c0-49b9-ba05-7186df05577b︡{"stdout":"19\n"}︡
-︠856b2f65-b4cb-4485-bf0e-5e62a7f53836︠
+
+︠d6f8ae6a-1419-48da-929b-3565bdf3f100︠
+︡69e34e33-d0f5-417b-affa-2a8cdf78ad3a︡
+︠1b2cdf12-3527-4944-b594-f220ba176b87︠
+︡3f8445ff-2cd8-4d9b-9a0b-eb240c382220︡
+︠53cadfd1-b8b0-4ad0-aab0-1263e9b0628b︠
+import MySQLdb
+︡61254bd8-df31-48be-8082-ec9cfd00d6e0︡
+︠ec2bb2d3-5b62-43e9-947e-14ca9c35343a︠
+import json
+import gspread
+from oauth2client.client import SignedJwtAssertionCredentials
+
+json_key = json.load(open('gspread-april-2cd … ba4.json'))
+scope = ['https://spreadsheets.google.com/feeds']
+
+credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+
+gc = gspread.authorize(credentials)
+
+wks = gc.open("Where is the money Lebowski?").sheet1
+︡0e631895-9bd6-46cf-9f32-6b6fa0c4996e︡{"stderr":"Error in lines 2-2\nTraceback (most recent call last):\n  File \"/projects/583d857d-54f0-48f2-9377-fb66dca7659a/.sagemathcloud/sage_server.py\", line 881, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nImportError: No module named gspread\n"}︡
+︠613b59ac-705b-46b0-8809-0edd10356a85s︠
+import json
+import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+from oauth2client.client import SignedJwtAssertionCredentials
+
+json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+scope = ['https://spreadsheets.google.com/feeds']
+
+credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+gc = gspread.authorize(credentials)
+
+s=gc.open("ParallelAddition_results")
+#worksheet= s.add_worksheet('results', 1, 20)
+worksheet=s.worksheet('results')
+worksheet.update_acell('B1', 'Bingo!')
+
+worksheet.append_row(["D", "E", "C"]) 
+︡fb4bc6be-31fd-40f9-9561-84e85b801970︡
+︠306799a8-ec33-44e0-8a4d-42c551df47a5︠
 
 
 
