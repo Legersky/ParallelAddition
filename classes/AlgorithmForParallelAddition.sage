@@ -256,6 +256,8 @@ class AlgorithmForParallelAddition(object):
             self.addLog(self.usedWeightCoefficients(), latex=True)
             self.addLog('The following elements of the weigth coefficient set are not used:')
             self.addLog(Set(self._weightCoefSet).difference(self.usedWeightCoefficients()).list(), latex=True)
+
+        self.saveResults()
         return self._weightFunction
 
     def usedWeightCoefficients(self):
@@ -1098,3 +1100,31 @@ class AlgorithmForParallelAddition(object):
                 im.save(folder+'/'+name+ '_image_{0}.png'.format(k), figsize=img_size)
                 k+=1
             self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)
+
+    def saveResults(self):
+        results=[self._name,  self._alphabet, self._inputAlphabet, self.getMinPolynomial(), self._genCCValue , self._base, self._base.minpoly() ]
+
+        try:
+            import json
+            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+            from oauth2client.client import SignedJwtAssertionCredentials
+
+            json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+            scope = ['https://spreadsheets.google.com/feeds']
+
+            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+            gc = gspread.authorize(credentials)
+
+            sheet=gc.open("ParallelAddition_results")
+
+            worksheet=sheet.worksheet('results')
+
+            worksheet.append_row(results)
+            self.addLog('The following results were saved to google spreadsheet ParallelAddition_results')
+            self.addLog(str(results))
+
+        except Exception, e:
+            self.addLog("Some problem with saving to google spreadsheet:")
+            self.addLog(e)
+            self.addLog('The following results can be saved to google spreadsheet ParallelAddition_results')
+            self.addLog(str(results))

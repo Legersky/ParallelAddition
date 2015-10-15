@@ -3,7 +3,7 @@ import inspect
 import time
 import sys
 
-
+load_attach_path('classes')
 load('AlgorithmForParallelAddition.sage')
 
 
