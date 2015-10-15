@@ -38,8 +38,12 @@ phase2_images=False       #save step-by-step images of phase 2
 #for input:
 phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
-load_attach_path('../')
 
-folder_path=os.path.dirname(__file__)
+load_attach_path('~')
+
 load_attach_path('/home/legerjan/ParallelAddition')
+load_attach_path('/home/legerjan/ParallelAddition/classes')
+
+import inspect
+folder_path=os.path.dirname(os.path.abspath(inspect.stack()[0][1]))
 load('ewm.sage')

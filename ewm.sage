@@ -1,17 +1,15 @@
 import os
+import inspect
 import time
 import sys
 
-if os.path.dirname(__file__):
-    load_attach_path(os.path.dirname(__file__)+'/classes/')
-else:
-    load_attach_path('./classes/')
 
 load('AlgorithmForParallelAddition.sage')
 
 
 alg=None
 alg_update=False
+
 
 try:
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
@@ -20,7 +18,7 @@ try:
     unsolved_saved=False
 
     filename=alg.getName()
-    output_folder=folder_path+'/outputs/'
+    output_folder=folder_path
 
     if filename:
         d = os.path.dirname(output_folder+filename+'/')
@@ -28,12 +26,6 @@ try:
             os.makedirs(d)
     else:
         raise ValueError("Filename is missing.")
-
-    if saveSetting:
-        setting=alg.getDictOfSetting()
-        print "The following setting was saved to ./examples/" + filename
-        print setting
-        save(setting,'./examples/'+ filename )
 
     print " "
 
