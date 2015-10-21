@@ -88,14 +88,14 @@ class AlgorithmForParallelAddition(object):
         self.addLog(self._base.minpoly(), latex=True)
         self.addLog("Roots of minimal polynomial of base:")
         roots=complex_roots(self._base.minpoly())
-        root_print=[]
-        abs_values=[]
+        self.root_print=[]
+        self.abs_values=[]
         for root in roots:
-            root_print.append(root[0])
-            abs_values.append(abs(root[0]))
-        self.addLog(root_print, latex=True)
+            self.root_print.append(root[0])
+            self.abs_values.append(abs(root[0]))
+        self.addLog(self.root_print, latex=True)
         self.addLog('With absolute values:')
-        self.addLog(abs_values, latex=True)
+        self.addLog(self.abs_values, latex=True)
 
         #if self._printLogLatex:
          #   self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
@@ -202,9 +202,9 @@ class AlgorithmForParallelAddition(object):
 #-----------------------------EXTENDING WINDOW METHOD------------------------------------------------------------------------
     def _findWeightCoefSet(self, max_iterations, method_number):
         #finds and sets Weight Coefficients set
-        weightCoefSet=WeightCoefficientsSetSearch(self,method_number)
-        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %weightCoefSet._method)
-        self._weightCoefSet=copy(weightCoefSet.findWeightCoefficientsSet(max_iterations))
+        self._weightCoefSetSearch=WeightCoefficientsSetSearch(self,method_number)
+        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %self._weightCoefSetSearch._method)
+        self._weightCoefSet=copy(self._weightCoefSetSearch.findWeightCoefficientsSet(max_iterations))
         return self._weightCoefSet
 
     def addWeightCoefSetIncrement(self, increment):
@@ -1102,7 +1102,8 @@ class AlgorithmForParallelAddition(object):
             self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)
 
     def saveResults(self):
-        results=[self._name,  self._alphabet, self._inputAlphabet, self.getMinPolynomial(), self._genCCValue , self._base, self._base.minpoly() ]
+        import time
+        results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet, self._inputAlphabet, self.getMinPolynomial(), self._genCCValue , self._base, self._base.minpoly(), self.root_print, self.abs_values, self._num_missing_classes_mod_base, self._missing_representatives_mod_base_minus_one , self._weightCoefSetSearch._method, len(self._weightCoefSet)]
 
         try:
             import json
