@@ -26,7 +26,7 @@ class WeightFunctionSearch(object):
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         if self._method==None:
-            self._method=5#4     #set the default method
+            self._method=4     #set the default method
         self._k=0
         self._numbersOfSavedCombinations=[]
 

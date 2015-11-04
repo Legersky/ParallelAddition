@@ -1,4 +1,4 @@
-︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2︠
+︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2s︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -6,17 +6,17 @@ import time
 #------------------Here you can set inputs---------------------------------------------------------------------
 
 #Minimal polynomial of alphabet generator (use variable x):
-minPol = 'x^2+x +1'
+minPol = 'x-1'
 
 #Embedding (the closest root of minimal polynomial to this value is taken as the alphabet generator):
 omegaCC = I
 
 #Alphabet (use \'omega\' as alphabet generator)
-alphabet =   '[0, -1,1, omega, omega+1, -omega-1,-omega]'
+alphabet =  '[0,1,2,-1,-2, 3, -3]' #'[0, -1,1, omega, omega+1, -omega-1,-omega]'
 inputAlphabet='[]'
 
 #Base (use \'omega\' as alphabet generator)
-base = '2*omega+2'
+base = 'omega*6'
 
 #load('inputs/eisenstein.sage')
 
@@ -29,7 +29,7 @@ sanCheck= 'N'
 #Do you want to save info about algorithm to .tex file? Y/N
 infoTex= 'N'
 #Enter the name of file:
-name='Quadratic+1-2+4_complex_biggerQ'
+name='testing'
 
 #Do you want to save also weight function to .tex file? Y/N
 weightFunctionTex= 'N'
@@ -38,136 +38,53 @@ weightFunctionTex= 'N'
 #Press Shift+Enter to run the program
 
 #---------------------------------------------------------------------------------------------------------------------
-start=time.clock()
+try:
+    start=time.clock()
 
-alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
+    alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=0)
 
-alg.check_alphabet_for_representatives_mod_base_minus_one()
-alg.check_alphabet_for_representatives_mod_base()
+    #alg._findWeightCoefSet(20,method_number=3)
+    omega=alg.getRingGenerator()
+    #alg._weightCoefSet=[0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -omega - 1, -omega - 2, -2*omega, -omega + 1, -1, -2*omega - 2, -2*omega - 1, -2]
+    #alg._findWeightFunction(15,method_number=4)
+    alg.findWeightFunction(20,15)#,method_weightCoefSet=3,method_weightFunSearch=4)
+    alg.printWeightCoefSet()
+    if plotWeightCoefSet=='Y': alg.plot(alg.getWeightCoefSet())
+    alg.printWeightFunctionInfo()
+    alg.usedWeightCoefficients()
 
-#alg._findWeightCoefSet(20,method_number=3)
-omega=alg.getRingGenerator()
-alg._weightCoefSet=[0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -omega - 1, -omega - 2, -2*omega, -omega + 1, -1, -2*omega - 2, -2*omega - 1, -2]
-alg._findWeightFunction(15,method_number=4)
-#alg.findWeightFunction(20,15,method_weightCoefSet=3,method_weightFunSearch=4)
-alg.printWeightCoefSet()
-if plotWeightCoefSet=='Y': alg.plot(alg.getWeightCoefSet())
-alg.printWeightFunctionInfo()
-alg.usedWeightCoefficients()
+    if sanCheck=='Y':
+        print "Sanity check:"
+        print "Number of errors: %s" % alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
 
-if sanCheck=='Y':
-    print "Sanity check:"
-    print "Number of errors: %s" % alg.sanityCheck_conversion(alg.getWeightFunction().getMaxLength()+1)
+    if infoTex== 'Y':
+        alg.saveInfoToTexFile(filename)
 
-if infoTex== 'Y':
-    alg.saveInfoToTexFile(filename)
+    end=time.clock()
 
-end=time.clock()
+    alg.addLog("Elapsed time: "+ str(end-start))
 
-alg.addLog("Elapsed time: "+ str(end-start))
-
-filename=alg.getName()
-output_folder='./outputs/'
-d = os.path.dirname(output_folder+filename+'/')
+    filename=alg.getName()
+    output_folder='./outputs/'
+    d = os.path.dirname(output_folder+filename+'/')
     if not os.path.exists(d):
         os.makedirs(d)
+finally:
+    alg.saveResults(str(end-start))
 
+#alg.saveInfoToTexFile(output_folder+filename+'/'+filename, header=True, shortInput=False)
 
+#alg.saveLog(output_folder+filename+'/'+filename)
 
-alg.saveInfoToTexFile(output_folder+filename+'/'+filename, header=True, shortInput=False)
+︡8bddb06f-c9a2-4f02-9a72-4fd8c31a3265︡︡{"stdout":"Inicialization...","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Numeration system: \n","done":false}︡{"stdout":"testing\n","done":false}︡{"stdout":"Alphabet: \n","done":false}︡{"stdout":"[0, 1, 2, -1, -2, 3, -3]\n","done":false}︡{"stdout":"Input alphabet: \n","done":false}︡{"stdout":"[0, 1, 2, 3, 4, 5, 6, -2, -6, -5, -4, -3, -1]\n","done":false}︡{"stdout":"Ring generator: \n","done":false}︡{"stdout":"1","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Minimal polynomial of ring generator: \n","done":false}︡{"stdout":"t - 1\n","done":false}︡{"stdout":"Base: \n","done":false}︡{"stdout":"6 = 6\n","done":false}︡{"stdout":"Minimal polynomial of base:\n","done":false}︡{"stdout":"x - 6\n","done":false}︡{"stdout":"Conjugates of base:\n","done":false}︡{"stdout":"[6]\n","done":false}︡{"stdout":"With absolute values:\n","done":false}︡{"stdout":"[6]\n","done":false}︡{"stdout":"Checking alphabet for representatives mod base:\n","done":false}︡{"stdout":"Number of congruence classes mod base is: 6","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Alphabet divided into congruence classes:\n","done":false}︡{"stdout":"[[0], [1], [2], [-1], [-2], [3, -3]]\n","done":false}︡{"stdout":"=> There are all representatives mod base in the alphabet.","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Checking alphabet for representatives mod base-1:\n","done":false}︡{"stdout":"Number of congruence classes mod base - 1 is: 5\n","done":false}︡{"stdout":"There are all elements of the input alphabet mod base-1 in the alphabet.","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Phase 1 - Searching for the Weight Coefficient Set using method 2...","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Starting Q_0:\n","done":false}︡{"stdout":"[0]\n","done":false}︡{"stdout":"Number of elements in Qk: 1","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Added coefficients:\n","done":false}︡{"stdout":"[1, -1]\n","done":false}︡{"stdout":"Number of elements in Qk: 3","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Added coefficients:\n","done":false}︡{"stdout":"[]\n","done":false}︡{"stdout":"The Weight Coefficient Set is:\n","done":false}︡{"stdout":"[0, 1, -1]\n","done":false}︡{"stdout":"Number of elements: 3\n","done":false}︡{"stdout":"Phase 2 is starting...\n","done":false}︡{"stdout":"Checking one letter inputs...\n","done":false}︡{"stdout":"The longest inputs are:","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"[(3, 3), (-3, -3)]\n","done":false}︡{"stdout":"Length of one letter input: 2: \n","done":false}︡{"stdout":"Number of letters with longest input: 2\n","done":false}︡{"stdout":"Searching the Weight Function using method 5...\n","done":false}︡{"stdout":"Length of the window: 1, Number of saved combinations of input digits: 11, To next iteration: 2","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Length of the window: 2, Number of saved combinations of input digits: 26, To next iteration: 0","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"Info about Weight Function:\n","done":false}︡{"stdout":"Maximal input length: 2\n","done":false}︡{"stdout":"Number of inputs: 37\n","done":false}︡{"stdout":"Output of weight function for the input 0,0,...,0: 0\n","done":false}︡{"stdout":"All elements of the weight coefficient set are used.\n","done":false}︡{"stdout":"Instance of WeightFunction\nWeight Coefficient Set is:\n","done":false}︡{"html":"<div align='center'>[$\\displaystyle 0$, $\\displaystyle 1$, $\\displaystyle -1$]</div>","done":false}︡{"stdout":"Number of elements:  3\nInfo about Weight Function for RingGenerator omega 1.00000000000000 (root of t - 1), alphabet [0, 1, 2, -1, -2, 3, -3] and input alphabet [0, 1, 2, 3, 4, 5, 6, -2, -6, -5, -4, -3, -1]\nMaximal input length: 2\nNumber of inputs: 37\n[0, 1, -1]\nElapsed time: 0.704112\n","done":false}︡{"stdout":"The following results were saved to google spreadsheet ParallelAddition_results","done":false}︡{"stdout":"\n","done":false}︡{"stdout":"['2015-11-04 22:38', 'testing', [0, 1, 2, -1, -2, 3, -3], 'A+A', 1, t - 1, '6 = 6', x - 6, [6], [6], [[0], [1], [2], [-1], [-2], [3, -3]], [], [[0], [1], [2, -3], [-1], [-2, 3]], [], 'yes', 2, 'OK', 3, [1, 3], 5, 'OK', 2, 'OK', 2, [11, 26], [], '0.704112']\n","done":false}︡{"done":true}
+︠0e03b2d9-2c34-4148-8ce8-9eaa7506191a︠
+R.<x> = QQ[]
+f=alg._base.minpoly()
+f.parent
+f.roots(SR, multiplicities=False)
+︡6cceaba5-0ce4-4501-bb21-0c20665e3063︡︡{"stdout":"<built-in method parent of sage.rings.polynomial.polynomial_integer_dense_flint.Polynomial_integer_dense_flint object at 0x7fe7ff258a78>\n","done":false}︡{"stdout":"[-I - 1, I - 1]","done":false}︡{"stdout":"\n","done":false}︡{"done":true}
+︠dd8aa65f-700f-4310-b63f-b4f1b6af5fad︠
 
-alg.saveLog(output_folder+filename+'/'+filename)
-︡7cf36792-6645-4c49-845e-ad5587134beb︡{"stdout":"Inicialization...\n"}︡{"stdout":"Numeration system: \n"}︡{"stdout":"Quadratic+1-2+4_complex_biggerQ\n"}︡{"stdout":"Alphabet: \n"}︡{"stdout":"[0, -1, 1, omega, omega + 1, -omega - 1, -omega]\n"}︡{"stdout":"Input alphabet: \n"}︡{"stdout":"[0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -2*omega - 1, -omega - 1, -2*omega, -omega + 1, -1, -2*omega - 2, -omega - 2, -2]\n"}︡{"stdout":"Minimal polynomial of ring generator: \n"}︡{"stdout":"t^2 + t + 1\n"}︡{"stdout":"Embedding: \n"}︡{"stdout":"-0.500000000000000 + 0.866025403784439*I\n"}︡{"stdout":"Base: \n"}︡{"stdout":"2*omega + 2\n"}︡{"stdout":"Minimal polynomial of base:\n"}︡{"stdout":"x^2 - 2*x + 4\n"}︡{"stdout":"Roots of minimal polynomial of base:\n"}︡{"stdout":"[1 - 1.732050807568878?*I, 1 + 1.732050807568878?*I]\n"}︡{"stdout":"With absolute values:\n"}︡{"stdout":"[2.000000000000000?, 2.000000000000000?]\n"}︡{"stdout":"Number of congruence classes mod base - 1 is: 3\n"}︡{"stdout":"There are all elements of the input alphabet mod base-1 in the alphabet.\n"}︡{"stdout":"Number of congruence classes mod base is: 4\n"}︡{"stdout":"Alphabet divided into congruence classes:\n"}︡{"stdout":"[[0], [-1, 1], [omega, -omega], [omega + 1, -omega - 1]]\n"}︡{"stdout":"=> There are all representatives mod base in the alphabet.\n"}︡{"stdout":"Checking one letter inputs...\n"}︡{"stdout":"The longest inputs are:"}︡{"stdout":"\n"}︡{"stdout":"[(1, 1, 1), (2, 2, 2), (-omega, -omega, -omega), (2*omega, 2*omega, 2*omega), (2*omega + 2, 2*omega + 2, 2*omega + 2), (omega, omega, omega), (omega + 1, omega + 1, omega + 1), (-omega - 1, -omega - 1, -omega - 1), (-2*omega, -2*omega, -2*omega), (-1, -1, -1), (-2*omega - 2, -2*omega - 2, -2*omega - 2), (-2, -2, -2)]\n"}︡{"stdout":"Length of one letter input: 3: \n"}︡{"stdout":"Number of letters with longest input: 12\n"}︡{"stdout":"Searching the Weight Function using method 4...\n"}︡{"stdout":"Length of the window: 1, Number of saved combinations of input digits: 0, To next iteration: 19"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 2, Number of saved combinations of input digits: 145, To next iteration: 216"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 3, Number of saved combinations of input digits: 3862, To next iteration: 242"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 4, Number of saved combinations of input digits: 4414, To next iteration: 184"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 5, Number of saved combinations of input digits: 3412, To next iteration: 84"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 6, Number of saved combinations of input digits: 1568, To next iteration: 28"}︡{"stdout":"\n"}︡{"stdout":"Length of the window: 7, Number of saved combinations of input digits: 532, To next iteration: 0"}︡{"stdout":"\n"}︡{"stdout":"Weight Coefficient Set is:\n"}︡{"html":"<div align='center'>[$\\displaystyle 0$, $\\displaystyle 1$, $\\displaystyle 2$, $\\displaystyle -\\omega$, $\\displaystyle 2\\omega$, $\\displaystyle 2\\omega + 1$, $\\displaystyle 2\\omega + 2$, $\\displaystyle \\omega - 1$, $\\displaystyle \\omega$, $\\displaystyle \\omega + 1$, $\\displaystyle \\omega + 2$, $\\displaystyle -\\omega - 1$, $\\displaystyle -\\omega - 2$, $\\displaystyle -2\\omega$, $\\displaystyle -\\omega + 1$, $\\displaystyle -1$, $\\displaystyle -2\\omega - 2$, $\\displaystyle -2\\omega - 1$, $\\displaystyle -2$]</div>"}︡{"stdout":"Number of elements:  19\n"}︡{"stdout":"Info about Weight Function for RingGenerator omega -0.500000000000000 + 0.866025403784439*I (root of t^2 + t + 1), alphabet [0, -1, 1, omega, omega + 1, -omega - 1, -omega] and input alphabet [0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -2*omega - 1, -omega - 1, -2*omega, -omega + 1, -1, -2*omega - 2, -omega - 2, -2]\nMaximal input length: 7\nNumber of inputs: 13933\n"}︡{"stdout":"[0, 1, 2, -omega, 2*omega, 2*omega + 1, 2*omega + 2, omega - 1, omega, omega + 1, omega + 2, -omega - 1, -omega - 2, -2*omega, -omega + 1, -1, -2*omega - 2, -2*omega - 1, -2]"}︡{"stdout":"\n"}︡{"stdout":"Elapsed time: 56.077631\n"}︡{"stdout":"Info about algorithm for parallel addition saved to ./outputs/Quadratic+1-2+4_complex_biggerQ/Quadratic+1-2+4_complex_biggerQ.tex\n"}︡{"stdout":"Log saved to ./outputs/Quadratic+1-2+4_complex_biggerQ/Quadratic+1-2+4_complex_biggerQ_log.txt\n"}︡
-︠54ee6110-45fd-4991-819a-4ff6bfe7b3f1︠
-A=alg.getAlphabet()
-beta=alg.getBase()
-omega=alg.getRingGenerator()
-
-#alg._weightFunSearch._Qw_w
-show(alg.plotPhase2((2,2,2,2,2,2)))
-︠799b3df0-bea9-42e6-80e2-8348d9eaed5b︠
-wfs=alg._weightFunSearch
-wfs._verbose=1
-
-wfs._Qw_w[()]=wfs._weightCoefSet
-longest=[()]
-wfs._algForParallelAdd._problematicLetters=[]
-for a in [4]:
-    if wfs._verbose>=1: print "Processing input", a,',', a, '...'
-    w_tuple=(a,)
-    Qww=wfs._findQw(w_tuple)
-    if wfs._verbose>=1:
-        print Qww
-        show(alg.plot(Qww))
-    inp_len=1
-    wfs._Qw_w[w_tuple]+=[-omega-2,-2*omega-2]
-    print wfs._Qw_w[w_tuple]
-    prevQww=Set(Qww)
-    while len(Qww)>1:
-#        if inp_len>=max_input_length:
- #           wfs._algForParallelAdd.addLog("Inputs are longer than the given maximum: %s" %(max_input_length))
-  #          raise RuntimeError("Inputs are longer than the given maximum: %s" %(max_input_length))
-        w_tuple = w_tuple+(a,)
-        Qww=wfs._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
-        if wfs._verbose>=1:
-            print Qww
-            show(alg.plot(Qww))
-        if prevQww==Set(Qww):
-            wfs._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,wfs._method))
-            wfs._algForParallelAdd._problematicLetters.append(a)
-            break
-        if len(Qww)==1:
-            wfs._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
-        inp_len+=1
-        prevQww=Set(Qww)
-    if len(w_tuple)>len(longest[0]):
-        longest=[w_tuple]
-    elif len(w_tuple)==len(longest[0]):
-        longest.append(w_tuple)
-if wfs._algForParallelAdd._problematicLetters:
-    raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(wfs._algForParallelAdd._problematicLetters,wfs._method))
-
-
-
-
-︠d6f8ae6a-1419-48da-929b-3565bdf3f100︠
-︡69e34e33-d0f5-417b-affa-2a8cdf78ad3a︡
-︠1b2cdf12-3527-4944-b594-f220ba176b87︠
-︡3f8445ff-2cd8-4d9b-9a0b-eb240c382220︡
-︠53cadfd1-b8b0-4ad0-aab0-1263e9b0628b︠
-import MySQLdb
-︡61254bd8-df31-48be-8082-ec9cfd00d6e0︡
-︠ec2bb2d3-5b62-43e9-947e-14ca9c35343a︠
-import json
-import gspread
-from oauth2client.client import SignedJwtAssertionCredentials
-
-json_key = json.load(open('gspread-april-2cd … ba4.json'))
-scope = ['https://spreadsheets.google.com/feeds']
-
-credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-
-gc = gspread.authorize(credentials)
-
-wks = gc.open("Where is the money Lebowski?").sheet1
-︡0e631895-9bd6-46cf-9f32-6b6fa0c4996e︡{"stderr":"Error in lines 2-2\nTraceback (most recent call last):\n  File \"/projects/583d857d-54f0-48f2-9377-fb66dca7659a/.sagemathcloud/sage_server.py\", line 881, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nImportError: No module named gspread\n"}︡
-︠613b59ac-705b-46b0-8809-0edd10356a85︠
-import json
-import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
-from oauth2client.client import SignedJwtAssertionCredentials
-
-json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
-scope = ['https://spreadsheets.google.com/feeds']
-
-credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-gc = gspread.authorize(credentials)
-
-s=gc.open("ParallelAddition_results")
-#worksheet= s.add_worksheet('results', 1, 20)
-worksheet=s.worksheet('results')
-worksheet.update_acell('B1', 'Bingo!')
-
-worksheet.append_row(["D", "E", "C"]) 
 
 
 
