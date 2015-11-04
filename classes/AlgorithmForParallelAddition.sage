@@ -91,6 +91,9 @@ class AlgorithmForParallelAddition(object):
         self.addLog('With absolute values:')
         self.addLog(self._abs_values, latex=True)
 
+        self._missing_representatives_mod_base_minus_one='-'
+        self._weightCoefSetSearch=None
+
         #if self._printLogLatex:
          #   self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
           #  show(self.plotLattice())
@@ -148,7 +151,7 @@ class AlgorithmForParallelAddition(object):
         self._roots=self._base.minpoly().roots(SR,multiplicities=False)
         self._abs_values=[]
         for root in self._roots:
-            self._abs_values.append(abs(root))
+            self._abs_values.append(abs(root).simplify())
             if abs(root)<=1:
                 self._base_is_expanding=False
         if not self._base_is_expanding:
