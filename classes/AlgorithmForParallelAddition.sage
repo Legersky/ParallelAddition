@@ -87,10 +87,10 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
         self.addLog("Roots of minimal polynomial of base:")
-        roots=complex_roots(self._base.minpoly(), retval='algebraic')
+        roots=self._base.minpoly().roots() #=complex_roots(self._base.minpoly(), retval='algebraic')
         self.root_print=[]
         self.abs_values=[]
-        print roots[0][0].parent
+        print roots
         for root in roots:
             self.root_print.append("{0:.4f}".format(complex(root[0])))
             print SR(root[0])

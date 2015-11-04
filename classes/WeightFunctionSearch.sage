@@ -160,9 +160,27 @@ class WeightFunctionSearch(object):
                     print 'Elements to add:', to_add
                 Qww+=to_add
 
-            Qww=Set(Qww).list()
+            toAdd=[]
 
-            if self._verbose>=2:
+            if self._verbose>=1:
+                print "Qw_w for ", w_tuple, " before completing: "
+                print Qww
+
+            if len(Set(Qww).list())>len(self._alphabet) :
+                for q in Qww:
+                    centers_of_covering=[]
+                    for a in self._alphabet:
+                        r=self._algForParallelAdd.divideByBase(q+w_tuple[-1]-a)
+                        if not r==None:
+                            centers_of_covering.append(r*self._base)
+                    if len(centers_of_covering)==1:
+                        for a in self._alphabet:
+                            if centers_of_covering[0]+a in Qw_prev:
+                                toAdd.append(centers_of_covering[0]+a)
+
+            Qww=Set(Qww+toAdd).list()
+
+            if self._verbose>=1:
                 print "Qw_w for ", w_tuple, " was found: "
                 print Qww
 
