@@ -49,6 +49,7 @@ class WeightCoefficientsSetSearch(object):
         #returns Qk
         res=Set(self._Qk1)
         added_elem=[]
+        self._numbersOfElementsInIterations.append(len(res))
         if self._verbose>=1: print "Number of elements in Qk: ", len(res)
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
         #Method 1 chooses the smallest element (the embedding to CC is necessary here)
@@ -133,7 +134,7 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
         else:
-            raise ValueError("Method number %s for PotentialCoefficientsSet is not implemented" % self._method)
+            raise ValueError("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
 
     def _getQk(self,C):
         #it extends Qk1 to Qk such that C \subset A + \beta Qk
@@ -144,6 +145,7 @@ class WeightCoefficientsSetSearch(object):
         self._Qk1=[]    #previous potential Weight Coefficient Set
         self._Qk1.append(0)    #0 is always in Weight Coefficients set
         self._algForParallelAdd.addWeightCoefSetIncrement(self._Qk1)
+        self._numbersOfElementsInIterations=[]
         self._algForParallelAdd.addLog('Starting Q_0:')
         self._algForParallelAdd.addLog(self._Qk1, latex=True)
         B=self._inputAlphabet   #input alphabet

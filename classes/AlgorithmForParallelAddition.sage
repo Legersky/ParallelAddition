@@ -87,12 +87,14 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
         self.addLog("Roots of minimal polynomial of base:")
-        roots=complex_roots(self._base.minpoly())
+        roots=complex_roots(self._base.minpoly(), retval='algebraic')
         self.root_print=[]
         self.abs_values=[]
+        print roots[0][0].parent
         for root in roots:
-            self.root_print.append(root[0])
-            self.abs_values.append(abs(root[0]))
+            self.root_print.append("{0:.4f}".format(complex(root[0])))
+            print SR(root[0])
+            self.abs_values.append("{0:.4f}".format(float(abs(root[0]))))
         self.addLog(self.root_print, latex=True)
         self.addLog('With absolute values:')
         self.addLog(self.abs_values, latex=True)
@@ -149,6 +151,13 @@ class AlgorithmForParallelAddition(object):
                 self._minimalPolynomialOfBase=self._base.minpoly()
         else:
             raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
+        self._base_is_expanding=True
+        roots=complex_roots(self._base.minpoly())
+        for root in roots:
+            if abs(root[0])<1:
+                self._base_is_expanding=False
+        if not self._base_is_expanding:
+            raise ValueError('Base %s is not expanding' %self._base)
 
     def getRingGenerator(self):
         #return generator of Ring
@@ -220,7 +229,8 @@ class AlgorithmForParallelAddition(object):
             self._oneLettersCheck=True
             self.addLog("The longest inputs are:")
             self.addLog(longest, latex=True)
-            self.addLog("Length of one letter input: %s: " %len(longest[0]))
+            self._length_OneLetterInputs=len(longest[0])
+            self.addLog("Length of one letter input: %s: " %self._length_OneLetterInputs)
             self.addLog("Number of letters with longest input: %s" %len(longest))
             self.addLog("Searching the Weight Function using method %s..." %self._weightFunSearch._method)
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
@@ -251,11 +261,13 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Output of weight function for the input 0,0,...,0: "+ str(self._weightFunction((0,))))
         if Set(self.usedWeightCoefficients())==Set(self._weightCoefSet):
             self.addLog('All elements of the weight coefficient set are used.')
+            self._not_usedWeightCoef=[]
         else:
             self.addLog('Used weight coefficients are following:')
             self.addLog(self.usedWeightCoefficients(), latex=True)
             self.addLog('The following elements of the weigth coefficient set are not used:')
-            self.addLog(Set(self._weightCoefSet).difference(self.usedWeightCoefficients()).list(), latex=True)
+            self._not_usedWeightCoef=Set(self._weightCoefSet).difference(self.usedWeightCoefficients()).list()
+            self.addLog(self._not_usedWeightCoef, latex=True)
 
         self.saveResults()
         return self._weightFunction
@@ -307,6 +319,7 @@ class AlgorithmForParallelAddition(object):
         self.addLog('Alphabet divided into congruence classes:')
         self.addLog(classes, latex=True)
         self._num_missing_classes_mod_base=num_classes - len(classes)
+        self._missing_classes_mod_base=[]
         if self._num_missing_classes_mod_base:
             self._missing_classes_mod_base = self.check_alphabet_for_representatives_from_set(self.findRepresentatives(self._base),self._base,log=False)
             self.addLog('=> There are not all representatives mod base in the alphabet. The following congruence classes are missing:')
@@ -1103,7 +1116,33 @@ class AlgorithmForParallelAddition(object):
 
     def saveResults(self):
         import time
-        results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet, self._inputAlphabet, self.getMinPolynomial(), self._genCCValue , self._base, self._base.minpoly(), self.root_print, self.abs_values, self._num_missing_classes_mod_base, self._missing_representatives_mod_base_minus_one , self._weightCoefSetSearch._method, len(self._weightCoefSet)]
+        results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
+        if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                results+=['A+A']
+        else:
+            results+=[self._inputAlphabet]
+        results+=[self.getMinPolynomial(), "{0:.4f}".format(complex(self._genCCValue)) , self._base, self._base.minpoly(), self.root_print, self.abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
+        if self._base_is_expanding:
+            results+=['yes']
+        else:
+            results+=['no']
+        results+=[self._weightCoefSetSearch._method]
+        if self._weightCoefSet:
+            results+=['OK' ,len(self._weightCoefSet)]
+        else:
+            results+=['x' ,'-']
+        results+=[self._weightCoefSetSearch._numbersOfElementsInIterations]
+        results+=[self._weightFunSearch._method]
+        if self._oneLettersCheck:
+            results+=['OK', self._length_OneLetterInputs]
+        else:
+            results+=[self._problematicLetters, '-']
+
+        if self._weightFunction:
+            results+=['OK' , self._weightFunction.getMaxLength()]
+        else:
+            results+=['x' ,'-']
+        results+=[self._weightFunSearch._numbersOfSavedCombinations,self._not_usedWeightCoef]
 
         try:
             import json
