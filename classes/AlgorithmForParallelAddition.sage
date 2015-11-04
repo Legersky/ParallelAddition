@@ -78,26 +78,18 @@ class AlgorithmForParallelAddition(object):
         if self._printLogLatex:
             self.addLog("Plotting the alphabet and input alphabet: ")
             show(self.plot(self._inputAlphabet, color='blue')+self.plotAlphabet())
+        self.addLog("Ring generator: ")
+        self.addLog(SR(self._ratRingGen), latex=True)
         self.addLog("Minimal polynomial of ring generator: ")
         self.addLog(self.getMinPolynomial(), latex=True)
-        self.addLog("Embedding: ")
-        self.addLog(self._genCCValue, latex=True)
         self.addLog("Base: ")
-        self.addLog(self._base, latex=True)
+        self.addLog(str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), latex=True)
         self.addLog("Minimal polynomial of base:")
         self.addLog(self._base.minpoly(), latex=True)
-        self.addLog("Roots of minimal polynomial of base:")
-        roots=self._base.minpoly().roots() #=complex_roots(self._base.minpoly(), retval='algebraic')
-        self.root_print=[]
-        self.abs_values=[]
-        print roots
-        for root in roots:
-            self.root_print.append("{0:.4f}".format(complex(root[0])))
-            print SR(root[0])
-            self.abs_values.append("{0:.4f}".format(float(abs(root[0]))))
-        self.addLog(self.root_print, latex=True)
+        self.addLog("Conjugates of base:")
+        self.addLog(self._roots, latex=True)
         self.addLog('With absolute values:')
-        self.addLog(self.abs_values, latex=True)
+        self.addLog(self._abs_values, latex=True)
 
         #if self._printLogLatex:
          #   self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
@@ -152,9 +144,12 @@ class AlgorithmForParallelAddition(object):
         else:
             raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
         self._base_is_expanding=True
-        roots=complex_roots(self._base.minpoly())
-        for root in roots:
-            if abs(root[0])<1:
+
+        self._roots=self._base.minpoly().roots(SR,multiplicities=False)
+        self._abs_values=[]
+        for root in self._roots:
+            self._abs_values.append(abs(root))
+            if abs(root)<=1:
                 self._base_is_expanding=False
         if not self._base_is_expanding:
             raise ValueError('Base %s is not expanding' %self._base)
@@ -269,7 +264,6 @@ class AlgorithmForParallelAddition(object):
             self._not_usedWeightCoef=Set(self._weightCoefSet).difference(self.usedWeightCoefficients()).list()
             self.addLog(self._not_usedWeightCoef, latex=True)
 
-        self.saveResults()
         return self._weightFunction
 
     def usedWeightCoefficients(self):
@@ -1114,14 +1108,14 @@ class AlgorithmForParallelAddition(object):
                 k+=1
             self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)
 
-    def saveResults(self):
+    def saveResults(self, elapsed_time):
         import time
         results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
         if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
                 results+=['A+A']
         else:
             results+=[self._inputAlphabet]
-        results+=[self.getMinPolynomial(), "{0:.4f}".format(complex(self._genCCValue)) , self._base, self._base.minpoly(), self.root_print, self.abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
+        results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly(), self._roots, self._abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
         if self._base_is_expanding:
             results+=['yes']
         else:
@@ -1142,7 +1136,14 @@ class AlgorithmForParallelAddition(object):
             results+=['OK' , self._weightFunction.getMaxLength()]
         else:
             results+=['x' ,'-']
-        results+=[self._weightFunSearch._numbersOfSavedCombinations,self._not_usedWeightCoef]
+        results+=[self._weightFunSearch._numbersOfSavedCombinations]
+
+        if self._weightFunction:
+            results+=[self._not_usedWeightCoef]
+        else:
+            results+=['-']
+        results+=[elapsed_time]
+
 
         try:
             import json

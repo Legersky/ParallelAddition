@@ -73,6 +73,8 @@ finally:
     end=time.clock()
     alg.addLog("Elapsed time: "+ str(end-start))
 
+    alg.saveResults(end-start)
+
     if info:
         alg.saveInfoToTexFile(output_folder+filename+'/'+filename, header=True, shortInput=False)
 

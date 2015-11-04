@@ -26,8 +26,9 @@ class WeightFunctionSearch(object):
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         if self._method==None:
-            self._method=4     #set the default method
+            self._method=5#4     #set the default method
         self._k=0
+        self._numbersOfSavedCombinations=[]
 
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
@@ -166,14 +167,14 @@ class WeightFunctionSearch(object):
                 print "Qw_w for ", w_tuple, " before completing: "
                 print Qww
 
-            if len(Set(Qww).list())>len(self._alphabet) :
+            if len(Set(Qww).list())>len(self._alphabet):
                 for q in Qww:
                     centers_of_covering=[]
                     for a in self._alphabet:
                         r=self._algForParallelAdd.divideByBase(q+w_tuple[-1]-a)
                         if not r==None:
                             centers_of_covering.append(r*self._base)
-                    if len(centers_of_covering)==1:
+                    if 1:#len(centers_of_covering)==1:
                         for a in self._alphabet:
                             if centers_of_covering[0]+a in Qw_prev:
                                 toAdd.append(centers_of_covering[0]+a)
@@ -197,7 +198,6 @@ class WeightFunctionSearch(object):
         self._Qw_w[()]=self._weightCoefSet
         combinations=[()]
         self._k=0
-        self._numbersOfSavedCombinations=[]
         while combinations:
             if self._k>=max_input_length:
                 raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
