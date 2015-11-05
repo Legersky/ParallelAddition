@@ -1,4 +1,7 @@
 #!/bin/bash
+
+alias sage='../../sage-devel/sage/sage'
+
 for input_name in $1*.sage
 do  sage extending_window_method.sage $input_name $i
 done
