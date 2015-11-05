@@ -9,7 +9,7 @@ load('AlgorithmForParallelAddition.sage')
 
 alg=None
 alg_update=False
-
+images=False
 
 try:
     start=time.clock()
