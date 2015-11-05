@@ -12,6 +12,8 @@ alg_update=False
 
 
 try:
+    start=time.clock()
+
     alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
 
     alg_update=False
@@ -39,7 +41,7 @@ try:
     alg.addLog("Maximum iterations: " + str(max_iterations))
     alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
 
-    start=time.clock()
+
     alg.findWeightFunction(max_iterations,max_input_length)
 
 
@@ -81,18 +83,19 @@ finally:
     if saveLog:
         alg.saveLog(output_folder+filename+'/'+filename)
 
-    if alg._weightCoefSet:
-        if phase1_images:
-            imgs1=alg.plotPhase1()
-            alg.saveImages(imgs1,output_folder+ filename + '/img','phase1')
+    if images:
+        if alg._weightCoefSet:
+            if phase1_images:
+                imgs1=alg.plotPhase1()
+                alg.saveImages(imgs1,output_folder+ filename + '/img','phase1')
 
-        if weightCoefSet_img:
-            alg.saveImages([alg.plotWeightCoefSet(estimation)],output_folder+ filename + '/img','weightCoefficientsSet')
+            if weightCoefSet_img:
+                alg.saveImages([alg.plotWeightCoefSet(estimation)],output_folder+ filename + '/img','weightCoefficientsSet')
 
-    if phase2_images and alg._weightFunction:
-        imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
-        alg.saveImages(imgs2,output_folder+ filename + '/img','phase2')
+        if phase2_images and alg._weightFunction:
+            imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
+            alg.saveImages(imgs2,output_folder+ filename + '/img','phase2')
 
-    if saveUnsolved and not alg_update and not unsolved_saved:
-        alg.saveUnsolvedInputsToCsv(output_folder+filename+'/'+filename)
+        if saveUnsolved and not alg_update and not unsolved_saved:
+            alg.saveUnsolvedInputsToCsv(output_folder+filename+'/'+filename)
     print '--------------------------end of '+ filename +'---------------------------------------------'

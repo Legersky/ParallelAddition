@@ -1,7 +1,4 @@
 #!/bin/bash
-for i in 1 2 3 4 5 6 7
-do
-    for input_name in $1*.sage
-    do  sage parallelAdd.sage $input_name $i
-    done
+for input_name in $1*.sage
+do  sage extending_window_method.sage $input_name $i
 done
