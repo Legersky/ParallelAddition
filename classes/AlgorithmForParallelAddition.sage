@@ -1111,41 +1111,44 @@ class AlgorithmForParallelAddition(object):
                 k+=1
             self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)
 
-    def saveResults(self, elapsed_time):
+    def saveResults(self, elapsed_time, message='', note=''):
         import time
-        results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
-        if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                results+=['A+A']
-        else:
-            results+=[self._inputAlphabet]
-        results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly(), self._roots, self._abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
-        if self._base_is_expanding:
-            results+=['yes']
-        else:
-            results+=['no']
-        results+=[self._weightCoefSetSearch._method]
-        if self._weightCoefSet:
-            results+=['OK' ,len(self._weightCoefSet)]
-        else:
-            results+=['x' ,'-']
-        results+=[self._weightCoefSetSearch._numbersOfElementsInIterations]
-        results+=[self._weightFunSearch._method]
-        if self._oneLettersCheck:
-            results+=['OK', self._length_OneLetterInputs]
-        else:
-            results+=[self._problematicLetters, '-']
+        try:
+            results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
+            if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                    results+=['A+A']
+            else:
+                results+=[self._inputAlphabet]
+            results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly(), self._roots, self._abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
+            if self._base_is_expanding:
+                results+=['yes']
+            else:
+                results+=['no']
+            results+=[self._weightCoefSetSearch._method]
+            if self._weightCoefSet:
+                results+=['OK' ,len(self._weightCoefSet)]
+            else:
+                results+=['x' ,'-']
+            results+=[self._weightCoefSetSearch._numbersOfElementsInIterations]
+            results+=[self._weightFunSearch._method]
+            if self._oneLettersCheck:
+                results+=['OK', self._length_OneLetterInputs]
+            else:
+                results+=[self._problematicLetters, '-']
 
-        if self._weightFunction:
-            results+=['OK' , self._weightFunction.getMaxLength()]
-        else:
-            results+=['x' ,'-']
-        results+=[self._weightFunSearch._numbersOfSavedCombinations]
+            if self._weightFunction:
+                results+=['OK' , self._weightFunction.getMaxLength()]
+            else:
+                results+=['x' ,'-']
+            results+=[self._weightFunSearch._numbersOfSavedCombinations]
 
-        if self._weightFunction:
-            results+=[self._not_usedWeightCoef]
-        else:
-            results+=['-']
-        results+=[elapsed_time]
+            if self._weightFunction:
+                results+=[self._not_usedWeightCoef]
+            else:
+                results+=['-']
+            results+=[elapsed_time, message, note]
+        except Exception, e:
+            results+=[message, e]
 
 
         try:
@@ -1175,3 +1178,60 @@ class AlgorithmForParallelAddition(object):
             for r in results:
                 results_csv=results_csv+str(r)+'; '
             self.addLog(results_csv)
+
+    def compareMethodsPhase1(self, methods, max_iterations=1000):
+        self.addLog('Comparing different methods in Phase 1:')
+        Qs=[self._findWeightCoefSet(max_iterations,methods[0])]
+        Qs_lengths=[len(Qs[0])]
+        same_method=[[methods[0]]]
+        for method in methods[1:]:
+            Q=self._findWeightCoefSet(max_iterations,method)
+            assigned=False
+            for i in range(0,len(Qs)):
+                if Set(Qs[i])==Set(Q):
+                    same_method[i].append(method)
+                    assigned=True
+                    break
+            if not assigned:
+                Qs.append(copy(Q))
+                Qs_lengths.append(len(Q))
+                same_method.append([method])
+
+        results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
+        if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
+                results+=['A+A']
+        else:
+            results+=[self._inputAlphabet]
+        results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly()]
+
+        results+=[same_method, Qs_lengths, Qs]
+
+        try:
+            import json
+            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+            from oauth2client.client import SignedJwtAssertionCredentials
+
+            json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+            scope = ['https://spreadsheets.google.com/feeds']
+
+            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+            gc = gspread.authorize(credentials)
+
+            sheet=gc.open("ParallelAddition_results")
+
+            worksheet=sheet.worksheet('comparePhase1')
+
+            worksheet.append_row(results)
+            self.addLog('The following results were saved to google spreadsheet ParallelAddition_results')
+            self.addLog(str(results))
+
+        except Exception, e:
+            self.addLog("Some problem with saving to google spreadsheet:")
+            self.addLog(e)
+            self.addLog('The following results can be saved to google spreadsheet ParallelAddition_results')
+            results_csv=''
+            for r in results:
+                results_csv=results_csv+str(r)+'; '
+            self.addLog(results_csv)
+
+        return same_method

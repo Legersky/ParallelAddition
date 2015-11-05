@@ -1,4 +1,4 @@
-︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2s︠
+︠1e5a7270-4dc7-4ed7-9e00-8f3566aef2d2︠
 load_attach_path('~/classes')
 load('AlgorithmForParallelAddition.sage')
 import time
@@ -90,6 +90,12 @@ f.roots(SR, multiplicities=False)
 k=abs(-1/2*I*sqrt(3) - 3/2)
 ︡13884857-bebf-4a78-bd88-a3a6567b96c9︡︡{"done":false,"stderr":"Error in lines 1-1\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.9/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nTypeError: eval() arg 1 must be a string or code object\n"}︡{"done":true}
 ︠2aff999f-4821-4664-9104-c1605e0405f4︠
+
+
+
+
+0, 1, 2, 3, -omega, -omega + 1, 2*omega - 1, 2*omega, 2*omega + 1, -omega - 1, 2*omega + 3, 2*omega + 4, 2*omega + 5, -3*omega - 2, omega - 1, omega, omega + 1, omega + 2, omega + 3, omega + 4, 4*omega + 4, 4*omega + 5, 4*omega + 6, 5*omega + 5, 5*omega + 6, 3*omega + 1, 3*omega + 4, 3*omega + 5, -4*omega - 6, -4*omega - 5, -4*omega - 4, -4*omega - 3, -3*omega - 5, -3*omega - 4, -3*omega - 3, -3*omega - 1, -5*omega - 6, -5*omega - 5, omega - 2, -2*omega - 5, -2*omega - 4, -2*omega - 3, -2*omega - 1, -2*omega, -2*omega + 1, -omega + 2, -3, -omega - 4, -1, -omega - 3, -omega - 2, -2*omega - 2, -2
+0, 1, 2, 3, -omega, -omega + 1, 2*omega - 1, 2*omega, 2*omega + 1, -omega - 1, 2*omega + 3, 2*omega + 4, 2*omega + 5, -3*omega - 2, omega - 1, omega, omega + 2, omega + 3, omega + 4, 4*omega + 4, 4*omega + 5, 4*omega + 6, 5*omega + 5, 5*omega + 6, 3*omega + 1, 3*omega + 4, 3*omega + 5, -4*omega - 6, -4*omega - 5, -4*omega - 4, -4*omega - 3, -3*omega - 5, -3*omega - 4, -3*omega - 3, -3*omega - 1, -5*omega - 6, -5*omega - 5, omega - 2, -2*omega - 5, -2*omega - 4, -2*omega - 3, -omega - 2, -2*omega, -2*omega + 1, -omega + 2, -3, -omega - 4, -1, -omega- 3, -2*omega - 2, -2*omega - 1, -2
 
 
 
