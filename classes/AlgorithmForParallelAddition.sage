@@ -1111,6 +1111,39 @@ class AlgorithmForParallelAddition(object):
                 k+=1
             self.addLog(str(k-1)+ " images named "+ name+ '_image_No.png saved to '+ folder)
 
+    def saveToGoogleSpreadsheet(self,_worksheet, row):
+        try:
+            import json
+            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+            from oauth2client.client import SignedJwtAssertionCredentials
+
+            try:
+                json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+            except Exception, e:
+                json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
+            scope = ['https://spreadsheets.google.com/feeds']
+
+            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+            gc = gspread.authorize(credentials)
+
+            sheet=gc.open("ParallelAddition_results")
+
+            worksheet=sheet.worksheet(_worksheet)
+
+            worksheet.append_row(row)
+            self.addLog('The following row was added to google spreadsheet ParallelAddition_results')
+            self.addLog(str(row))
+
+        except Exception, e:
+            self.addLog("Some problem with saving to google spreadsheet:")
+            self.addLog(e)
+            self.addLog('The following row can be saved to google spreadsheet ParallelAddition_results')
+            results_csv=''
+            for r in row:
+                results_csv=results_csv+str(r)+'; '
+            self.addLog(results_csv)
+
+
     def saveResults(self, elapsed_time, message='', note=''):
         import time
         try:
@@ -1150,34 +1183,8 @@ class AlgorithmForParallelAddition(object):
         except Exception, e:
             results+=[message, e]
 
+        self.saveToGoogleSpreadsheet('results', results)
 
-        try:
-            import json
-            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
-            from oauth2client.client import SignedJwtAssertionCredentials
-
-            json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
-            scope = ['https://spreadsheets.google.com/feeds']
-
-            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-            gc = gspread.authorize(credentials)
-
-            sheet=gc.open("ParallelAddition_results")
-
-            worksheet=sheet.worksheet('results')
-
-            worksheet.append_row(results)
-            self.addLog('The following results were saved to google spreadsheet ParallelAddition_results')
-            self.addLog(str(results))
-
-        except Exception, e:
-            self.addLog("Some problem with saving to google spreadsheet:")
-            self.addLog(e)
-            self.addLog('The following results can be saved to google spreadsheet ParallelAddition_results')
-            results_csv=''
-            for r in results:
-                results_csv=results_csv+str(r)+'; '
-            self.addLog(results_csv)
 
     def compareMethodsPhase1(self, methods, max_iterations=1000):
         self.addLog('Comparing different methods in Phase 1:')
@@ -1206,32 +1213,6 @@ class AlgorithmForParallelAddition(object):
 
         results+=[same_method, Qs_lengths, Qs]
 
-        try:
-            import json
-            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
-            from oauth2client.client import SignedJwtAssertionCredentials
-
-            json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
-            scope = ['https://spreadsheets.google.com/feeds']
-
-            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-            gc = gspread.authorize(credentials)
-
-            sheet=gc.open("ParallelAddition_results")
-
-            worksheet=sheet.worksheet('comparePhase1')
-
-            worksheet.append_row(results)
-            self.addLog('The following results were saved to google spreadsheet ParallelAddition_results')
-            self.addLog(str(results))
-
-        except Exception, e:
-            self.addLog("Some problem with saving to google spreadsheet:")
-            self.addLog(e)
-            self.addLog('The following results can be saved to google spreadsheet ParallelAddition_results')
-            results_csv=''
-            for r in results:
-                results_csv=results_csv+str(r)+'; '
-            self.addLog(results_csv)
+        self.saveToGoogleSpreadsheet('comparePhase1', results)
 
         return same_method
