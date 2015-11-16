@@ -69,7 +69,20 @@ class WeightFunctionSearch(object):
                         C_covered_by[covered_by_q]=[q]        #first covering value
 
             first_time=True
-            while C_covered_by:        #while there are uncovered elements
+
+            to_add=[]
+
+            bezSynergii=True
+            if self._method ==10:
+                bezSynergii=False
+                for covering_elem in C_covered_by:
+                    closest=self._pick_element_close_PoG(C_covered_by[covering_elem],self.point_of_gravity(C_covered_by[covering_elem]))
+                    print closest
+                    to_add.append(closest)
+                to_add=Set(to_add).list()
+            Qww=to_add
+
+            while C_covered_by and bezSynergii:        #while there are uncovered elements
                 if self._verbose>=2:
                     print C_covered_by
                 to_add=[]
@@ -167,19 +180,19 @@ class WeightFunctionSearch(object):
                 print "Qw_w for ", w_tuple, " before completing: "
                 print Qww
 
-            if len(Set(Qww).list())>len(self._alphabet):
-                for q in Qww:
-                    centers_of_covering=[]
-                    for a in self._alphabet:
-                        r=self._algForParallelAdd.divideByBase(q+w_tuple[-1]-a)
-                        if not r==None:
-                            centers_of_covering.append(r*self._base)
-                    if 1:#len(centers_of_covering)==1:
-                        for a in self._alphabet:
-                            if centers_of_covering[0]+a in Qw_prev:
-                                toAdd.append(centers_of_covering[0]+a)
-
-            Qww=Set(Qww+toAdd).list()
+           # if len(Set(Qww).list())>len(self._alphabet):    #pridavani zpatky podle abecedy
+          #      for q in Qww:
+         #           centers_of_covering=[]
+        #            for a in self._alphabet:
+       #                 r=self._algForParallelAdd.divideByBase(q+w_tuple[-1]-a)
+      #                  if not r==None:
+     #                       centers_of_covering.append(r*self._base)
+    #                if 1:#len(centers_of_covering)==1:
+   #                     for a in self._alphabet:
+  #                          if centers_of_covering[0]+a in Qw_prev:
+ #                               toAdd.append(centers_of_covering[0]+a)
+#
+            #Qww=Set(Qww+toAdd).list()
 
             if self._verbose>=1:
                 print "Qw_w for ", w_tuple, " was found: "

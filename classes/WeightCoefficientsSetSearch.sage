@@ -103,7 +103,7 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
 
-        #Method 3 takes first the only possible candidates and then chooses the smallest element in the nartural norm
+        #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
         if self._method==3:
             for cand_for_elem in copy(candidates):
                 if len(cand_for_elem)==1:
