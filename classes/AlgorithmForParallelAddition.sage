@@ -468,6 +468,42 @@ class AlgorithmForParallelAddition(object):
         self.addLog("Number of errors: " + str(errors))
         return errors
 
+#-----------------------------AUXILIARY FUNCTIONS-------------------------------------------------------------------
+    def _findSmallest(self,list_from_Ring):
+        #finds smallest (in absolute value) element of list_from_Ring
+        smallestAbs=abs(self._algForParallelAdd.ring2CC(list_from_Ring[0]))
+        smallest_in=0
+        i=0
+        for num in list_from_Ring[1:]:
+            numAbs=abs(self._algForParallelAdd.ring2CC(num))
+            i+=1
+            if numAbs<smallestAbs:
+                smallestAbs=numAbs
+                smallest_in=i
+        if self._verbose>=1:
+            print 'Searching for the smallest element in the absolute value'
+            print smallestAbs
+        return list_from_Ring[smallest_in]
+
+    def _findSmallest_norm(self,list_from_Ring):
+        #finds smallest (in natural norm) element of list_from_Ring
+        smallestNorm=self.naturalNorm(list_from_Ring[0])
+        smallest_in=0
+        i=0
+        for num in list_from_Ring[1:]:
+            numNorm=self.naturalNorm(num)
+            i+=1
+            if numNorm<smallestNorm:
+                smallestNorm=numNorm
+                smallest_in=i
+        if self._verbose>=1:
+            print 'Searching for the smallest element in the natural norm'
+            print smallestNorm
+        return list_from_Ring[smallest_in]
+
+    def naturalNorm(self,num):
+        return (self._diagonalizingMatrix*vector(num.list())).norm()
+
 #-----------------------------RING CONVERSIONS, AUXILIARY RING FUNCTIONS-----------------------------------------------------
     def list2BaseRing(self, _digits):
         #converts list [a_0, a_1, ..., a_k] to a_0 + a_1*base + ... + a_k*base^k
@@ -1123,15 +1159,21 @@ class AlgorithmForParallelAddition(object):
                 json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
             scope = ['https://spreadsheets.google.com/feeds']
 
+            stderr = sys.stderr
+            sys.stderr=sys.stdout
+
             credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
             gc = gspread.authorize(credentials)
+
+            sys.stderr = stderr
 
             sheet=gc.open("ParallelAddition_results")
 
             worksheet=sheet.worksheet(_worksheet)
 
             worksheet.append_row(row)
-            self.addLog('The following row was added to google spreadsheet ParallelAddition_results')
+
+            self.addLog('The following row was added to google spreadsheet ParallelAddition_results, worksheet: '+_worksheet)
             self.addLog(str(row))
 
         except Exception, e:

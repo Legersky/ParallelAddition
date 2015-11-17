@@ -58,7 +58,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=1: print "Searching smallest element."
-                    weightCoef=self._findSmallest(cand_for_elem)
+                    weightCoef=self.algForParallelAdd._findSmallest(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -89,7 +89,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self._findSmallest(cand_for_elem)
+                    weightCoef=self.algForParallelAdd._findSmallest(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -120,7 +120,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self._findSmallest_norm(cand_for_elem)
+                    weightCoef=self.algForParallelAdd._findSmallest_norm(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -168,38 +168,3 @@ class WeightCoefficientsSetSearch(object):
             k+=1
         return self._Qk1
 
-#-----------------------------AUXILIARY FUNCTIONS-------------------------------------------------------------------
-    def _findSmallest(self,list_from_Ring):
-        #finds smallest (in absolute value) element of list_from_Ring
-        smallestAbs=abs(self._algForParallelAdd.ring2CC(list_from_Ring[0]))
-        smallest_in=0
-        i=0
-        for num in list_from_Ring[1:]:
-            numAbs=abs(self._algForParallelAdd.ring2CC(num))
-            i+=1
-            if numAbs<smallestAbs:
-                smallestAbs=numAbs
-                smallest_in=i
-        if self._verbose>=1:
-            print 'Searching for the smallest element in the absolute value'
-            print smallestAbs
-        return list_from_Ring[smallest_in]
-
-    def _findSmallest_norm(self,list_from_Ring):
-        #finds smallest (in natural norm) element of list_from_Ring
-        smallestNorm=self.naturalNorm(list_from_Ring[0])
-        smallest_in=0
-        i=0
-        for num in list_from_Ring[1:]:
-            numNorm=self.naturalNorm(num)
-            i+=1
-            if numNorm<smallestNorm:
-                smallestNorm=numNorm
-                smallest_in=i
-        if self._verbose>=1:
-            print 'Searching for the smallest element in the natural norm'
-            print smallestNorm
-        return list_from_Ring[smallest_in]
-
-    def naturalNorm(self,num):
-        return (self._diagonalizingMatrix*vector(num.list())).norm()

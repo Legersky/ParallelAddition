@@ -73,7 +73,7 @@ class WeightFunctionSearch(object):
             to_add=[]
 
             bezSynergii=True
-            if self._method ==10:
+            if self._method ==10:    #each value covered separately by the point closest to point of gravity of covering values
                 bezSynergii=False
                 for covering_elem in C_covered_by:
                     closest=self._pick_element_close_PoG(C_covered_by[covering_elem],self.point_of_gravity(C_covered_by[covering_elem]))
