@@ -1151,21 +1151,24 @@ class AlgorithmForParallelAddition(object):
         try:
             import json
             import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
-            from oauth2client.client import SignedJwtAssertionCredentials
+            import warnings
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                from oauth2client.client import SignedJwtAssertionCredentials
+                warnings.resetwarnings()
+
 
             try:
                 json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
             except Exception, e:
                 json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
+
             scope = ['https://spreadsheets.google.com/feeds']
 
-            stderr = sys.stderr
-            sys.stderr=sys.stdout
-
             credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+
             gc = gspread.authorize(credentials)
 
-            sys.stderr = stderr
 
             sheet=gc.open("ParallelAddition_results")
 
