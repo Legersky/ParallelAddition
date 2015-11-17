@@ -67,6 +67,9 @@ class AlgorithmForParallelAddition(object):
         self._verbose=verbose
 
 
+        #the following diagonalizing matrix is necessary for construction of the "lattice" norm
+        self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
+
 
         self.addLog("Inicialization...")
         self.addLog("Numeration system: ")
@@ -347,7 +350,7 @@ class AlgorithmForParallelAddition(object):
         #return list of all representatives mod modulus
         num_classes=self.number_of_representatives(modulus)
         representatives=[]
-        for max_coef in range(0,10):
+        for max_coef in range(0,100):
             comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
             for (ind, a) in enumerate(comb):
                 cand=-self.list2Ring(a)
@@ -363,6 +366,23 @@ class AlgorithmForParallelAddition(object):
                     return representatives
         raise RuntimeError('Only these representatives found: '+str(representatives)+'. Number of missing: '+str(num_classes-len(representatives)))
 
+    def computeBound(self):
+        bound =0
+        for a in self._alphabet:
+            for b in self._inputAlphabet:
+                c=abs(self.ring2CC(b-a))
+                if c>bound:
+                    bound=c
+        return c/(abs(self.getBaseCC())-1)
+
+    def computeBound_norm(self):
+        bound =0
+        for a in self._alphabet:
+            for b in self._inputAlphabet:
+                c=self.naturalNorm(b-a)
+                if c>bound:
+                    bound=c
+        return c/(abs(self.getBaseCC())-1)
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
@@ -471,11 +491,11 @@ class AlgorithmForParallelAddition(object):
 #-----------------------------AUXILIARY FUNCTIONS-------------------------------------------------------------------
     def _findSmallest(self,list_from_Ring):
         #finds smallest (in absolute value) element of list_from_Ring
-        smallestAbs=abs(self._algForParallelAdd.ring2CC(list_from_Ring[0]))
+        smallestAbs=abs(self.ring2CC(list_from_Ring[0]))
         smallest_in=0
         i=0
         for num in list_from_Ring[1:]:
-            numAbs=abs(self._algForParallelAdd.ring2CC(num))
+            numAbs=abs(self.ring2CC(num))
             i+=1
             if numAbs<smallestAbs:
                 smallestAbs=numAbs
@@ -502,6 +522,7 @@ class AlgorithmForParallelAddition(object):
         return list_from_Ring[smallest_in]
 
     def naturalNorm(self,num):
+        num=self._ring(num)
         return (self._diagonalizingMatrix*vector(num.list())).norm()
 
 #-----------------------------RING CONVERSIONS, AUXILIARY RING FUNCTIONS-----------------------------------------------------
@@ -734,7 +755,7 @@ class AlgorithmForParallelAddition(object):
     def plotWeightCoefSet(self,estimation=False):
         #plot weight coefficients set Q
         if estimation:
-            return self.plot(self._weightCoefSet) + circle((0,0),(self._maximumOfAlphabet+self._maximumOfInputAlphabet)/(abs(self.getBaseCC())-1))
+            return self.plot(self._weightCoefSet) + circle((0,0),self.computeBound())
         else:
             return self.plot(self._weightCoefSet)
 

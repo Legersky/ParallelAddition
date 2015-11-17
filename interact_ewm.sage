@@ -90,6 +90,8 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
         start=time.clock()
         alg.findWeightFunction(max_iterations,max_input_len)
         end=time.clock()
+
+        message='successfull'
         alg.addLog("Elapsed time: "+ str(end-start))
         alg_update=True
 
@@ -106,14 +108,22 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
     except KeyboardInterrupt:
         print "Keyboard Interrupt:"
-        alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
-        unsolved_saved=True
+        if saveUnsolved:
+            alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
+            unsolved_saved=True
+        message='Keyboard Interrupt'
 
     except Exception, e:
         print "Error:"
         print e
+        message=str(e)
 
     finally:
+        try:
+            end
+        except:
+            end=time.clock()
+        alg.saveResults(end-start, message)
         if info:
             alg.saveInfoToTexFile("./outputs/"+filename+'/'+filename, header=False)
         if saveUnsolved and (not alg_update) and (not unsolved_saved):

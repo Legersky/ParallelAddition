@@ -20,9 +20,6 @@ class WeightCoefficientsSetSearch(object):
         if self._method==None:
             self._method=2     #set the default method
 
-        #the following diagonalizing matrix is necessary for construction of the norm for method 3
-        self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._algForParallelAdd._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
-
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
 
@@ -58,7 +55,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=1: print "Searching smallest element."
-                    weightCoef=self.algForParallelAdd._findSmallest(cand_for_elem)
+                    weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -89,7 +86,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self.algForParallelAdd._findSmallest(cand_for_elem)
+                    weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -120,7 +117,7 @@ class WeightCoefficientsSetSearch(object):
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
                     if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self.algForParallelAdd._findSmallest_norm(cand_for_elem)
+                    weightCoef=self._algForParallelAdd._findSmallest_norm(cand_for_elem)
                     res=res.union(Set([weightCoef]))            #add the smallest one
                     if self._verbose>=2: print "Added coefficient:"
                     if self._verbose>=2: print weightCoef
@@ -142,6 +139,20 @@ class WeightCoefficientsSetSearch(object):
 
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
+        if self._method==4:
+            bound=self._algForParallelAdd.computeBound_norm()
+            max_coef=2*round(bound)
+            comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._algForParallelAdd._minPolynomial.degree()))))
+
+            Q=[]
+            for (ind, a) in enumerate(comb):
+                cand=self._algForParallelAdd.list2Ring(a)
+                if abs(self._algForParallelAdd.naturalNorm(cand))<bound:
+                    Q.append(cand)
+            self._Qk1=Q
+            return self._Qk1
+
+
         self._Qk1=[]    #previous potential Weight Coefficient Set
         self._Qk1.append(0)    #0 is always in Weight Coefficients set
         self._algForParallelAdd.addWeightCoefSetIncrement(self._Qk1)
