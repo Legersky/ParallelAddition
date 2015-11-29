@@ -93,6 +93,7 @@ class WeightFunctionSearch(object):
                     to_add=Set(to_add).list()
                     first_time=False
 
+
                 if self._method ==0:    	    #original - add the first element in the first shortest list
                     num=2
                     while not to_add:
@@ -113,7 +114,7 @@ class WeightFunctionSearch(object):
                             to_add=self._minimalCovering(list_of_shortest)[0]
                         num+=1
 
-                elif self._method in [2,3,4,7,8,11]:
+                elif self._method in [2,3,4,7,8,11,12]:
                     num=2
                     while not to_add:
                         shortest=[]
@@ -143,6 +144,10 @@ class WeightFunctionSearch(object):
                                 chosen_element=self._algForParallelAdd._findSmallest(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
+                            elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
+                                chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
                         num+=1
 
                 elif self._method==5:        #pick element from all resting list which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
@@ -165,6 +170,26 @@ class WeightFunctionSearch(object):
                         for covered in C_covered_by:
                             list_of_all.append(Set(C_covered_by[covered]))
                         to_add=self._minimalCovering(list_of_all)[0]
+
+                elif self._method ==13:    	    #highest occurrencies, closest to 0 in beta-norm
+                    if not to_add:
+                        occur={}
+                        for covering in C_covered_by.values():
+                            for q in covering:
+                                if q not in occur:
+                                    occur[q]=1
+                                else:
+                                    occur[q]+=1
+                        max_occur=0
+                        q_with_max_occur=[]
+                        for q in occur:
+                            if occur[q]>max_occur:
+                                q_with_max_occur=[q]
+                                max_occur=occur[q]
+                            elif occur[q]==max_occur:
+                                q_with_max_occur.append(q)
+
+                        to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
 
                 else:
                     raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)

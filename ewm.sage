@@ -9,7 +9,7 @@ load('AlgorithmForParallelAddition.sage')
 
 alg=None
 alg_update=False
-images=True
+images=0#True
 
 if methods_phase1==[]:
     methods_phase1=[None]
@@ -42,12 +42,14 @@ for method1 in methods_phase1:
             unsolved_saved=False
 
             filename=alg.getName()
-            output_folder=folder_path+filename+'/'
+            output_folder=folder_path+filename
             if method1!=None or method2!=None:
-                output_folder+='methods_'+str(method1)+'-'+str(method2)+'/'
+                output_folder+='/methods_'+str(method1)+'-'+str(method2)
+
+            #output_folder+='/'
 
             if filename:
-                d = os.path.dirname(output_folder)
+                d = os.path.dirname(output_folder+'/')
                 if not os.path.exists(d):
                     os.makedirs(d)
             else:
@@ -55,12 +57,13 @@ for method1 in methods_phase1:
 
             print " "
 
-            if alphabet_img:
-                alg.saveImages([alg.plotAlphabet()],output_folder+'/img','alphabet')
-                alg.saveImages([alg.plot(alg._inputAlphabet, color='blue')+alg.plotAlphabet()],output_folder+'/img','inputAlphabet')
+            if images:
+                if alphabet_img:
+                    alg.saveImages([alg.plotAlphabet()],output_folder+'/img','alphabet')
+                    alg.saveImages([alg.plot(alg._inputAlphabet, color='blue')+alg.plotAlphabet()],output_folder+'/img','inputAlphabet')
 
-            if lattice_img:
-                alg.saveImages([alg.plotLattice()],output_folder+'/img','lattice')
+                if lattice_img:
+                    alg.saveImages([alg.plotLattice()],output_folder+'/img','lattice')
 
             alg.addLog("Maximum iterations: " + str(max_iterations))
             alg.addLog("Maximum length of input of weight function: " + str(max_input_length))
@@ -111,6 +114,10 @@ for method1 in methods_phase1:
                 alg.saveLog(output_folder+ '/'+filename)
 
             if images:
+                try:
+                    weightCoefSet_img
+                except:
+                    weightCoefSet_img=False
                 if alg._weightCoefSet:
                     if phase1_images:
                         imgs1=alg.plotPhase1()

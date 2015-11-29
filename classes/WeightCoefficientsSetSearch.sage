@@ -18,7 +18,7 @@ class WeightCoefficientsSetSearch(object):
 
         self._method=method
         if self._method==None:
-            self._method=2     #set the default method
+            self._method=3     #set the default method
 
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
@@ -139,17 +139,35 @@ class WeightCoefficientsSetSearch(object):
 
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
-        if self._method==4:    #weight coefficients set given by bound
+        if self._method==4:    #weight coefficients set given by bound (norm)
             bound=self._algForParallelAdd.computeBound_norm()
+            print bound
             max_coef=2*round(bound)
             comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._algForParallelAdd._minPolynomial.degree()))))
 
             Q=[]
             for (ind, a) in enumerate(comb):
                 cand=self._algForParallelAdd.list2Ring(a)
-                if abs(self._algForParallelAdd.naturalNorm(cand))<bound:
+                if self._algForParallelAdd.naturalNorm(cand)<bound:
                     Q.append(cand)
             self._Qk1=Q
+            self._algForParallelAdd.addWeightCoefSetIncrement(self._Qk1)
+            self._numbersOfElementsInIterations=[len(self._Qk1)]
+            return self._Qk1
+
+        if self._method==5:    #weight coefficients set given by bound (abs)
+            bound=self._algForParallelAdd.computeBound()
+            max_coef=2*round(bound)
+            comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._algForParallelAdd._minPolynomial.degree()))))
+
+            Q=[]
+            for (ind, a) in enumerate(comb):
+                cand=self._algForParallelAdd.list2Ring(a)
+                if self._algForParallelAdd.naturalNorm(cand)<bound:
+                    Q.append(cand)
+            self._Qk1=Q
+            self._algForParallelAdd.addWeightCoefSetIncrement(self._Qk1)
+            self._numbersOfElementsInIterations=[len(self._Qk1)]
             return self._Qk1
 
 

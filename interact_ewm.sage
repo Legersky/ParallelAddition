@@ -58,6 +58,8 @@ def _(frame_label=text_control('<h3>Load inputs: </h3>', label=''),
 def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
       max_iterations= input_box(default = '20', type = Integer, label = "Maximum of iterations to get Weight coefficient set:"),
       max_input_len= input_box(default = '8', type = Integer, label = "Maximal length of weight function input:"),
+      method1= input_box(default = 'None', label = "Method for Phase 1:"),
+      method2 = input_box(default = 'None', label = "Method for Phase 2:"),
       frame_help=text_control('Choose required outputs to save:', label=''),
      info=checkbox(default=True, label='General info to .tex file:'),
      WFcsv=checkbox(default=False, label='Weight function to .csv file:'),
@@ -88,7 +90,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
         print " "
         start=time.clock()
-        alg.findWeightFunction(max_iterations,max_input_len)
+        alg.findWeightFunction(max_iterations,max_input_len, method_weightCoefSet=method1, method_weightFunSearch=method2)
         end=time.clock()
 
         message='successfull'
@@ -115,7 +117,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
     except Exception, e:
         print "Error:"
-        print e
+        print str(e)
         message=str(e)
 
     finally:

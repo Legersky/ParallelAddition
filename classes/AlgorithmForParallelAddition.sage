@@ -153,10 +153,14 @@ class AlgorithmForParallelAddition(object):
 
         self._roots=self._base.minpoly().roots(SR,multiplicities=False)
         self._abs_values=[]
+        self._smallestRoot_abs=abs(self._roots[0]).simplify()
         for root in self._roots:
-            self._abs_values.append(abs(root).simplify())
+            abs_root=abs(root).simplify()
+            self._abs_values.append(abs_root)
             if abs(root)<=1:
                 self._base_is_expanding=False
+            if self._smallestRoot_abs> abs_root:
+                self._smallestRoot_abs=abs_root
         if not self._base_is_expanding:
             raise ValueError('Base %s is not expanding' %self._base)
 
@@ -373,7 +377,7 @@ class AlgorithmForParallelAddition(object):
                 c=abs(self.ring2CC(b-a))
                 if c>bound:
                     bound=c
-        return c/(abs(self.getBaseCC())-1)
+        return bound/(abs(self.getBaseCC())-1)
 
     def computeBound_norm(self):
         bound =0
@@ -382,7 +386,8 @@ class AlgorithmForParallelAddition(object):
                 c=self.naturalNorm(b-a)
                 if c>bound:
                     bound=c
-        return c/(abs(self.getBaseCC())-1)
+        print self._smallestRoot_abs
+        return bound/(self._smallestRoot_abs-1)
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
