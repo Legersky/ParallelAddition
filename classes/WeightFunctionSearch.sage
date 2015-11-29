@@ -72,17 +72,17 @@ class WeightFunctionSearch(object):
 
             to_add=[]
 
-            bezSynergii=True
+            Synergie=True
             if self._method ==10:    #each value covered separately by the point closest to point of gravity of covering values
-                bezSynergii=False
+                Synergie=False
                 for covering_elem in C_covered_by:
                     closest=self._pick_element_close_PoG(C_covered_by[covering_elem],self.point_of_gravity(C_covered_by[covering_elem]))
                     print closest
                     to_add.append(closest)
                 to_add=Set(to_add).list()
-            Qww=to_add
+                Qww=to_add
 
-            while C_covered_by and bezSynergii:        #while there are uncovered elements
+            while C_covered_by and Synergie:        #while there are uncovered elements
                 if self._verbose>=2:
                     print C_covered_by
                 to_add=[]
@@ -113,7 +113,7 @@ class WeightFunctionSearch(object):
                             to_add=self._minimalCovering(list_of_shortest)[0]
                         num+=1
 
-                elif self._method in [2,3,4,7,8]:
+                elif self._method in [2,3,4,7,8,11]:
                     num=2
                     while not to_add:
                         shortest=[]
@@ -137,6 +137,10 @@ class WeightFunctionSearch(object):
                                     to_add=[chosen_element]
                             elif self._method==8:    #pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
                                 chosen_element=self._pick_element_close_PoG_CC(shortest)
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)
+                                chosen_element=self._algForParallelAdd._findSmallest(shortest)
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
                         num+=1

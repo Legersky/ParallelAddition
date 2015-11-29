@@ -69,7 +69,7 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
 
-        #Method 2 takes first the only possible candidates and then chooses the smallest element (the embedding to CC is necessary here)
+        #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary here)
         if self._method==2:
             for cand_for_elem in copy(candidates):
                 if len(cand_for_elem)==1:
@@ -139,7 +139,7 @@ class WeightCoefficientsSetSearch(object):
 
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
-        if self._method==4:
+        if self._method==4:    #weight coefficients set given by bound
             bound=self._algForParallelAdd.computeBound_norm()
             max_coef=2*round(bound)
             comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._algForParallelAdd._minPolynomial.degree()))))
