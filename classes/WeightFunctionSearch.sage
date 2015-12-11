@@ -191,6 +191,26 @@ class WeightFunctionSearch(object):
 
                         to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
 
+                elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added
+                    if not to_add:
+                        occur={}
+                        for covering in C_covered_by.values():
+                            for q in covering:
+                                if q not in occur:
+                                    occur[q]=1
+                                else:
+                                    occur[q]+=1
+                        max_occur=0
+                        q_with_max_occur=[]
+                        for q in occur:
+                            if occur[q]>max_occur:
+                                q_with_max_occur=[q]
+                                max_occur=occur[q]
+                            elif occur[q]==max_occur:
+                                q_with_max_occur.append(q)
+
+                        to_add=[self._pick_element_close_PoG_by_lattice(q_with_max_occur, self.point_of_gravity(Qww))]
+
                 else:
                     raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
 
@@ -378,7 +398,7 @@ class WeightFunctionSearch(object):
         num=len(numbers)
         if num==0:
             return None
-        for coef in self._algForParallelAdd._ring(sum(numbers)).list():
+        for coef in self._algForParallelAdd._ring(sum(numbers+[0])).list():
             point.append(round(coef/num))
         return self._algForParallelAdd.list2Ring(point)
 
