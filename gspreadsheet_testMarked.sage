@@ -64,6 +64,6 @@ for row in range(2,worksheet.row_count):
                 inputAlphabet=''
             base =worksheet.cell(row, 7).value
 
-            #load('ewm.sage')         #run extending window method
+            load('ewm.sage')         #run extending window method
     except:
         pass
