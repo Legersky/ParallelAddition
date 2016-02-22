@@ -52,7 +52,7 @@ except Exception, e:
     print "Some problem with google spreadsheet:"
 
 for row in range(2,worksheet.row_count):
-    #try:
+    try:
         if worksheet.cell(row, 1).value=='y':
             name = worksheet.cell(row, 2).value
             print name
@@ -65,5 +65,5 @@ for row in range(2,worksheet.row_count):
             base =worksheet.cell(row, 7).value
 
             #load('ewm.sage')         #run extending window method
-    #except:
-     #   pass
+    except:
+        pass
