@@ -419,9 +419,9 @@ class WeightFunctionSearch(object):
         if elements:
             min_norm=[elements[0]]
             for elem in elements[1:]:
-                if self.naturalNorm_vect(point-vector(elem.list()))<self.naturalNorm_vect(point-vector(min_norm[0].list())):
+                if self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))<self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
                     min_norm=[elem]
-                elif self.naturalNorm_vect(point-vector(elem.list()))==self.naturalNorm_vect(point-vector(min_norm[0].list())):
+                elif self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))==self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
                     min_norm.append(elem)
             return self._pick_element(min_norm)
         else:
