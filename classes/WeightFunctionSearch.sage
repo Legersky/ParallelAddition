@@ -191,7 +191,7 @@ class WeightFunctionSearch(object):
 
                         to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
 
-                elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added
+                elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added (in absolute value)
                     if not to_add:
                         occur={}
                         for covering in C_covered_by.values():
@@ -209,7 +209,7 @@ class WeightFunctionSearch(object):
                             elif occur[q]==max_occur:
                                 q_with_max_occur.append(q)
 
-                        to_add=[self._pick_element_close_PoG_by_lattice(q_with_max_occur, self.point_of_gravity(Qww))]
+                        to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
 
                 else:
                     raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
@@ -381,6 +381,19 @@ class WeightFunctionSearch(object):
         else:
             return None
 
+    def _pick_element_closest_to_point(self,elements, point):
+        #pick the element from elements which is closest in absolute to the center of gravity in CC
+        if elements:
+            min_abs=[elements[0]]
+            for elem in elements[1:]:
+                if abs(point-self._algForParallelAdd.ring2CC(elem))<abs(point-self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs=[elem]
+                elif abs(point-self._algForParallelAdd.ring2CC(elem))==abs(point-self._algForParallelAdd.ring2CC(min_abs[0])):
+                    min_abs.append(elem)
+            return self._pick_element(min_abs)
+        else:
+            return None
+
 #-----------------------------PRINT FUNCTION-------------------------------------------------------------
     def printCsvQww(self):
         for inp, coef in self._Qw_w.items():
@@ -409,7 +422,7 @@ class WeightFunctionSearch(object):
                 point+=self._algForParallelAdd.ring2CC(num)
             return point/len(numbers)
         else:
-            return None
+            return 0
 
     def _minimalCovering(self, sets_to_cover):
         k=1
