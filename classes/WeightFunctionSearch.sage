@@ -211,6 +211,26 @@ class WeightFunctionSearch(object):
 
                         to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
 
+                elif self._method ==15:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
+                    if not to_add:
+                        occur={}
+                        for covering in C_covered_by.values():
+                            for q in covering:
+                                if q not in occur:
+                                    occur[q]=1
+                                else:
+                                    occur[q]+=1
+                        max_occur=0
+                        q_with_max_occur=[]
+                        for q in occur:
+                            if occur[q]>max_occur:
+                                q_with_max_occur=[q]
+                                max_occur=occur[q]
+                            elif occur[q]==max_occur:
+                                q_with_max_occur.append(q)
+
+                        to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
+
                 else:
                     raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
 
@@ -382,7 +402,7 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_closest_to_point(self,elements, point):
-        #pick the element from elements which is closest in absolute to the center of gravity in CC
+        #pick the element from elements which is closest in absolute to the point
         if elements:
             min_abs=[elements[0]]
             for elem in elements[1:]:
@@ -391,6 +411,19 @@ class WeightFunctionSearch(object):
                 elif abs(point-self._algForParallelAdd.ring2CC(elem))==abs(point-self._algForParallelAdd.ring2CC(min_abs[0])):
                     min_abs.append(elem)
             return self._pick_element(min_abs)
+        else:
+            return None
+
+    def _pick_element_closest_to_point_betaNorm(self,elements, point):
+        #pick the element from elements which is closest in absolute to the center of gravity in CC
+        if elements:
+            min_norm=[elements[0]]
+            for elem in elements[1:]:
+                if self.naturalNorm_vect(point-vector(elem.list()))<self.naturalNorm_vect(point-vector(min_norm[0].list())):
+                    min_norm=[elem]
+                elif self.naturalNorm_vect(point-vector(elem.list()))==self.naturalNorm_vect(point-vector(min_norm[0].list())):
+                    min_norm.append(elem)
+            return self._pick_element(min_norm)
         else:
             return None
 
@@ -414,6 +447,15 @@ class WeightFunctionSearch(object):
         for coef in self._algForParallelAdd._ring(sum(numbers)).list():
             point.append(round(coef/num))
         return self._algForParallelAdd.list2Ring(point)
+
+    def point_of_gravity_Qomega(self, numbers):
+        point=[]
+        num=len(numbers)
+        if num==0:
+            return 0
+        for coef in self._algForParallelAdd._ring(sum(numbers)).list():
+            point.append(coef/num)
+        return vector(point)
 
     def point_of_gravity_CC(self, numbers):
         if numbers:

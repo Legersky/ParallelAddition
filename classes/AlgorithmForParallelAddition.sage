@@ -574,6 +574,9 @@ class AlgorithmForParallelAddition(object):
         num=self._ring(num)
         return (self._diagonalizingMatrix*vector(num.list())).norm()
 
+    def naturalNorm_vect(self,num):
+        return (self._diagonalizingMatrix*num).norm()
+
 #-----------------------------RING CONVERSIONS, AUXILIARY RING FUNCTIONS-----------------------------------------------------
     def list2BaseRing(self, _digits):
         #converts list [a_0, a_1, ..., a_k] to a_0 + a_1*base + ... + a_k*base^k
