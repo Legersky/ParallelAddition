@@ -397,8 +397,8 @@ class WeightFunctionSearch(object):
         point=[]
         num=len(numbers)
         if num==0:
-            return None
-        for coef in self._algForParallelAdd._ring(sum(numbers+[0])).list():
+            return 0
+        for coef in self._algForParallelAdd._ring(sum(numbers)).list():
             point.append(round(coef/num))
         return self._algForParallelAdd.list2Ring(point)
 

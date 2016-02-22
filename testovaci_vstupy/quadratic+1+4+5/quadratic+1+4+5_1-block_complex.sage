@@ -9,7 +9,7 @@ minPol =' x^2 + 1 '
 omegaCC= 1.00000000000000*I
 
 #Alphabet (use 'omega' as ring generator)
-alphabet = ' [0, 1, -1, omega, -omega, omega + 1, -omega - 1, omega - 1, -omega - 2, -2] '
+alphabet = '[omega + 2, omega + 1, omega, omega - 1, 1, 0, -1, -omega + 1, -omega, -omega - 1]' # [0, 1, -1, omega, -omega, omega + 1, -omega - 1, omega - 1, -omega - 2, -2] '
 
 #Input alphabet (if empty, A + A is used)
 inputAlphabet = ''

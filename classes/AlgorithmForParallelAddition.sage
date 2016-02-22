@@ -37,19 +37,26 @@ class AlgorithmForParallelAddition(object):
             return self._polynomial._latex_('\\omega')  #self.parent().latex_variable_names()[0])
         self._ring.element_class._latex_=latexZomega
             #latex output
-        self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
-            #alphabet
+        self._ringGenCompanionMatrix=matrix.companion(self._minPolynomial)
+            # companion matrix to minimal polynomial of ringGenerator (omega)
+
         self.setBase(sage.misc.sage_eval.sage_eval(base, locals={'omega':self._ringGenerator}))
             #base of numeration system
+        self._inverseBaseCompanionMatrix=self._computeInverseCompanionMatrix(self._base)
+            # inversion of companion matrix of base
+
+        if alphabet:
+            self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
+                #alphabet
+        else:
+            self.setAlphabet(self.findAlphabet())
+                #automatically find an alphabet
         if inputAlphabet:
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
             self.setInputAlphabet([])
-        self._ringGenCompanionMatrix=matrix.companion(self._minPolynomial)
-            # companion matrix to minimal polynomial of ringGenerator (omega)
-        self._inverseBaseCompanionMatrix=self._computeInverseCompanionMatrix(self._base)
-            # inversion of companion matrix of base
+
         self._weightCoefSet=[]
             #set of potential coefficients
         self._weightCoefSetIncrements=[]
@@ -163,6 +170,43 @@ class AlgorithmForParallelAddition(object):
                 self._smallestRoot_abs=abs_root
         if not self._base_is_expanding:
             raise ValueError('Base %s is not expanding' %self._base)
+
+    def findAlphabet(self):
+        #find an alphabet which contains all representatives modulo beta and beta -1
+        return self.addRepresentatives(self.addRepresentatives([0],self._base-1),self._base)
+
+
+    def addRepresentatives(self, _set, modulus):
+        num_classes=self.number_of_representatives(modulus)
+        representatives=self.divide_into_congruent_classes(_set, modulus)
+        representatives_set=copy(_set)
+        for max_coef in range(0,100):
+            comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
+            for (ind, a) in enumerate(comb):
+                cand1=-self.list2Ring(list(a))
+                cand2=self.list2Ring(list(a))
+                is_in_representatives=False
+                for repre in representatives:
+                    if self.divide(repre[0]-cand1, modulus)!=None:
+                        is_in_representatives=True
+                        break
+                if not is_in_representatives:
+                    representatives.append([cand1])
+                    representatives_set.append(cand1)
+                if len(representatives)>=num_classes:
+                    return representatives_set
+
+                is_in_representatives=False
+                for repre in representatives:
+                    if self.divide(repre[0]-cand2, modulus)!=None:
+                        is_in_representatives=True
+                        break
+                if not is_in_representatives:
+                    representatives.append([cand2])
+                    representatives_set.append(cand2)
+                if len(representatives)>=num_classes:
+                    return representatives_set
+
 
     def getRingGenerator(self):
         #return generator of Ring
