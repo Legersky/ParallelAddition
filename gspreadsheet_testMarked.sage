@@ -1,14 +1,6 @@
 folder_path='./outputs/'
 load_attach_path('./classes')
 
-
-#------------EWM SETTING----------------
-max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
-methods_phase1=[3]        #methods in the list are used. If empty, default method is used.
-max_input_length = 10    #maximal length of the input of the weight function
-methods_phase2=[15]        #methods in the list are used. If empty, default method is used.
-#Cartesian product of lists methods_phase1 and methods_phase2 is computed
-
 #------------SANITY CHECK---------------
 sanityCheck=False         #run sanity check
 
@@ -48,10 +40,16 @@ try:
     gc = gspread.authorize(credentials)
     sheet=gc.open("ParallelAddition_results")
     worksheet=sheet.worksheet('inputs')
+        #------------EWM SETTING----------------
+    max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
+    methods_phase1=sage.misc.sage_eval.sage_eval(worksheet.cell(1, 3).value)       #methods in the list are used. If empty, default method is used.
+    max_input_length = 10    #maximal length of the input of the weight function
+    methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
+    #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 except Exception, e:
     print "Some problem with google spreadsheet:"
 
-for row in range(2,worksheet.row_count):
+for row in range(3,worksheet.row_count):
     try:
         if worksheet.cell(row, 1).value=='y':
             name = worksheet.cell(row, 2).value
