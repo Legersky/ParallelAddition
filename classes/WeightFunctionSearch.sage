@@ -114,7 +114,7 @@ class WeightFunctionSearch(object):
                             to_add=self._minimalCovering(list_of_shortest)[0]
                         num+=1
 
-                elif self._method in [2,3,4,7,8,11,12]:
+                elif self._method in [2,3,4,7,8,11,12,15]:
                     num=2
                     while not to_add:
                         shortest=[]
@@ -146,6 +146,10 @@ class WeightFunctionSearch(object):
                                     to_add=[chosen_element]
                             elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
                                 chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            elif self._method==15:    #pick element from the shortest lists which is closest to already added (absolute value)
+                                chosen_element=self._pick_element_closest_to_point(shortest, self.point_of_gravity_CC(Qww))
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
                         num+=1
@@ -211,7 +215,7 @@ class WeightFunctionSearch(object):
 
                         to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
 
-                elif self._method ==15:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
+                elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
                     if not to_add:
                         occur={}
                         for covering in C_covered_by.values():
