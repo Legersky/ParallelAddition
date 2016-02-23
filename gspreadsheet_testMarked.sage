@@ -1,27 +1,6 @@
 folder_path='./outputs/'
 load_attach_path('./classes')
 
-#------------SANITY CHECK---------------
-sanityCheck=False         #run sanity check
-
-#------------SAVING---------------------
-info=False                #save general info to .tex file
-WFcsv=False              #save weight function to .csv file
-localConversionCsv=False #save local conversion to .csv file
-saveSetting=False        #save inputs setting as a dictionary
-saveLog=False             #save log file
-saveUnsolved=False       #save unsolved combinations after interruption
-
-#------------IMAGES--------------------
-alphabet_img=False        #save image of alphabet and input alphabet
-lattice_img=False         #save image of lattice with shifted alphabet
-phase1_images=False       #save step-by-step images of phase 1
-weightCoefSet_img=False   #save image of the weight coefficient set
-#with estimation given by lemma:
-estimation=False
-phase2_images=False       #save step-by-step images of phase 2
-#for input:
-phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 try:
     import json
@@ -40,12 +19,8 @@ try:
     gc = gspread.authorize(credentials)
     sheet=gc.open("ParallelAddition_results")
     worksheet=sheet.worksheet('inputs')
-        #------------EWM SETTING----------------
-    max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
     methods_phase1=sage.misc.sage_eval.sage_eval(worksheet.cell(1, 3).value)       #methods in the list are used. If empty, default method is used.
-    max_input_length = 10    #maximal length of the input of the weight function
     methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
-    #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 except Exception, e:
     print "Some problem with google spreadsheet:"
 
