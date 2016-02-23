@@ -33,7 +33,7 @@ folder_path='./outputs/'
 load_attach_path('./classes')
 
 #-----------------------------------------------------------------------
-max_coef=2
+max_coef=5
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
