@@ -43,7 +43,7 @@ for x in cartesian_product_iterator(t):
     p= str(P(list(x)+[1]))
     print p
     try:
-        name = str(p)+'_automaticAlphabet'
+        name = 'Quadratic_'+str(p)+'_automaticAlphabet'
         minPol =p
         omegaCC= 1+ 1*I
         alphabet = ''
