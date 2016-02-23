@@ -51,8 +51,8 @@ for x in cartesian_product_iterator(t):
         base ='omega'
 
         load('ewm.sage')
-    except:
-        pass
+    except ValueError, e:
+        print e
 
 
 

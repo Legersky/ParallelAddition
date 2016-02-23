@@ -10,6 +10,16 @@ class AlgorithmForParallelAddition(object):
     """
 #-----------------------------CONSTRUCTOR------------------------------------------------------------------------------------
     def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0):
+        self._name=name
+            #name of the numeration system
+        self._log=[]
+            #list of logs
+        self._printLog=printLog
+            #log are printed if True
+        self._printLogLatex=printLogLatex
+            #log are printed using latex if True
+        self._verbose=verbose
+
         P.<x>=ZZ[]
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
             #evaluation of minimal polynomial
@@ -63,15 +73,7 @@ class AlgorithmForParallelAddition(object):
         self._oneLettersCheck=False
         self._weightFunction = None
             #Weight Function
-        self._name=name
-            #name of the numeration system
-        self._log=[]
-            #list of logs
-        self._printLog=printLog
-            #log are printed if True
-        self._printLogLatex=printLogLatex
-            #log are printed using latex if True
-        self._verbose=verbose
+
 
 
         #the following diagonalizing matrix is necessary for construction of the "lattice" norm
@@ -177,7 +179,7 @@ class AlgorithmForParallelAddition(object):
 
     def findAlphabet2(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
-        return self.findSmallestRepresentatives(self.findSmallestRepresentatives([0],self._base-1),self._base)
+        return self.addSmallestRepresentatives(self.addSmallestRepresentatives([0],self._base-1),self._base)
 
 
     def addRepresentatives(self, _set, modulus):
@@ -211,9 +213,11 @@ class AlgorithmForParallelAddition(object):
                 if len(representatives)>=num_classes:
                     return representatives_set
 
-    def findSmallestRepresentatives(self, seed, modulus):
+    def addSmallestRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)
-        representatives=self.divide_into_congruent_classes(seed, modulus)
+        representatives=self.divide_into_congruent_classes(_set, modulus)
+        num_contained_repre=len(representatives)
+        chosen_repre=copy(_set)
         max_coef=0
         while len(representatives)<num_classes:
             comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
@@ -236,8 +240,7 @@ class AlgorithmForParallelAddition(object):
                 if not is_in_representatives:
                     representatives.append([cand2])
             max_coef+=1
-        chosen_repre=[]
-        for repre in representatives:
+        for repre in representatives[num_contained_repre:]:
             chosen_repre.append(self._findSmallest(repre))
         return chosen_repre
 
@@ -436,7 +439,7 @@ class AlgorithmForParallelAddition(object):
         for max_coef in range(0,100):
             comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
             for (ind, a) in enumerate(comb):
-                cand=-self.list2Ring(a)
+                cand=-self.list2Ring(list(a))
                 is_in_representatives=False
                 for repre in representatives:
                     if self.divide(repre-cand, modulus)!=None:
