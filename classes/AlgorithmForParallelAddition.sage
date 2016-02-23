@@ -49,7 +49,7 @@ class AlgorithmForParallelAddition(object):
             self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
                 #alphabet
         else:
-            self.setAlphabet(self.findAlphabet())
+            self.setAlphabet(self.findAlphabet2())
                 #automatically find an alphabet
         if inputAlphabet:
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
@@ -175,6 +175,10 @@ class AlgorithmForParallelAddition(object):
         #find an alphabet which contains all representatives modulo beta and beta -1
         return self.addRepresentatives(self.addRepresentatives([0],self._base-1),self._base)
 
+    def findAlphabet2(self):
+        #find an alphabet which contains all representatives modulo beta and beta -1
+        return self.findSmallestRepresentatives(self.findSmallestRepresentatives([0],self._base-1),self._base)
+
 
     def addRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)
@@ -206,6 +210,37 @@ class AlgorithmForParallelAddition(object):
                     representatives_set.append(cand2)
                 if len(representatives)>=num_classes:
                     return representatives_set
+
+    def findSmallestRepresentatives(self, seed, modulus):
+        num_classes=self.number_of_representatives(modulus)
+        representatives=self.divide_into_congruent_classes(seed, modulus)
+        max_coef=0
+        while len(representatives)<num_classes:
+            comb = list(CartesianProduct(*(range(-max_coef,max_coef+1) for i in range(0,self._minPolynomial.degree()))))
+            for (ind, a) in enumerate(comb):
+                cand1=-self.list2Ring(list(a))
+                cand2=self.list2Ring(list(a))
+                is_in_representatives=False
+                for repre in representatives:
+                    if self.divide(repre[0]-cand1, modulus)!=None:
+                        is_in_representatives=True
+                        break
+                if not is_in_representatives:
+                    representatives.append([cand1])
+
+                is_in_representatives=False
+                for repre in representatives:
+                    if self.divide(repre[0]-cand2, modulus)!=None:
+                        is_in_representatives=True
+                        break
+                if not is_in_representatives:
+                    representatives.append([cand2])
+            max_coef+=1
+        chosen_repre=[]
+        for repre in representatives:
+            chosen_repre.append(self._findSmallest(repre))
+        return chosen_repre
+
 
 
     def getRingGenerator(self):

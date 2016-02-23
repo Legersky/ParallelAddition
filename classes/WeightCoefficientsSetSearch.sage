@@ -147,7 +147,7 @@ class WeightCoefficientsSetSearch(object):
 
             Q=[]
             for (ind, a) in enumerate(comb):
-                cand=self._algForParallelAdd.list2Ring(a)
+                cand=self._algForParallelAdd.list2Ring(list(a))
                 if self._algForParallelAdd.naturalNorm(cand)<bound:
                     Q.append(cand)
             self._Qk1=Q
