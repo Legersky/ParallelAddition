@@ -41,7 +41,7 @@ for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
 for x in cartesian_product_iterator(t):
-    if x[0]<=m and x[1]<=m:
+    if abs(x[0])<=m and abs(x[1])<=m:
         pass
     else:
         p= str(P(list(x)+[1]))
