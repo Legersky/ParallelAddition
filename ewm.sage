@@ -101,6 +101,12 @@ for method1 in methods_phase1:
             alg.addLog(e)
             message=str(e)
 
+        except Exception, e:
+            print "Error:"
+            alg.addLog(e)
+            message=str(e)
+            raise e
+
         finally:
             end=time.clock()
             alg.addLog("Elapsed time: "+ str(end-start))

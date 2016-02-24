@@ -253,20 +253,6 @@ class WeightFunctionSearch(object):
                 print "Qw_w for ", w_tuple, " before completing: "
                 print Qww
 
-           # if len(Set(Qww).list())>len(self._alphabet):    #pridavani zpatky podle abecedy
-          #      for q in Qww:
-         #           centers_of_covering=[]
-        #            for a in self._alphabet:
-       #                 r=self._algForParallelAdd.divideByBase(q+w_tuple[-1]-a)
-      #                  if not r==None:
-     #                       centers_of_covering.append(r*self._base)
-    #                if 1:#len(centers_of_covering)==1:
-   #                     for a in self._alphabet:
-  #                          if centers_of_covering[0]+a in Qw_prev:
- #                               toAdd.append(centers_of_covering[0]+a)
-#
-            #Qww=Set(Qww+toAdd).list()
-
             if self._verbose>=1:
                 print "Qw_w for ", w_tuple, " was found: "
                 print Qww
@@ -421,8 +407,9 @@ class WeightFunctionSearch(object):
     def _pick_element_closest_to_point_betaNorm(self,elements, point):
         #pick the element from elements which is closest in absolute to the center of gravity in CC
         if elements:
-            min_norm=[elements[0]]
+            min_norm=[self._algForParallelAdd._ring.coerce(elements[0])]
             for elem in elements[1:]:
+                elem=self._algForParallelAdd._ring.coerce(elem)
                 if self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))<self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
                     min_norm=[elem]
                 elif self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))==self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
