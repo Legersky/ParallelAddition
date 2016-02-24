@@ -37,7 +37,7 @@ class WeightCoefficientsSetSearch(object):
                     cand_for_elem.append(division_result)
                     num_cand+=1
             if num_cand==0:
-                raise RuntimeError ("There is no element a in the alphabet %s and candidate q in the alphabetRing such that %s = a+ base* q" %(self._alphabet,elem_c ))
+                raise RuntimeErrorParAdd ("There is no element a in the alphabet %s and candidate q in the alphabetRing such that %s = a+ base* q" %(self._alphabet,elem_c ))
             candidates.append(cand_for_elem)
         return candidates
 
@@ -131,7 +131,7 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
         else:
-            raise ValueError("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
+            raise ValueErrorParAdd("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
 
     def _getQk(self,C):
         #it extends Qk1 to Qk such that C \subset A + \beta Qk
@@ -185,7 +185,7 @@ class WeightCoefficientsSetSearch(object):
         while True:
             if k>=maxIterations-1:
                 if self._verbose>=1: print "Phase 1 doesn't stop after %s loops" %(k+1)
-                raise RuntimeError("Searching Weight coefficient set requires more interations than given maximum: " + str(maxIterations))
+                raise RuntimeErrorParAdd("Searching Weight coefficient set requires more interations than given maximum: " + str(maxIterations))
             tested_set=Set(self._algForParallelAdd.sumOfSets(B,self._Qk1)).difference(Set(self._algForParallelAdd.sumOfSets(B,self._Qk2)))
                 #it is enough to check (B+Qk1)-(B+Qk2)
             Qk=self._getQk(tested_set.list())

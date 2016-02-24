@@ -28,23 +28,23 @@ class WeightFunction(object):
         #minLength=1
         for i in range(0,len(w)):
             if not w[i] in self._inputAlphabet:
-                raise ValueError("Digit %s is not in the input alphabet" %w[i])
+                raise ValueErrorParAdd("Digit %s is not in the input alphabet" %w[i])
         input_tuple=(w[0],)    #input to weight function
         shift=1
         while not input_tuple in self._mapping:    #until the input is found in the weight function
             input_tuple=input_tuple + (w[shift],)                    #take longer if not
             shift+=1
             if shift>maxLength:
-                raise RuntimeError("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
+                raise RuntimeErrorParAdd("Input tuple " + str(input_tuple) + " is longer than maxLength of Weight function.")
         return self._mapping[input_tuple]
 
     def addWeightCoefToInput(self,_input, coef):
         #save coef fo _input
         if not type(_input) is tuple:
-            raise TypeError("The weight function input must be a tuple.")
+            raise TypeErrorParAdd("The weight function input must be a tuple.")
         for w_i in _input:
             if not w_i in self._inputAlphabet:
-                raise ValueError("Value %s is not in the alphabet of rewritten sequence." %w_i)
+                raise ValueErrorParAdd("Value %s is not in the alphabet of rewritten sequence." %w_i)
         if len(_input)>self._maxLength:
             self._maxLength = len(_input)
         self._mapping[_input]=coef

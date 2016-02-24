@@ -79,7 +79,7 @@ except KeyboardInterrupt:
         alg.saveUnsolvedInputsToCsv(output_folder+filename+'/'+filename)
         unsolved_saved=True
 
-except Exception, e:
+except ExceptionParAdd, e:
     print "Error:"
     alg.addLog(e)
 

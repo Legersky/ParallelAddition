@@ -49,7 +49,7 @@ def _(frame_label=text_control('<h3>Load inputs: </h3>', label=''),
 
         save(alg.getDictOfSetting(), './examples/last')
 
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print e
 
@@ -80,7 +80,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
             if not os.path.exists(d):
                 os.makedirs(d)
         else:
-            raise ValueError("Filename is missing.")
+            raise ValueErrorParAdd("Filename is missing.")
 
         if saveSetting:
             setting=alg.getDictOfSetting()
@@ -115,7 +115,7 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
             unsolved_saved=True
         message='Keyboard Interrupt'
 
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print str(e)
         message=str(e)
@@ -143,13 +143,13 @@ def _(frame_label=text_control('<h3>Sanity check: </h3>', label=''),
         global alg
         global alg_update
         if not alg_update:
-            raise RuntimeError("Weight function search must be updated first.")
+            raise RuntimeErrorParAdd("Weight function search must be updated first.")
 
         alg.sanityCheck_conversion(len_inp)
         if alg_update and saveLog:
             alg.saveLog("./outputs/"+alg.getName()+'/'+alg.getName())
 
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print e
 
@@ -162,12 +162,12 @@ def _(frame_label=text_control('<h3>Weight function: </h3>', label=''),
         global alg
         global alg_update
         if not alg_update:
-            raise RuntimeError("Weight function search must be updated first.")
+            raise RuntimeErrorParAdd("Weight function search must be updated first.")
 
         inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
         show("Weight coefficient for input tuple $(x_j, \dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" ,
              latex(alg.getWeightFunction()(inp_alpRing)),'$')
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print e
 
@@ -186,7 +186,7 @@ def _(frame_label=text_control('<h3>Construction of the weight coefficients set:
         if folder:
             alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase1',img_size=_size)
 
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print e
 
@@ -210,6 +210,6 @@ def _(frame_label=text_control('<h3>Construction of the weight function: </h3>',
         if folder:
             alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase2',img_size=_size)
 
-    except Exception, e:
+    except ExceptionParAdd, e:
         print "Error:"
         print e

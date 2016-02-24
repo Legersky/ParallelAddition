@@ -236,7 +236,7 @@ class WeightFunctionSearch(object):
                         to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
 
                 else:
-                    raise ValueError("Method number %s for WeightFunctionSearch is not implemented" % self._method)
+                    raise  ValueErrorParAdd("Method number %s for WeightFunctionSearch is not implemented" % self._method)
 
                 for covered in copy(C_covered_by):
                     for added in to_add:
@@ -277,7 +277,7 @@ class WeightFunctionSearch(object):
 #            self.opravy(w_tuple)
             return Qww
         else:
-            raise RuntimeError("There is no Qww for: ", w_tuple_without_first)
+            raise  RuntimeErrorParAdd("There is no Qww for: ", w_tuple_without_first)
 
     def findWeightFunction(self, max_input_length):
         # checks different w \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
@@ -286,7 +286,7 @@ class WeightFunctionSearch(object):
         self._k=0
         while combinations:
             if self._k>=max_input_length:
-                raise RuntimeError("Inputs are longer than given maximum: "+ str(max_input_length))
+                raise  RuntimeErrorParAdd("Inputs are longer than given maximum: "+ str(max_input_length))
             num_prev_comb=len(combinations)
             combinations=self._find_weightCoef_for_comb_B(combinations)
             self._k+=1
@@ -310,7 +310,7 @@ class WeightFunctionSearch(object):
             while len(Qww)>1:
                 if inp_len>=max_input_length:
                     self._algForParallelAdd.addLog("Inputs are longer than the given maximum: %s" %(max_input_length))
-                    raise RuntimeError("Inputs are longer than the given maximum: %s" %(max_input_length))
+                    raise  RuntimeErrorParAdd("Inputs are longer than the given maximum: %s" %(max_input_length))
                 w_tuple = w_tuple+(a,)
                 Qww=self._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
                 if self._verbose>=1:  print Qww
@@ -327,7 +327,7 @@ class WeightFunctionSearch(object):
             elif len(w_tuple)==len(longest[0]):
                 longest.append(w_tuple)
         if self._algForParallelAdd._problematicLetters:
-            raise RuntimeError("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(self._algForParallelAdd._problematicLetters,self._method))
+            raise  RuntimeErrorParAdd("There is no unique weight coefficient for finite input gained by repetition of letters %s using method number %s" %(self._algForParallelAdd._problematicLetters,self._method))
         return longest
 
     def _pick_element(self,elements):
@@ -497,7 +497,7 @@ class WeightFunctionSearch(object):
             k+=1
             if k>6:
                 self._algForParallelAdd.addLog('Stopped afer searching subsets of size '+str(k-1)+ '.')
-                raise  RuntimeError('Stopped afer searching subsets of size '+str(k-1)+ '.')
+                raise   RuntimeErrorParAdd('Stopped afer searching subsets of size '+str(k-1)+ '.')
 
     def opravy(self, w_tuple):
         omega=alg.getRingGenerator()

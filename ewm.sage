@@ -53,7 +53,7 @@ for method1 in methods_phase1:
                 if not os.path.exists(d):
                     os.makedirs(d)
             else:
-                raise ValueError("Filename is missing.")
+                raise ValueErrorParAdd("Filename is missing.")
 
             print " "
 
@@ -96,7 +96,7 @@ for method1 in methods_phase1:
                 unsolved_saved=True
             message='Keyboard Interrupt'
 
-        except Exception, e:
+        except ExceptionParAdd, e:
             print "Error:"
             alg.addLog(e)
             message=str(e)

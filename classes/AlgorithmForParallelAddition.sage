@@ -1,6 +1,7 @@
 load('WeightCoefficientsSetSearch.sage')
 load('WeightFunctionSearch.sage')
 load('WeightFunction.sage')
+load('ParAddException.sage')
 
 from sage.rings.polynomial.complex_roots import complex_roots
 
@@ -24,9 +25,9 @@ class AlgorithmForParallelAddition(object):
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
             #evaluation of minimal polynomial
         if not minPol.is_irreducible():
-            raise ValueError("For the construction of Ring, polynomial %s must be irreducible." %minPol)
+            raise ValueErrorParAdd("For the construction of Ring, polynomial %s must be irreducible." %minPol)
         if not minPol.is_monic():
-            raise ValueError("For parallel addition algorithms, polynomial %s must be monic." %minPol)
+            raise ValueErrorParAdd("For parallel addition algorithms, polynomial %s must be monic." %minPol)
         N.<ratRingGenator> = NumberField(minPol, embedding=embd)
             # Rational Polynomials with variable ratRingGenerator mod minPol, beta is the closest root of minPol to embd
         self._ratRingGen=N.gen()
@@ -125,7 +126,7 @@ class AlgorithmForParallelAddition(object):
                 if abs(self.ring2CC(a))>maxA:
                     maxA=abs(self.ring2CC(a))
             else:
-                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
+                raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
         self._maximumOfAlphabet=maxA
 
     def setInputAlphabet(self,B):
@@ -137,12 +138,12 @@ class AlgorithmForParallelAddition(object):
                 if b in alphabetPlusAlphabet:
                     self._inputAlphabet.append(b)    #adding to input alphabet
                 else:
-                    raise ValueError("Value %s is not element of alphabet + alphabet so it cannot be used for inputAlphabet." %b)
+                    raise ValueErrorParAdd("Value %s is not element of alphabet + alphabet so it cannot be used for inputAlphabet." %b)
             for a in self._alphabet:
                 if not a in self._inputAlphabet:
-                    raise ValueError("Value %s from alphabet must be used in the inputAlphabet." %a)
+                    raise ValueErrorParAdd("Value %s from alphabet must be used in the inputAlphabet." %a)
             if len(self._inputAlphabet)==len(self._alphabet):
-                raise ValueError("Input alphabet cannot equal to alphabet.")
+                raise ValueErrorParAdd("Input alphabet cannot equal to alphabet.")
         else:
             self._inputAlphabet=alphabetPlusAlphabet
         maxB=0
@@ -157,7 +158,7 @@ class AlgorithmForParallelAddition(object):
                 self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
         else:
-            raise TypeError("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
+            raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for base." %(a, self._genCCValue, self._minPolynomial))
         self._base_is_expanding=True
 
         self._roots=self._base.minpoly().roots(SR,multiplicities=False)
@@ -171,7 +172,7 @@ class AlgorithmForParallelAddition(object):
             if self._smallestRoot_abs> abs_root:
                 self._smallestRoot_abs=abs_root
         if not self._base_is_expanding:
-            raise ValueError('Base %s is not expanding' %self._base)
+            raise ValueErrorParAdd('Base %s is not expanding' %self._base)
 
     def findAlphabet(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
@@ -322,7 +323,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog("Searching the Weight Function using method %s..." %self._weightFunSearch._method)
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
         else:
-            raise ValueError("There are no values in the weight coefficient set Q.")
+            raise ValueErrorParAdd("There are no values in the weight coefficient set Q.")
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=None, method_weightFunSearch=None):
         #finds and sets Weight Function
@@ -362,7 +363,7 @@ class AlgorithmForParallelAddition(object):
         if self._weightFunction:
             return Set(self._weightFunction.getMapping().values()).list()
         else:
-            raise RuntimeError('Weight function must be computed first to get used weight coefficients.')
+            raise RuntimeErrorParAdd('Weight function must be computed first to get used weight coefficients.')
 
 #-----------------------------ALPHABET CONTROL-------------------------------------------------------------------------------
     def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
@@ -393,7 +394,7 @@ class AlgorithmForParallelAddition(object):
         if self._missing_representatives_mod_base_minus_one:
             self.addLog('The following congruence classes of the input alphabet mod base-1 are not in the alphabet:')
             self.addLog(self._missing_representatives_mod_base_minus_one, latex=True)
-            raise ValueError('There are not representatives of the congruence classes '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
+            raise ValueErrorParAdd('There are not representatives of the congruence classes '+str(self._missing_representatives_mod_base_minus_one)+' from the input alphabet mod (base-1) in the alphabet.')
         else:
             self.addLog('There are all elements of the input alphabet mod base-1 in the alphabet.')
 
@@ -410,7 +411,7 @@ class AlgorithmForParallelAddition(object):
             self._missing_classes_mod_base = self.check_alphabet_for_representatives_from_set(self.findRepresentatives(self._base),self._base,log=False)
             self.addLog('=> There are not all representatives mod base in the alphabet. The following congruence classes are missing:')
             self.addLog(self._missing_classes_mod_base,latex=True)
-            raise ValueError('There are not all representatives mod base in the alphabet. The following congruence classes are missing: '
+            raise ValueErrorParAdd('There are not all representatives mod base in the alphabet. The following congruence classes are missing: '
                               +str(self._missing_classes_mod_base))
         else:
             self.addLog('=> There are all representatives mod base in the alphabet.')
@@ -450,7 +451,7 @@ class AlgorithmForParallelAddition(object):
 
                 if len(representatives)==num_classes:
                     return representatives
-        raise RuntimeError('Only these representatives found: '+str(representatives)+'. Number of missing: '+str(num_classes-len(representatives)))
+        raise RuntimeErrorParAdd('Only these representatives found: '+str(representatives)+'. Number of missing: '+str(num_classes-len(representatives)))
 
     def computeBound(self):
         bound =0
@@ -476,10 +477,10 @@ class AlgorithmForParallelAddition(object):
         #a, b are numbers in BaseRing saved as lists, a=\sum_{i=0}^n a[i] base^i, a[i] \in alphabet A
         for a_i in a:
             if not a_i in self._alphabet:
-                raise ValueError("The digit %s of the number %s is not in the alphabet A." %(a_i,a))
+                raise ValueErrorParAdd("The digit %s of the number %s is not in the alphabet A." %(a_i,a))
         for b_i in b:
             if not b_i in self._alphabet:
-                raise ValueError("The digit %s of the number %s is not in the alphabet A." %(b_i,b))
+                raise ValueErrorParAdd("The digit %s of the number %s is not in the alphabet A." %(b_i,b))
         w=[]
         for i in range(0, min(len(a),len(b))):    #adding digits of common part
             w.append(a[i]+b[i])
@@ -506,7 +507,7 @@ class AlgorithmForParallelAddition(object):
             q_i=self._weightFunction(reversed(input_tuple))        #getting weight coefficient
             z_i=w[i]+q_i_prev-self._base*q_i
             if not z_i in self._alphabet:
-                raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[i],w,z_i))
+                raise RuntimeErrorParAdd("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[i],w,z_i))
             z.append(z_i)                    #conversion to alphabet A
             q_i_prev=q_i
             if self._verbose==2 :print "Converted digit:", z[-1]
@@ -521,7 +522,7 @@ class AlgorithmForParallelAddition(object):
         q_i=self._weightFunction(w[0:maxLength+1])
         z_i=w[0]+q_i_prev-self._base*q_i        #conversion to alphabet A
         if not z_i in self._alphabet:
-            raise RuntimeError("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[0],w,z_i))
+            raise RuntimeErrorParAdd("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[0],w,z_i))
         return z_i
 
     def parallelConversion_using_localConversion(self,w):
@@ -659,7 +660,7 @@ class AlgorithmForParallelAddition(object):
         #outputs set sum of A and B if A and B are subsets of Ring
         for a in A+B:
             if not(a in self._ring):
-                raise TypeError("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
+                raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
         res=Set([])
         for a in A:
             for b in B:
