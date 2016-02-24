@@ -42,20 +42,21 @@ for i in range(0,2):
 
 for x in cartesian_product_iterator(t):
     if x[0]<=m and x[1]<=m:
-        break
-    p= str(P(list(x)+[1]))
-    print p
-    try:
-        name = 'Quadratic_'+str(p)+'_automaticAlphabet'
-        minPol =p
-        omegaCC= 1+ 1*I
-        alphabet = ''
-        inputAlphabet = ''
-        base ='omega'
+        pass
+    else:
+        p= str(P(list(x)+[1]))
+        print p
+        try:
+            name = 'Quadratic_'+str(p)+'_automaticAlphabet'
+            minPol =p
+            omegaCC= 1+ 1*I
+            alphabet = ''
+            inputAlphabet = ''
+            base ='omega'
 
-        load('ewm.sage')
-    except ValueError, e:
-        print e
+            load('ewm.sage')
+        except ValueError, e:
+            print e
 
 
 
