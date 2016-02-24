@@ -105,7 +105,6 @@ for method1 in methods_phase1:
             print "Error:"
             alg.addLog(e)
             message=str(e)
-            raise e
 
         finally:
             end=time.clock()
