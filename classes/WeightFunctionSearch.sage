@@ -179,16 +179,19 @@ class WeightFunctionSearch(object):
                             elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
                                 to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
 
-                    elif self._method ==18:        #according to alphabet
+                    elif self._method in [18,19]:        #according to alphabet
                         elements=[]
                         for covered in C_covered_by:
                             elements+=C_covered_by[covered]
                         if Qww:
                             cov_alph=self.coveringAlphabets(Qww,w_tuple[0])
                             for alph in cov_alph:
-                                to_add=alph.intersection(Set(elements)).list()
-                                if to_add:
-                                    break
+                                if self._method ==18:
+                                    to_add=alph.intersection(Set(elements)).list()
+                                    if to_add:
+                                        break
+                                elif self._method ==19:
+                                    to_add+=alph.intersection(Set(elements)).list()
 
                         if not to_add:
                             to_add=[self._algForParallelAdd._findSmallest(elements)]
