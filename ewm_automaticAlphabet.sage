@@ -34,12 +34,15 @@ load_attach_path('./classes')
 
 #-----------------------------------------------------------------------
 max_coef=5
+m=2
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
 for x in cartesian_product_iterator(t):
+    if x[0]<=m and x[1]<=m:
+        break
     p= str(P(list(x)+[1]))
     print p
     try:
