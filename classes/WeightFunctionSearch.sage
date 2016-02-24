@@ -72,17 +72,10 @@ class WeightFunctionSearch(object):
 
             to_add=[]
 
-            Synergie=True
             if self._method ==10:    #each value covered separately by the point closest to point of gravity of covering values
-                Synergie=False
-                for covering_elem in C_covered_by:
-                    closest=self._pick_element_close_PoG(C_covered_by[covering_elem],self.point_of_gravity(C_covered_by[covering_elem]))
-                    #print closest
-                    to_add.append(closest)
-                to_add=Set(to_add).list()
-                Qww=to_add
+                raise ValueErrorParAdd('Method 10 has been deleted. (Bez synergii to vubec nefunguje)')
 
-            while C_covered_by and Synergie:        #while there are uncovered elements
+            while C_covered_by:        #while there are uncovered elements
                 if self._verbose>=2:
                     print C_covered_by
                 to_add=[]
@@ -92,162 +85,127 @@ class WeightFunctionSearch(object):
                             to_add.append(C_covered_by[covered][0])
                     to_add=Set(to_add).list()
                     first_time=False
-
-
-                if self._method ==0:    	    #original - add the first element in the first shortest list
-                    num=2
-                    while not to_add:
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:    #then add first value of list with length num
-                                to_add.append(C_covered_by[covered][0])
-                                break
-                        num+=1
-
-                elif self._method ==1: #find the smallest covering coefficients from the shortest lists
-                    num=2
-                    while not to_add:
-                        list_of_shortest=[]
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:
-                                list_of_shortest.append(Set(C_covered_by[covered]))
-                        if list_of_shortest:
-                            to_add=self._minimalCovering(list_of_shortest)[0]
-                        num+=1
-
-                elif self._method in [2,3,4,7,8,11,12,15]:
-                    num=2
-                    while not to_add:
-                        shortest=[]
-                        for covered in C_covered_by:
-                            if len(C_covered_by[covered])==num:
-                                shortest+=C_covered_by[covered]
-                        if shortest:
-                            if self._method==2:    	    #random from the shortest lists
-                                to_add.append(shortest[ZZ.random_element(len(shortest))])
-                            elif self._method==3:        #pick element from the shortest lists lexicographically according to coordinates in lattice
-                                chosen_element=self._pick_element(shortest)
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==4:        #pick element from the shortest list which is the closest (according to lattice) to rounded center of gravity of points in shortest lists
-                                chosen_element=self._pick_element_close_PoG_by_lattice(shortest,self.point_of_gravity(shortest))
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==7:        #pick element from the shortest list which is the closest (in absolute value) to rounded center of gravity of points in shortest lists
-                                chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==8:    #pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
-                                chosen_element=self._pick_element_close_PoG_CC(shortest)
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)
-                                chosen_element=self._algForParallelAdd._findSmallest(shortest)
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
-                                chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                            elif self._method==15:    #pick element from the shortest lists which is closest to already added (absolute value)
-                                chosen_element=self._pick_element_closest_to_point(shortest, self.point_of_gravity_CC(Qww))
-                                if chosen_element!=None:
-                                    to_add=[chosen_element]
-                        num+=1
-
-                elif self._method==5:        #pick element from all resting list which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
-                    if not to_add:
-                        elements=[]
-                        for covered in C_covered_by:
-                            elements+=C_covered_by[covered]        #adding all
-                        to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
-
-                elif self._method==9:        #pick element from all resting list which is the closest (in absolute value) to center of gravity of points in all resting lists
-                    if not to_add:
-                        elements=[]
-                        for covered in C_covered_by:
-                            elements+=C_covered_by[covered]        #adding all
-                        to_add=[self._pick_element_close_PoG_CC(elements)]
-
-                elif self._method==6:    	    #find the smallest covering coefficients from all resting lists
-                    if not to_add:
-                        list_of_all=[]
-                        for covered in C_covered_by:
-                            list_of_all.append(Set(C_covered_by[covered]))
-                        to_add=self._minimalCovering(list_of_all)[0]
-
-                elif self._method ==13:    	    #highest occurrencies, closest to 0 in beta-norm
-                    if not to_add:
-                        occur={}
-                        for covering in C_covered_by.values():
-                            for q in covering:
-                                if q not in occur:
-                                    occur[q]=1
-                                else:
-                                    occur[q]+=1
-                        max_occur=0
-                        q_with_max_occur=[]
-                        for q in occur:
-                            if occur[q]>max_occur:
-                                q_with_max_occur=[q]
-                                max_occur=occur[q]
-                            elif occur[q]==max_occur:
-                                q_with_max_occur.append(q)
-
-                        to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
-
-                elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added (in absolute value)
-                    if not to_add:
-                        occur={}
-                        for covering in C_covered_by.values():
-                            for q in covering:
-                                if q not in occur:
-                                    occur[q]=1
-                                else:
-                                    occur[q]+=1
-                        max_occur=0
-                        q_with_max_occur=[]
-                        for q in occur:
-                            if occur[q]>max_occur:
-                                q_with_max_occur=[q]
-                                max_occur=occur[q]
-                            elif occur[q]==max_occur:
-                                q_with_max_occur.append(q)
-
-                        to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
-
-                elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
-                    if not to_add:
-                        occur={}
-                        for covering in C_covered_by.values():
-                            for q in covering:
-                                if q not in occur:
-                                    occur[q]=1
-                                else:
-                                    occur[q]+=1
-                        max_occur=0
-                        q_with_max_occur=[]
-                        for q in occur:
-                            if occur[q]>max_occur:
-                                q_with_max_occur=[q]
-                                max_occur=occur[q]
-                            elif occur[q]==max_occur:
-                                q_with_max_occur.append(q)
-
-                        to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
-
                 else:
-                    raise  ValueErrorParAdd("Method number %s for WeightFunctionSearch is not implemented" % self._method)
+
+                    if self._method ==0:    	    #original - add the first element in the first shortest list
+                        num=2
+                        while not to_add:
+                            for covered in C_covered_by:
+                                if len(C_covered_by[covered])==num:    #then add first value of list with length num
+                                    to_add.append(C_covered_by[covered][0])
+                                    break
+                            num+=1
+
+                    elif self._method ==1: #find the smallest covering coefficients from the shortest lists
+                        num=2
+                        while not to_add:
+                            list_of_shortest=[]
+                            for covered in C_covered_by:
+                                if len(C_covered_by[covered])==num:
+                                    list_of_shortest.append(Set(C_covered_by[covered]))
+                            if list_of_shortest:
+                                to_add=self._minimalCovering(list_of_shortest)[0]
+                            num+=1
+
+                    elif self._method in [2,3,4,7,8,11,12,15]:
+                        num=2
+                        while not to_add:
+                            shortest=[]
+                            for covered in C_covered_by:
+                                if len(C_covered_by[covered])==num:
+                                    shortest+=C_covered_by[covered]
+                            if shortest:
+                                if self._method==2:    	    #random from the shortest lists
+                                    chosen_element=shortest[ZZ.random_element(len(shortest))]
+                                elif self._method==3:        #pick element from the shortest lists lexicographically according to coordinates in lattice
+                                    chosen_element=self._pick_element(shortest)
+                                elif self._method==4:        #pick element from the shortest list which is the closest (according to lattice) to rounded center of gravity of points in shortest lists
+                                    chosen_element=self._pick_element_close_PoG_by_lattice(shortest,self.point_of_gravity(shortest))
+                                elif self._method==7:        #pick element from the shortest list which is the closest (in absolute value) to rounded center of gravity of points in shortest lists
+                                    chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
+                                elif self._method==8:    #pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
+                                    chosen_element=self._pick_element_close_PoG_CC(shortest)
+                                elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)
+                                    chosen_element=self._algForParallelAdd._findSmallest(shortest)
+                                elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
+                                    chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
+                                elif self._method==15:    #pick element from the shortest lists which is closest to already added (absolute value)
+                                    chosen_element=self._pick_element_closest_to_point(shortest, self.point_of_gravity_CC(Qww))
+
+                                if chosen_element!=None:
+                                    to_add=[chosen_element]
+                            num+=1
+
+                    elif self._method in [5,9,17]:
+                        elements=[]
+                        for covered in C_covered_by:
+                            elements+=C_covered_by[covered]        #adding all
+
+                        if self._method==5:        #pick element from all resting lists which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
+                            to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
+                        elif self._method==9:        #pick element from all resting list which is the closest (in absolute value) to center of gravity of points in all resting lists
+                            to_add=[self._pick_element_close_PoG_CC(elements)]
+                        elif self._method==17:    #pick element from all resting list which is the closest (in beta norm) to the center of gravity of already added
+                            to_add=[self._pick_element_closest_to_point_betaNorm(elements, self.point_of_gravity_Qomega(Qww))]
+
+                    elif self._method==6:    	    #find the smallest covering coefficients from all resting lists
+                        if not to_add:
+                            list_of_all=[]
+                            for covered in C_covered_by:
+                                list_of_all.append(Set(C_covered_by[covered]))
+                            to_add=self._minimalCovering(list_of_all)[0]
+
+                    elif self._method in [13,14,16]:
+                            occur={}
+                            for covering in C_covered_by.values():
+                                for q in covering:
+                                    if q not in occur:
+                                        occur[q]=1
+                                    else:
+                                        occur[q]+=1
+                            max_occur=0
+                            q_with_max_occur=[]
+                            for q in occur:
+                                if occur[q]>max_occur:
+                                    q_with_max_occur=[q]
+                                    max_occur=occur[q]
+                                elif occur[q]==max_occur:
+                                    q_with_max_occur.append(q)
+
+                            if self._method ==13:    	    #highest occurrencies, closest to 0 in beta-norm
+                                to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
+                            elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added (in absolute value)
+                                to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
+                            elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
+                                to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
+
+                    elif self._method ==18:        #according to alphabet
+                        elements=[]
+                        for covered in C_covered_by:
+                            elements+=C_covered_by[covered]
+                        if Qww:
+                            cov_alph=self.coveringAlphabets(Qww,w_tuple[0])
+                            for alph in cov_alph:
+                                to_add=alph.intersection(Set(elements)).list()
+                                if to_add:
+                                    break
+
+                        if not to_add:
+                            to_add=[self._algForParallelAdd._findSmallest(elements)]
+                            #to_add=[self._algForParallelAdd._findSmallest_norm(elements)]
+                    else:
+                        raise  ValueErrorParAdd("Method number %s for WeightFunctionSearch is not implemented" % self._method)
 
                 for covered in copy(C_covered_by):
                     for added in to_add:
                         if added in C_covered_by[covered]:
                             C_covered_by.pop(covered)    #remove covered elements from dictionary
                             break
+
                 if self._verbose>=2:
                     print 'Elements to add:', to_add
                 Qww+=to_add
 
-            toAdd=[]
 
             if self._verbose>=1:
                 print "Qw_w for ", w_tuple, " before completing: "
@@ -516,3 +474,24 @@ class WeightFunctionSearch(object):
                     to_add.append(el)
                     break
         return Set(Qww+to_add).list()
+
+    def coveringAlphabets(self,Q,shift):
+        Q=Set(Q).list()
+        coveringValues={}
+        for q in Q:
+            q_shifted=q+shift
+            for a in self._alphabet:
+                w=self._algForParallelAdd.divideByBase(q_shifted-a)
+                if w!=None:
+                    if w not in coveringValues:
+                        coveringValues[w]=1
+                    else:
+                        coveringValues[w]+=1
+        shifted_alphabets=[]
+        for w in sorted(coveringValues, key=coveringValues.get, reverse=True):
+            shifted_alph=[]
+            for a in self._alphabet:
+                shifted_alph.append(a+self._base*w)
+            shifted_alphabets.append(Set(shifted_alph))
+        return shifted_alphabets
+

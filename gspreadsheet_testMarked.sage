@@ -26,6 +26,7 @@ phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 folder_path='./outputs/'
 load_attach_path('./classes')
+load('ParAddException.sage')
 
 
 try:
@@ -49,6 +50,7 @@ try:
     methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
 except Exception, e:
     print "Some problem with google spreadsheet:"
+    print e
 
 for row in range(3,worksheet.row_count):
     try:
