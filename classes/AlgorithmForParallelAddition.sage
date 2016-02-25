@@ -593,6 +593,22 @@ class AlgorithmForParallelAddition(object):
             print smallestAbs
         return list_from_Ring[smallest_in]
 
+    def _findGreatest(self,list_from_Ring):
+        #finds greatest (in absolute value) element of list_from_Ring
+        greatestAbs=abs(self.ring2CC(list_from_Ring[0]))
+        greatest_in=0
+        i=0
+        for num in list_from_Ring[1:]:
+            numAbs=abs(self.ring2CC(num))
+            i+=1
+            if numAbs>greatestAbs:
+                greatestAbs=numAbs
+                greatest_in=i
+        if self._verbose>=1:
+            print 'Searching for the greatest element in the absolute value'
+            print greatestAbs
+        return list_from_Ring[greatest_in]
+
     def _findSmallest_norm(self,list_from_Ring):
         #finds smallest (in natural norm) element of list_from_Ring
         smallestNorm=self.naturalNorm(list_from_Ring[0])

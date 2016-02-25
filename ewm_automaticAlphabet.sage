@@ -2,7 +2,7 @@
 #------------EWM SETTING----------------
 max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
 methods_phase1=[3]        #methods in the list are used. If empty, default method is used.
-max_input_length = 10    #maximal length of the input of the weight function
+max_input_length = 100    #maximal length of the input of the weight function
 methods_phase2=[15]        #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
@@ -32,15 +32,21 @@ phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 folder_path='./outputs/'
 load_attach_path('./classes')
 
+load_attach_path('~')
+
+load_attach_path('/home/legerjan/ParallelAddition')
+load_attach_path('/home/legerjan/ParallelAddition/classes')
+
+folder_path='./'
 #-----------------------------------------------------------------------
-max_coef=5
-m=2
+max_coef=6
+m=max_coef-1
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
-skip=True
+skip=False#True
 for x in cartesian_product_iterator(t):
     if abs(x[0])<=m and abs(x[1])<=m:
         pass

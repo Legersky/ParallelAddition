@@ -186,7 +186,7 @@ class WeightFunctionSearch(object):
                         if Qww:
                             cov_alph=self.coveringAlphabets(Qww,w_tuple[0])
                             for alph in cov_alph:
-                                if self._method ==18:
+                                if self._method in [18,20]:
                                     to_add=alph.intersection(Set(elements)).list()
                                     if to_add:
                                         break
@@ -194,7 +194,10 @@ class WeightFunctionSearch(object):
                                     to_add+=alph.intersection(Set(elements)).list()
 
                         if not to_add:
-                            to_add=[self._algForParallelAdd._findSmallest(elements)]
+                            if self._method ==18:
+                                to_add=[self._algForParallelAdd._findSmallest(elements)]
+                            elif self._method ==20:
+                                to_add=[self._algForParallelAdd._findGreatest(elements)]
                             #to_add=[self._algForParallelAdd._findSmallest_norm(elements)]
                     else:
                         raise  ValueErrorParAdd("Method number %s for WeightFunctionSearch is not implemented" % self._method)
