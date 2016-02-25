@@ -197,8 +197,8 @@ class WeightFunctionSearch(object):
                             if self._method ==18:
                                 to_add=[self._algForParallelAdd._findSmallest(elements)]
                             elif self._method ==20:
-                                to_add=[self._algForParallelAdd._findGreatest(elements)]
-                            #to_add=[self._algForParallelAdd._findSmallest_norm(elements)]
+                                #to_add=[self._algForParallelAdd._findGreatest(elements)]
+                                to_add=[self._algForParallelAdd._findSmallest_norm(elements)]
                     else:
                         raise  ValueErrorParAdd("Method number %s for WeightFunctionSearch is not implemented" % self._method)
 
