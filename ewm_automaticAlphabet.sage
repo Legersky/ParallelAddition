@@ -42,8 +42,6 @@ for i in range(0,2):
 
 skip=True
 for x in cartesian_product_iterator(t):
-    if x[0]==3 and x[1]==4:
-        skip=False
     if abs(x[0])<=m and abs(x[1])<=m:
         pass
     elif skip:
@@ -62,6 +60,8 @@ for x in cartesian_product_iterator(t):
             load('ewm.sage')
         except ExceptionParAdd, e:
             print e
+    if x[0]==4 and x[1]==1:
+        skip=False
 
 
 
