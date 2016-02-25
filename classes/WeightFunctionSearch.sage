@@ -179,7 +179,7 @@ class WeightFunctionSearch(object):
                             elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
                                 to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
 
-                    elif self._method in [18,19]:        #according to alphabet
+                    elif self._method in [18,19,20]:        #according to alphabet
                         elements=[]
                         for covered in C_covered_by:
                             elements+=C_covered_by[covered]
