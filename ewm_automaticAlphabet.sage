@@ -40,13 +40,13 @@ P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
-iterat=cartesian_product_iterator(t)
-for x in iterat:
+skip=True
+for x in cartesian_product_iterator(t):
     if x[0]==3 and x[1]==4:
-        break
-
-for x in iterat:
+        skip=False
     if abs(x[0])<=m and abs(x[1])<=m:
+        pass
+    elif skip:
         pass
     else:
         p= str(P(list(x)+[1]))
