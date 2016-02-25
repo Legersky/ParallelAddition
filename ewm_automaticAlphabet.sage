@@ -39,7 +39,7 @@ load_attach_path('/home/legerjan/ParallelAddition/classes')
 
 folder_path='./'
 #-----------------------------------------------------------------------
-max_coef=6
+max_coef=1
 m=max_coef-1
 t=[]
 P.<x> = ZZ[]
@@ -61,8 +61,13 @@ for x in cartesian_product_iterator(t):
             omegaCC= 1+ 1*I
             alphabet = ''
             inputAlphabet = ''
-            base ='omega'
 
+            max_coef_base=3
+            u=[]
+            for i in range(0,2):
+                u.append(range(-max_coef_base,max_coef_base+1))
+            for y in cartesian_product_iterator(u):
+                base =str(y[0])+'*omega'+'+('+str(y[1])+')'
             load('ewm.sage')
         except ExceptionParAdd, e:
             print e
