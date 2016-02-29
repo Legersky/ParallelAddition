@@ -50,13 +50,15 @@ class WeightCoefficientsSetSearch(object):
         if self._verbose>=1: print "Number of elements in Qk: ", len(res)
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
 
-        if self._method in [1,2,3,6,7]:
+        if self._method in [1,2,3,6,7, 8,9]:
             #Method 1 chooses the smallest element (the embedding to CC is necessary here)
             #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary)
             #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
             #Method 6 takes first the only possible candidates and all in non-covered lists
             #Method 7 == 2, but A+A is taken even if the input alphabet is different
-            if self._method in [2,7,3,6]:
+            #Method 8  takes first the only possible candidates and then add all smallest elements (absolute value)
+            #Method 9  takes first the only possible candidates and then add all smallest elements (natural norm)
+            if self._method in [2,3,6,7,8,9]:
                 for cand_for_elem in copy(candidates):
                     if len(cand_for_elem)==1:
                         weightCoef=cand_for_elem[0]
@@ -80,9 +82,16 @@ class WeightCoefficientsSetSearch(object):
 
                         res=res.union(Set([weightCoef]))            #add the smallest one
                         added_elem.append(weightCoef)
-                    if self._method in [6]:
-                        res=res.union(Set(cand_for_elem))
-                        added_elem+=Set(cand_for_elem).list()
+
+                    elif self._method in [6,8,9]:
+                        if self._method in [8]:
+                            weightCoefs=self._algForParallelAdd._findAllSmallest(cand_for_elem)
+                        elif self._method in [9]:
+                            weightCoefs=self._algForParallelAdd._findAllSmallest_norm(cand_for_elem)
+                        elif self._method in [6]:
+                            weightCoefs=cand_for_elem
+                        res=res.union(Set(weightCoefs))
+                        added_elem+=Set(weightCoefs).list()
                 else:
                     if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
             if self._verbose>=1: print "Added coefficients:"

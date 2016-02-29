@@ -55,23 +55,23 @@ for x in cartesian_product_iterator(t):
     else:
         p= str(P(list(x)+[1]))
         print p
-        try:
-            name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'
-            minPol =p
-            omegaCC= 1+ 1*I
-            alphabet = 'integer'
-            inputAlphabet = ''
+        name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'
+        minPol =p
+        omegaCC= 1+ 1*I
+        alphabet = 'integer'
+        inputAlphabet = ''
 
-            max_coef_base=3
-            u=[]
-            for i in range(0,2):
-                u.append(range(-max_coef_base,max_coef_base+1))
-            for y in cartesian_product_iterator(u):
-                base =str(y[0])+'*omega'+'+('+str(y[1])+')'
-                name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'+base
+        max_coef_base=3
+        u=[]
+        for i in range(0,2):
+            u.append(range(-max_coef_base,max_coef_base+1))
+        for y in cartesian_product_iterator(u):
+            base =str(y[0])+'*omega'+'+('+str(y[1])+')'
+            name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'+base
+            try:
                 load('ewm.sage')
-        except ExceptionParAdd, e:
-            print e
+            except ExceptionParAdd, e:
+                print e
     if x[0]==4 and x[1]==1:
         skip=False
 

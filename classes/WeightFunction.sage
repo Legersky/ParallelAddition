@@ -4,6 +4,7 @@ class WeightFunction(object):
     def __init__(self,B):
         self._maxLength=1
         self._mapping={}
+        self._num_of_saved=0
         self._inputAlphabet=B
             #alphabet of input sequence
 
@@ -48,6 +49,9 @@ class WeightFunction(object):
         if len(_input)>self._maxLength:
             self._maxLength = len(_input)
         self._mapping[_input]=coef
+        self._num_of_saved+=1
+        if self._num_of_saved>1000000:
+            raise RuntimeErrorParAdd("Number of saved inputs of weight function has exceeded 1 000 000.")
 
 #-----------------------------PRINT FUNCTIONS-------------------------------------------------------------------
     def printInfo(self):

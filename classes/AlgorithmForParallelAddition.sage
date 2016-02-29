@@ -622,7 +622,7 @@ class AlgorithmForParallelAddition(object):
 
 #-----------------------------AUXILIARY FUNCTIONS-------------------------------------------------------------------
     def _findSmallest(self,list_from_Ring):
-        #finds smallest (in absolute value) element of list_from_Ring
+        #return the first smallest (in absolute value) element of list_from_Ring
         smallestAbs=abs(self.ring2CC(list_from_Ring[0]))
         smallest_in=0
         i=0
@@ -636,6 +636,35 @@ class AlgorithmForParallelAddition(object):
             print 'Searching for the smallest element in the absolute value'
             print smallestAbs
         return list_from_Ring[smallest_in]
+
+    def _findAllSmallest(self,list_from_Ring):
+        #finds smallest (in absolute value) element of list_from_Ring
+        smallestAbs=abs(self.ring2CC(list_from_Ring[0]))
+        smallest=[list_from_Ring[0]]
+        for num in list_from_Ring[1:]:
+            numAbs=abs(self.ring2CC(num))
+            if numAbs==smallestAbs:
+                smallest.append(num)
+            elif numAbs<smallestAbs:
+                smallestAbs=numAbs
+                smallest=[num]
+        if self._verbose>=1:
+            print 'Searching for the smallest element in the absolute value'
+            print smallestAbs
+        return smallest
+
+    def _findAllSmallest_norm(self,list_from_Ring):
+        #finds smallest (in absolute value) element of list_from_Ring
+        smallestNorm=self.naturalNorm(list_from_Ring[0])
+        smallest=[list_from_Ring[0]]
+        for num in list_from_Ring[1:]:
+            numNorm=self.naturalNorm(num)
+            if numNorm==smallestNorm:
+                smallest.append(num)
+            elif numNorm<smallestNorm:
+                smallestNorm=numNorm
+                smallest=[num]
+        return smallest
 
     def _findGreatest(self,list_from_Ring):
         #finds greatest (in absolute value) element of list_from_Ring
