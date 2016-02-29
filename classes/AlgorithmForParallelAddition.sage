@@ -166,6 +166,7 @@ class AlgorithmForParallelAddition(object):
             for ak in a.list()[1:]:
                 if ak !=0:
                     raise ValueErrorParAdd("Digit %s is not integer." %a)
+            a=a.list()[0]
             if a < min_a:
                 min_a=a
             if a>max_a:
