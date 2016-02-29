@@ -39,7 +39,7 @@ load_attach_path('/home/legerjan/ParallelAddition/classes')
 
 folder_path='./'
 #-----------------------------------------------------------------------
-max_coef=1
+max_coef=3
 m=max_coef-1
 t=[]
 P.<x> = ZZ[]
@@ -62,7 +62,7 @@ for x in cartesian_product_iterator(t):
             alphabet = 'integer'
             inputAlphabet = ''
 
-            max_coef_base=1
+            max_coef_base=3
             u=[]
             for i in range(0,2):
                 u.append(range(-max_coef_base,max_coef_base+1))
