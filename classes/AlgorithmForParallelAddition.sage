@@ -148,7 +148,7 @@ class AlgorithmForParallelAddition(object):
                     raise ValueErrorParAdd("Value %s is not element of alphabet + alphabet so it cannot be used for inputAlphabet." %b)
             for a in self._alphabet:
                 if not a in self._inputAlphabet:
-                    raise ValueErrorParAdd("Value %s from alphabet must be used in the inputAlphabet." %a)
+                    raise ValueErrorParAdd("Value %s from alphabet must be used in the inputAlphabet %s." %(a,self._inputAlphabet))
             if len(self._inputAlphabet)==len(self._alphabet):
                 raise ValueErrorParAdd("Input alphabet cannot equal to alphabet.")
         else:
