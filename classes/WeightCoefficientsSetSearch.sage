@@ -49,48 +49,40 @@ class WeightCoefficientsSetSearch(object):
         self._numbersOfElementsInIterations.append(len(res))
         if self._verbose>=1: print "Number of elements in Qk: ", len(res)
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
-        #Method 1 chooses the smallest element (the embedding to CC is necessary here)
-        if self._method==1:
+
+        if self._method in [1,2,3,6,7]:
+            #Method 1 chooses the smallest element (the embedding to CC is necessary here)
+            #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary)
+            #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
+            #Method 6 takes first the only possible candidates and all in non-covered lists
+            #Method 7 == 2, but A+A is taken even if the input alphabet is different
+            if self._method in [2,7,3,6]:
+                for cand_for_elem in copy(candidates):
+                    if len(cand_for_elem)==1:
+                        weightCoef=cand_for_elem[0]
+                        if self._verbose>=2: print "Only element: ", weightCoef
+                        if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
+                            res=res.union(Set([weightCoef]))
+                            if self._verbose>=2: print "Added coefficient:"
+                            if self._verbose>=2: print weightCoef
+                            added_elem.append(weightCoef)
+                        candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
+
             for cand_for_elem in candidates:
                 intersect=Set(cand_for_elem).intersection(res)
                 if intersect.is_empty():                #check if there is already some candidate in Qk1
-                    if self._verbose>=1: print "Searching smallest element."
-                    weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
-                    res=res.union(Set([weightCoef]))            #add the smallest one
-                    if self._verbose>=2: print "Added coefficient:"
-                    if self._verbose>=2: print weightCoef
-                    added_elem.append(weightCoef)
-                else:
-                    if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
-            if self._verbose>=1: print "Added coefficients:"
-            if self._verbose>=1: print added_elem
-            self._algForParallelAdd.addLog("Added coefficients:")
-            self._algForParallelAdd.addLog(added_elem, latex=True)
-            self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
-            return res.list()
+                    if self._method in [1,2,7,3]:
+                        if self._verbose>=2: print "Searching smallest element."
+                        if self._method in [1,2,7]:
+                            weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
+                        elif self._method in [3]:
+                            weightCoef=self._algForParallelAdd._findSmallest_norm(cand_for_elem)
 
-        #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary here)
-        if self._method==2:
-            for cand_for_elem in copy(candidates):
-                if len(cand_for_elem)==1:
-                    weightCoef=cand_for_elem[0]
-                    if self._verbose>=2: print "Only element: ", weightCoef
-                    if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
-                        res=res.union(Set([weightCoef]))
-                        if self._verbose>=2: print "Added coefficient:"
-                        if self._verbose>=2: print weightCoef
+                        res=res.union(Set([weightCoef]))            #add the smallest one
                         added_elem.append(weightCoef)
-                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
-
-            for cand_for_elem in candidates:
-                intersect=Set(cand_for_elem).intersection(res)
-                if intersect.is_empty():                #check if there is already some candidate in Qk1
-                    if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
-                    res=res.union(Set([weightCoef]))            #add the smallest one
-                    if self._verbose>=2: print "Added coefficient:"
-                    if self._verbose>=2: print weightCoef
-                    added_elem.append(weightCoef)
+                    if self._method in [6]:
+                        res=res.union(Set(cand_for_elem))
+                        added_elem+=Set(cand_for_elem).list()
                 else:
                     if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
             if self._verbose>=1: print "Added coefficients:"
@@ -100,63 +92,8 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
 
-        #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
-        if self._method==3:
-            for cand_for_elem in copy(candidates):
-                if len(cand_for_elem)==1:
-                    weightCoef=cand_for_elem[0]
-                    if self._verbose>=2: print "Only element: ", weightCoef
-                    if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
-                        res=res.union(Set([weightCoef]))
-                        if self._verbose>=2: print "Added coefficient:"
-                        if self._verbose>=2: print weightCoef
-                        added_elem.append(weightCoef)
-                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
 
-            for cand_for_elem in candidates:
-                intersect=Set(cand_for_elem).intersection(res)
-                if intersect.is_empty():                #check if there is already some candidate in Qk1
-                    if self._verbose>=2: print "Searching smallest element."
-                    weightCoef=self._algForParallelAdd._findSmallest_norm(cand_for_elem)
-                    res=res.union(Set([weightCoef]))            #add the smallest one
-                    if self._verbose>=2: print "Added coefficient:"
-                    if self._verbose>=2: print weightCoef
-                    added_elem.append(weightCoef)
-                else:
-                    if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
-            if self._verbose>=1: print "Added coefficients:"
-            if self._verbose>=1: print added_elem
-            self._algForParallelAdd.addLog("Added coefficients:")
-            self._algForParallelAdd.addLog(added_elem, latex=True)
-            self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
-            return res.list()
 
-        #Method 6 takes first the only possible candidates and all in non-covered lists
-        if self._method==6:
-            for cand_for_elem in copy(candidates):
-                if len(cand_for_elem)==1:
-                    weightCoef=cand_for_elem[0]
-                    if self._verbose>=2: print "Only element: ", weightCoef
-                    if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
-                        res=res.union(Set([weightCoef]))
-                        if self._verbose>=2: print "Added coefficient:"
-                        if self._verbose>=2: print weightCoef
-                        added_elem.append(weightCoef)
-                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
-
-            for cand_for_elem in candidates:
-                intersect=Set(cand_for_elem).intersection(res)
-                if intersect.is_empty():                #check if there is already some candidate in Qk1
-                    res=res.union(Set(cand_for_elem))
-                    added_elem+=Set(cand_for_elem).list()
-                else:
-                    if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
-            if self._verbose>=1: print "Added coefficients:"
-            if self._verbose>=1: print added_elem
-            self._algForParallelAdd.addLog("Added coefficients:")
-            self._algForParallelAdd.addLog(added_elem, latex=True)
-            self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
-            return res.list()
         else:
             raise ValueErrorParAdd("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
 
@@ -205,6 +142,8 @@ class WeightCoefficientsSetSearch(object):
         self._algForParallelAdd.addLog('Starting Q_0:')
         self._algForParallelAdd.addLog(self._Qk1, latex=True)
         B=self._inputAlphabet   #input alphabet
+        if self._method==7:
+            B=self._algForParallelAdd.sumOfSets(self._alphabet,self._alphabet)
         self._Qk2=copy(self._Qk1)    #preprevious potential Weight Coefficient Set
 
         self._Qk1=self._getQk(self._algForParallelAdd.sumOfSets(B,self._Qk1))    #get Qk for B+Qk1 \subset alphabet + base* Qk
