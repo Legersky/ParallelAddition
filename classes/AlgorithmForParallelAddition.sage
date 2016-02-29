@@ -70,7 +70,10 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
-            self.setInputAlphabet([])
+            if alphabet=='integer':
+                self.setSmallerIntegerInputAlphabet()
+            else:
+                self.setInputAlphabet([])
 
         self._weightCoefSet=[]
             #set of potential coefficients
@@ -155,6 +158,19 @@ class AlgorithmForParallelAddition(object):
             if abs(self.ring2CC(b))>maxB:
                 maxB=abs(self.ring2CC(b))
         self._maximumOfInputAlphabet=maxB
+
+    def setSmallerIntegerInputAlphabet(self):
+        min_a=0
+        max_a=0
+        for a in self._alphabet:
+            for ak in a.list()[1:]:
+                if ak !=0:
+                    raise ValueErrorParAdd("Digit %s is not integer." %a)
+            if a < min_a:
+                min_a=a
+            if a>max_a:
+                max_a=a
+        self.setInputAlphabet(self.coerceListIntoZomega(range(min_a-1,max_a+1+1)))
 
     def setBase(self, base):
         #set base
