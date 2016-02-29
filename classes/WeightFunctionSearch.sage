@@ -194,7 +194,7 @@ class WeightFunctionSearch(object):
                                     to_add+=alph.intersection(Set(elements)).list()
 
                         if not to_add:
-                            if self._method ==18:
+                            if self._method in [18,19]:
                                 to_add=[self._algForParallelAdd._findSmallest(elements)]
                             elif self._method ==20:
                                 #to_add=[self._algForParallelAdd._findGreatest(elements)]
