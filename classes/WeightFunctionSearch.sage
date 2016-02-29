@@ -272,6 +272,7 @@ class WeightFunctionSearch(object):
                     break
                 if len(Qww)==1:
                     self._weightFunction.addWeightCoefToInput(w_tuple, Qww[0])
+                    self._algForParallelAdd.addLog('The weight coefficient for the finite input gained by repetition of letter %s is %s' %(a, Qww[0]))
                 inp_len+=1
                 prevQww=Set(Qww)
             if len(w_tuple)>len(longest[0]):

@@ -130,6 +130,33 @@ class WeightCoefficientsSetSearch(object):
             self._algForParallelAdd.addLog(added_elem, latex=True)
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
             return res.list()
+
+        #Method 6 takes first the only possible candidates and all in non-covered lists
+        if self._method==6:
+            for cand_for_elem in copy(candidates):
+                if len(cand_for_elem)==1:
+                    weightCoef=cand_for_elem[0]
+                    if self._verbose>=2: print "Only element: ", weightCoef
+                    if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
+                        res=res.union(Set([weightCoef]))
+                        if self._verbose>=2: print "Added coefficient:"
+                        if self._verbose>=2: print weightCoef
+                        added_elem.append(weightCoef)
+                    candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
+
+            for cand_for_elem in candidates:
+                intersect=Set(cand_for_elem).intersection(res)
+                if intersect.is_empty():                #check if there is already some candidate in Qk1
+                    res=res.union(Set(cand_for_elem))
+                    added_elem+=Set(cand_for_elem).list()
+                else:
+                    if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
+            if self._verbose>=1: print "Added coefficients:"
+            if self._verbose>=1: print added_elem
+            self._algForParallelAdd.addLog("Added coefficients:")
+            self._algForParallelAdd.addLog(added_elem, latex=True)
+            self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
+            return res.list()
         else:
             raise ValueErrorParAdd("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
 
@@ -162,7 +189,7 @@ class WeightCoefficientsSetSearch(object):
 
             Q=[]
             for (ind, a) in enumerate(comb):
-                cand=self._algForParallelAdd.list2Ring(a)
+                cand=self._algForParallelAdd.list2Ring(list(a))
                 if self._algForParallelAdd.naturalNorm(cand)<bound:
                     Q.append(cand)
             self._Qk1=Q
