@@ -36,7 +36,12 @@ for method1 in methods_phase1:
         try:
             start=time.clock()
 
-            alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True)
+            try:
+                verbosity
+            except:
+                verbosity=0
+
+            alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity)
 
             alg_update=False
             unsolved_saved=False
