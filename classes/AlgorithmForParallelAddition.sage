@@ -56,12 +56,16 @@ class AlgorithmForParallelAddition(object):
         self._inverseBaseCompanionMatrix=self._computeInverseCompanionMatrix(self._base)
             # inversion of companion matrix of base
 
-        if alphabet:
-            self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
-                #alphabet
-        else:
+        if alphabet=='':
             self.setAlphabet(self.findAlphabet2())
                 #automatically find an alphabet
+        elif alphabet=='integer':
+            self.setAlphabet(self.findIntegerAlphabet())
+                #automatically find an integer alphabet
+        else:
+            self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
+                #alphabet
+
         if inputAlphabet:
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
@@ -181,6 +185,30 @@ class AlgorithmForParallelAddition(object):
     def findAlphabet2(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
         return self.addSmallestRepresentatives(self.addSmallestRepresentatives([0],self._base-1),self._base)
+
+    def coerceListIntoZomega(self,_list):
+        res=[]
+        for a in _list:
+            res.append(self._ring.coerce(a))
+        return res
+
+    def findIntegerAlphabet(self):
+        #find an integer alphabet which contains all representatives modulo beta and beta -1
+        num_base=self.number_of_representatives(self._base)
+        num_base_minus_one=self.number_of_representatives(self._base-1)
+        for a in range(1,num_base+num_base_minus_one+1):
+            alphabet=self.coerceListIntoZomega(range(-a+1,a+1))
+            repr_base = self.divide_into_congruent_classes(alphabet, self._base)
+            repr_base_minus_one = self.divide_into_congruent_classes(alphabet, self._base-1)
+            if len(repr_base)>=num_base and len(repr_base_minus_one)>=num_base_minus_one:
+                return alphabet
+
+            alphabet=self.coerceListIntoZomega(range(-a,a+1))
+            repr_base = self.divide_into_congruent_classes(alphabet, self._base)
+            repr_base_minus_one = self.divide_into_congruent_classes(alphabet, self._base-1)
+            if len(repr_base)>=num_base and len(repr_base_minus_one)>=num_base_minus_one:
+                return alphabet
+        raise RuntimeErrorParAdd('Integer alphabet not found.')
 
 
     def addRepresentatives(self, _set, modulus):
