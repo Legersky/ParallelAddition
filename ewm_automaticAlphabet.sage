@@ -55,10 +55,10 @@ for x in cartesian_product_iterator(t):
     else:
         p= str(P(list(x)+[1]))
         print p
-        name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'
+        name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'
         minPol =p
         omegaCC= 1+ 1*I
-        alphabet = 'integer'
+        alphabet = ''
         inputAlphabet = ''
 
         max_coef_base=3
@@ -67,7 +67,7 @@ for x in cartesian_product_iterator(t):
             u.append(range(-max_coef_base,max_coef_base+1))
         for y in cartesian_product_iterator(u):
             base =str(y[0])+'*omega'+'+('+str(y[1])+')'
-            name = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet_'+base
+            name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'+base
             try:
                 load('ewm.sage')
             except ExceptionParAdd, e:
