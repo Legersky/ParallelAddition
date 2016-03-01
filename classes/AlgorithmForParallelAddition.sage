@@ -655,7 +655,7 @@ class AlgorithmForParallelAddition(object):
         return smallest
 
     def _findAllSmallest_norm(self,list_from_Ring):
-        #finds smallest (in absolute value) element of list_from_Ring
+        #finds smallest (in norm) element of list_from_Ring
         smallestNorm=self.naturalNorm(list_from_Ring[0])
         smallest=[list_from_Ring[0]]
         for num in list_from_Ring[1:]:
