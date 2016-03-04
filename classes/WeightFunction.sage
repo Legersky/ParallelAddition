@@ -50,8 +50,8 @@ class WeightFunction(object):
             self._maxLength = len(_input)
         self._mapping[_input]=coef
         self._num_of_saved+=1
-        if self._num_of_saved>1000000:
-            raise RuntimeErrorParAdd("Number of saved inputs of weight function has exceeded 1 000 000.")
+        #if self._num_of_saved>1000000:
+        #   raise RuntimeErrorParAdd("Number of saved inputs of weight function has exceeded 1 000 000.")
 
 #-----------------------------PRINT FUNCTIONS-------------------------------------------------------------------
     def printInfo(self):

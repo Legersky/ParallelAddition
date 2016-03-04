@@ -243,8 +243,8 @@ class WeightFunctionSearch(object):
             self._numbersOfSavedCombinations.append(num_prev_comb*len(self._B) - len(combinations))
             if self._verbose>=1: print "Length of the window: ", self._k,", Number of saved combinations of input digits: " ,self._numbersOfSavedCombinations[-1], ", To next iteration: " ,len(combinations)
             self._algForParallelAdd.addLog("Length of the window: "+ str(self._k) + ", Number of saved combinations of input digits: " + str(self._numbersOfSavedCombinations[-1]) + ", To next iteration: " + str(len(combinations)))
-            if len(combinations)> 500000:
-                raise RuntimeErrorParAdd('Number of combinations to next iteration exceeded 500 000!!!')
+            #if len(combinations)> 500000:
+            #    raise RuntimeErrorParAdd('Number of combinations to next iteration exceeded 500 000!!!')
         return self._weightFunction
 
     def check_one_letter_inputs(self, max_input_length):
