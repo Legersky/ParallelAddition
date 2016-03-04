@@ -1,6 +1,6 @@
 #------------EWM SETTING----------------
 max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
-max_input_length = 10    #maximal length of the input of the weight function
+max_input_length = 100    #maximal length of the input of the weight function
 
 #------------SANITY CHECK---------------
 sanityCheck=False         #run sanity check

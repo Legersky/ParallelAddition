@@ -902,7 +902,7 @@ class AlgorithmForParallelAddition(object):
         print forTable
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
-    def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10):
+    def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10, allSameLabel=''):
         #plots nums_from_ring from Ring
         to_plot = []
         allReal=True
@@ -914,6 +914,9 @@ class AlgorithmForParallelAddition(object):
             zeros.append(0)
             if labeled:
                 label_plot+=text('$'+latex(num)+ '$', self.getCoordinates(num)+vector([0.1,0.1]) ,
+                                 color=color, horizontal_alignment='left', fontsize=fontsize )
+            if allSameLabel:
+                label_plot+=text(allSameLabel, self.getCoordinates(num)+vector([0.1,-0.1]) ,
                                  color=color, horizontal_alignment='left', fontsize=fontsize )
             if numCC.imag()!=0:
                 allReal=False
@@ -928,6 +931,18 @@ class AlgorithmForParallelAddition(object):
             p+=label_plot
         p.set_aspect_ratio(1)
         return p
+
+    def plotAlphabetDivididedIntoCongruenceClasses(self, modulus):
+        divided_alphabet=self.divide_into_congruent_classes(self._alphabet,modulus)
+        img=plot([])
+        colors=['blue', 'mediumspringgreen', 'orangered','aqua', 'mediumpurple', 'aquamarine',   'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse','chocolate', 'coral', 'cornflowerblue', 'crimson', 'cyan','darkblue', 'darkcyan', 'darkgoldenrod', 'darkgreen','darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange','darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategrey', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgrey', 'dodgerblue', 'firebrick', 'forestgreen', 'fuchsia',  'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'hotpink', 'indianred', 'indigo', 'lawngreen',  'lightcoral',   'lightgreen',   'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategrey', 'lightsteelblue',  'lime', 'limegreen',  'magenta', 'maroon','mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumseagreen', 'mediumslateblue' ,'mediumturquoise', 'mediumvioletred', 'navy', 'olive', 'olivedrab', 'orange', 'orchid', 'palevioletred', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategrey', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'yellowgreen']
+        classes=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+                 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+        i=0
+        for alph in divided_alphabet:
+            img+=self.plot(alph, color=colors[i % len(colors)], size=30, allSameLabel=classes[i % len(classes)])
+            i+=1
+        return img
 
     def plotAlphabet(self):
         #plot alphabet A
