@@ -10,7 +10,7 @@ class AlgorithmForParallelAddition(object):
     Class for construction of parallel addition algorithms with the rewriting rule x-beta
     """
 #-----------------------------CONSTRUCTOR------------------------------------------------------------------------------------
-    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0):
+    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0, maxInputs=1000000):
         self._name=name
             #name of the numeration system
         self._log=[]
@@ -81,6 +81,8 @@ class AlgorithmForParallelAddition(object):
         self._oneLettersCheck=False
         self._weightFunction = None
             #Weight Function
+        self._maxInputs=maxInputs
+            #if number of saved inputs of weight function exceeds self._maxInputs, RuntimeErrorParAdd is raised
 
 
 
@@ -356,7 +358,7 @@ class AlgorithmForParallelAddition(object):
     def _findWeightFunction(self, max_input_length,method_number):
         #finds and sets Weight Function using the set of weight coefficients
         if self._weightCoefSet:
-            self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method_number)
+            self._weightFunSearch=WeightFunctionSearch(self, self._weightCoefSet, method_number,self._maxInputs)
             self.addLog("Checking one letter inputs...")
             longest=self._weightFunSearch.check_one_letter_inputs(max_input_length)
             self._oneLettersCheck=True

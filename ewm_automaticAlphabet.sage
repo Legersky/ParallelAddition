@@ -70,6 +70,9 @@ load_attach_path('~')
 load_attach_path('/home/legerjan/ParallelAddition')
 load_attach_path('/home/legerjan/ParallelAddition/classes')
 
+load('AlgorithmForParallelAddition.sage')
+classes_loaded=True
+
 folder_path='./'
 #-----------------------------------------------------------------------
 max_coef=3

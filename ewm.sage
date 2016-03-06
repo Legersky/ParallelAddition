@@ -3,8 +3,11 @@ import inspect
 import time
 import sys
 
-load_attach_path('classes')
-load('AlgorithmForParallelAddition.sage')
+try:
+    classes_loaded
+except:
+    load_attach_path('classes')
+    load('AlgorithmForParallelAddition.sage')
 
 
 alg=None
@@ -41,7 +44,12 @@ for method1 in methods_phase1:
             except:
                 verbosity=0
 
-            alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity)
+            try:
+                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity, maxInputs=maximumOfInputs)
+            except:
+                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity)
+
+
 
             alg_update=False
             unsolved_saved=False

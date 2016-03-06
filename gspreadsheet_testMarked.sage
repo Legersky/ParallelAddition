@@ -26,7 +26,9 @@ phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 folder_path='./outputs/'
 load_attach_path('./classes')
-load('ParAddException.sage')
+
+load('AlgorithmForParallelAddition.sage')
+classes_loaded=True
 
 
 try:
@@ -54,7 +56,7 @@ except Exception, e:
 
 for row in range(3,worksheet.row_count):
     try:
-        if worksheet.cell(row, 1).value=='y':
+        if worksheet.cell(row, 1).value=='x':
             name = worksheet.cell(row, 2).value
             print name
             minPol =worksheet.cell(row, 6).value.replace('t','x')
@@ -64,7 +66,7 @@ for row in range(3,worksheet.row_count):
             if inputAlphabet=='A+A':
                 inputAlphabet=''
             base =worksheet.cell(row, 7).value
-
+            maximumOfInputs=2000000
             load('ewm.sage')         #run extending window method
     except ExceptionParAdd, e:
         print e

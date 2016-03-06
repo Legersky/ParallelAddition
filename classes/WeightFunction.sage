@@ -1,12 +1,13 @@
 class WeightFunction(object):
     """saving of weight function"""
 #-----------------------------CONSTRUCTOR, GETTERS-------------------------------------------------------------------
-    def __init__(self,B):
+    def __init__(self,B, maxInputs):
         self._maxLength=1
         self._mapping={}
         self._num_of_saved=0
         self._inputAlphabet=B
             #alphabet of input sequence
+        self._maxInputs=maxInputs
 
     def __repr__(self):
         return "Instance of WeightFunction"
@@ -50,8 +51,8 @@ class WeightFunction(object):
             self._maxLength = len(_input)
         self._mapping[_input]=coef
         self._num_of_saved+=1
-        #if self._num_of_saved>1000000:
-        #   raise RuntimeErrorParAdd("Number of saved inputs of weight function has exceeded 1 000 000.")
+        if self._num_of_saved>self._maxInputs:
+           raise RuntimeErrorParAdd("Number of saved inputs of weight function has exceeded %s." %self._maxInputs)
 
 #-----------------------------PRINT FUNCTIONS-------------------------------------------------------------------
     def printInfo(self):
