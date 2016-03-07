@@ -30,6 +30,9 @@ class WeightFunctionSearch(object):
         self._k=0
         self._numbersOfSavedCombinations=[]
 
+        self._nondecreasing_prev={}
+        self._nondecreasing={}
+
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
 
@@ -47,15 +50,25 @@ class WeightFunctionSearch(object):
                     new_combinations.append(w_tuple)
         return new_combinations
 
+
     def _findQw(self,w_tuple):
+        size_difference=1
+        Qw_prev=self._Qw_w[w_tuple[0:-1]]
+        while size_difference>0:
+            Qww=self._findQw_once(w_tuple,Qw_prev)
+            size_difference=len(Qw_prev)-len(Qww)
+            Qw_prev=Qww
+        return Qww
+
+    def _findQw_once(self,w_tuple,Qw_prev):
         #find set of possible weight coefficients for input w_tuple
         w_tuple_without_first=w_tuple[1:]
         w0=w_tuple[0]
         if w_tuple_without_first in self._Qw_w:
             C=self._algForParallelAdd.sumOfSets([w0],self._Qw_w[w_tuple_without_first])
 
+            #Qw_prev=self._Qw_w[w_tuple[0:-1]]
             Qww=[]
-            Qw_prev=self._Qw_w[w_tuple[0:-1]]
             if self._verbose>=2:
                 print 'To be covered:' , C
                 print 'Previous Qw', Qw_prev
@@ -223,6 +236,10 @@ class WeightFunctionSearch(object):
 
             #self._Qw_w[w_tuple]=self.convex(w_tuple,Qww)
             self._Qw_w[w_tuple]=Qww
+            #if len(Qw_prev)==len(Qww) and len(Qww)>1:
+             #   print w_tuple
+
+
 
 #            self.opravy(w_tuple)
             return Qww
@@ -243,6 +260,9 @@ class WeightFunctionSearch(object):
             self._numbersOfSavedCombinations.append(num_prev_comb*len(self._B) - len(combinations))
             if self._verbose>=1: print "Length of the window: ", self._k,", Number of saved combinations of input digits: " ,self._numbersOfSavedCombinations[-1], ", To next iteration: " ,len(combinations)
             self._algForParallelAdd.addLog("Length of the window: "+ str(self._k) + ", Number of saved combinations of input digits: " + str(self._numbersOfSavedCombinations[-1]) + ", To next iteration: " + str(len(combinations)))
+
+            self._nondecreasing_prev=self._nondecreasing
+            self._nondecreasing={}
             #if len(combinations)> 500000:
             #    raise RuntimeErrorParAdd('Number of combinations to next iteration exceeded 500 000!!!')
         return self._weightFunction

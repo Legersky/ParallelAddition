@@ -143,6 +143,32 @@ for x in cartesian_product_iterator(t):
 ︠91e27250-1787-462b-a948-338a8845b077︠
 
 
+import platform
+import socket
+import os
+
+print platform.node()
+print socket.gethostname()
+print os.environ["COMPUTERNAME"]
+︡89c9888a-d525-4012-8051-4c594142e4df︡︡{"stdout":"compute4-us\n","done":false}︡{"stdout":"compute4-us\n","done":false}︡{"done":false,"stderr":"Error in lines 6-6\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\n  File \"/projects/sage/sage-6.10/local/lib/python/UserDict.py\", line 23, in __getitem__\n    raise KeyError(key)\nKeyError: 'COMPUTERNAME'\n"}︡{"done":true}
+︠26c159fd-e174-4da6-a5c1-c1fbcb0b9a49s︠
+
+
+a={1:'a',3:'r'}
+print a
+b=a
+a={}
+a[2]='r'
+print b
+print a
+︡10e7252d-c5cb-4385-89ba-3f340a156d0e︡︡{"stdout":"{1: 'a', 3: 'r'}\n","done":false}︡{"stdout":"{1: 'a', 3: 'r'}\n","done":false}︡{"stdout":"{2: 'r'}\n","done":false}︡{"done":true}
+︠d1c3766e-0b77-4596-97d6-0223f6b63cef︠
+
+
+
+
+
+
 
 
 

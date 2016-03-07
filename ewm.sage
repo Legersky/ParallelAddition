@@ -20,7 +20,10 @@ if methods_phase2==[]:
     methods_phase2=[None]
 
 alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
-note=''
+try:
+    note+=', '
+except:
+    note=''
 if len(methods_phase1)>1:
     print 'Comparing different methods for Phase 1...'
     sys.stdout.flush()
@@ -28,7 +31,7 @@ if len(methods_phase1)>1:
     same_methods=alg_test.compareMethodsPhase1(methods_phase1)
     print 'Same weight coefficients sets are found by these group(s) of methods:'
     print same_methods
-    note='Same weight coefficients sets are found by these group(s) of methods:' + str(same_methods)
+    note+='Same weight coefficients sets are found by these group(s) of methods:' + str(same_methods)
     methods_phase1=[]
     for group in same_methods:
         methods_phase1.append(group[0])

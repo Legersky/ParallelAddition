@@ -82,8 +82,10 @@ P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
-skip=True
+skip=False#True
 for x in cartesian_product_iterator(t):
+    if x[0]==1 and x[1]==0:
+        skip=False
     if abs(x[0])<=m and abs(x[1])<=m:
         pass
     elif skip:
@@ -109,8 +111,7 @@ for x in cartesian_product_iterator(t):
                 load('ewm.sage')
             except ExceptionParAdd, e:
                 print e
-    if x[0]==1 and x[1]==0:
-        skip=False
+
 
 
 

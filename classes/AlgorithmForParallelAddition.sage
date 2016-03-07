@@ -3,6 +3,8 @@ load('WeightFunctionSearch.sage')
 load('WeightFunction.sage')
 load('ParAddException.sage')
 
+import os
+import socket
 from sage.rings.polynomial.complex_roots import complex_roots
 
 class AlgorithmForParallelAddition(object):
@@ -1443,7 +1445,7 @@ class AlgorithmForParallelAddition(object):
                 results+=[self._not_usedWeightCoef]
             else:
                 results+=['-']
-            results+=[elapsed_time, message, note]
+            results+=[elapsed_time, message, note, socket.gethostname()]
         except Exception, e:
             results+=[message, e]
 

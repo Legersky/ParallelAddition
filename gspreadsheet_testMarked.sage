@@ -54,9 +54,15 @@ except Exception, e:
     print "Some problem with google spreadsheet:"
     print e
 
+
+
+maximumOfInputs=2000000
+compareWith='x'
+note='testovani vicenasobneho hledani Qww'
+
 for row in range(3,worksheet.row_count):
     try:
-        if worksheet.cell(row, 1).value=='x':
+        if worksheet.cell(row, 1).value==compareWith:
             name = worksheet.cell(row, 2).value
             print name
             minPol =worksheet.cell(row, 6).value.replace('t','x')
@@ -66,7 +72,6 @@ for row in range(3,worksheet.row_count):
             if inputAlphabet=='A+A':
                 inputAlphabet=''
             base =worksheet.cell(row, 7).value
-            maximumOfInputs=2000000
             load('ewm.sage')         #run extending window method
     except ExceptionParAdd, e:
         print e
