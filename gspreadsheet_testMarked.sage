@@ -57,8 +57,8 @@ except Exception, e:
 
 
 maximumOfInputs=2000000
-compareWith='x'
-note='testovani vicenasobneho hledani Qww'
+compareWith='w'
+note='testovani odhalovani zacykleni'
 
 for row in range(3,worksheet.row_count):
     try:

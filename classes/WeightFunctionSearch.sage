@@ -59,32 +59,33 @@ class WeightFunctionSearch(object):
             size_difference=len(Qw_prev)-len(Qww)
             Qw_prev=Qww
 
-        if len(self._Qw_w[w_tuple[0:-1]])==len(Qww)
+        if len(self._Qw_w[w_tuple[0:-1]])==len(Qww):
             self._addNondecreasingTuple(w_tuple)
             self._checkCycles(w_tuple)
         return Qww
 
-    def _checkCycles(w_tuple):
+    def _checkCycles(self, w_tuple):
         w=w_tuple[1:]
         inspected={}
-        if w[-1] in self._nondecreasing_prev[w[0:-1]]:
-            self._algForParallelAdd.addLog("Checking cycles for %s" %w)
-            inspected[w]=True
-            find_next_letter(w,w_tuple.list())
+        if w[0:-1] in self._nondecreasing_prev:
+            if w[-1] in self._nondecreasing_prev[w[0:-1]]:
+                self._algForParallelAdd.addLog("Checking cycles for " + str(w))
+                inspected[w]=True
+                find_next_letter(w,w_tuple.list())
 
         def find_next_letter(_w,witness_seq):
             w_without_first=_w[1:]
-            for x in self._nondecreasing_prev[w_without_first]
+            for x in self._nondecreasing_prev[w_without_first]:
                 witness_seq+=x
                 w_new=w_without_first+(x,)
                 if w_new in inspected:
-                    raise RuntimeErrorParAdd("There is an infinite loop caused by sequence %s ..." %witness_seq)
+                    raise RuntimeErrorParAdd("There is an infinite loop caused by sequence "+str(witness_seq))
                 else:
                     inspected[w_new]=True
                     find_next_letter(w_new,witness_seq)
 
 
-    def _addNondecreasingTuple(w):
+    def _addNondecreasingTuple(self,w):
         if w[0:-1] in self._nondecreasing:
             self._nondecreasing[w[0:-1]].append(w[-1])
         else:
