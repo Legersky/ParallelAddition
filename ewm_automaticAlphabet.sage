@@ -34,7 +34,7 @@
 
 #------------EWM SETTING----------------
 max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
-methods_phase1=[8,9]        #methods in the list are used. If empty, default method is used.
+methods_phase1=[8]        #methods in the list are used. If empty, default method is used.
 max_input_length = 100    #maximal length of the input of the weight function
 methods_phase2=[15]        #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
