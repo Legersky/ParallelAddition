@@ -82,7 +82,7 @@ P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
-skip=False#True
+skip=True
 for x in cartesian_product_iterator(t):
     if abs(x[0])<=m and abs(x[1])<=m:
         pass
@@ -104,11 +104,12 @@ for x in cartesian_product_iterator(t):
         for y in cartesian_product_iterator(u):
             base =str(y[0])+'*omega'+'+('+str(y[1])+')'
             name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'+base
+            maximumOfInputs=1000000
             try:
                 load('ewm.sage')
             except ExceptionParAdd, e:
                 print e
-    if x[0]==4 and x[1]==1:
+    if x[0]==1 and x[1]==0:
         skip=False
 
 
