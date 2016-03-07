@@ -58,7 +58,37 @@ class WeightFunctionSearch(object):
             Qww=self._findQw_once(w_tuple,Qw_prev)
             size_difference=len(Qw_prev)-len(Qww)
             Qw_prev=Qww
+
+        if len(self._Qw_w[w_tuple[0:-1]])==len(Qww)
+            self._addNondecreasingTuple(w_tuple)
+            self._checkCycles(w_tuple)
         return Qww
+
+    def _checkCycles(w_tuple):
+        w=w_tuple[1:]
+        inspected={}
+        if w[-1] in self._nondecreasing_prev[w[0:-1]]:
+            self._algForParallelAdd.addLog("Checking cycles for %s" %w)
+            inspected[w]=True
+            find_next_letter(w,w_tuple.list())
+
+        def find_next_letter(_w,witness_seq):
+            w_without_first=_w[1:]
+            for x in self._nondecreasing_prev[w_without_first]
+                witness_seq+=x
+                w_new=w_without_first+(x,)
+                if w_new in inspected:
+                    raise RuntimeErrorParAdd("There is an infinite loop caused by sequence %s ..." %witness_seq)
+                else:
+                    inspected[w_new]=True
+                    find_next_letter(w_new,witness_seq)
+
+
+    def _addNondecreasingTuple(w):
+        if w[0:-1] in self._nondecreasing:
+            self._nondecreasing[w[0:-1]].append(w[-1])
+        else:
+            self._nondecreasing[w[0:-1]]=[w[-1]]
 
     def _findQw_once(self,w_tuple,Qw_prev):
         #find set of possible weight coefficients for input w_tuple

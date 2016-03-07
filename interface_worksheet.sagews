@@ -154,16 +154,20 @@ print os.environ["COMPUTERNAME"]
 ︠26c159fd-e174-4da6-a5c1-c1fbcb0b9a49s︠
 
 
-a={1:'a',3:'r'}
+a={1:[],3:['a']}
 print a
 b=a
-a={}
-a[2]='r'
+a[1].append('e')
+a[2].append('r')
 print b
 print a
-︡10e7252d-c5cb-4385-89ba-3f340a156d0e︡︡{"stdout":"{1: 'a', 3: 'r'}\n","done":false}︡{"stdout":"{1: 'a', 3: 'r'}\n","done":false}︡{"stdout":"{2: 'r'}\n","done":false}︡{"done":true}
-︠d1c3766e-0b77-4596-97d6-0223f6b63cef︠
+︡c3c67ee1-32d3-4fa9-82de-160d33aea7d3︡︡{"stdout":"{1: [], 3: ['a']}\n","done":false}︡{"done":false,"stderr":"Error in lines 5-5\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nKeyError: 2\n"}︡{"done":true}
+︠d1c3766e-0b77-4596-97d6-0223f6b63cefs︠
+w=(1,2,3,4,5)
 
+w[1:]
+︡4d35b66c-df5c-469c-a869-2c5f9fc93dc1︡︡{"stdout":"(2, 3, 4, 5)\n","done":false}︡{"done":true}
+︠2567ae4d-d095-4678-8bc6-cb1fd86b4c13︠
 
 
 
