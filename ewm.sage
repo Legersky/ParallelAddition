@@ -21,11 +21,10 @@ if methods_phase2==[]:
 
 alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
 try:
-    general_note=note
-    note+=', '
-
+    note=general_note+', '
 except:
     note=''
+
 if len(methods_phase1)>1:
     print 'Comparing different methods for Phase 1...'
     sys.stdout.flush()
@@ -134,7 +133,6 @@ for method1 in methods_phase1:
                 message='some error'
 
             alg.saveResults(end-start, message,note)
-            note=''
 
             if info:
                 alg.saveInfoToTexFile(output_folder+ '/'+filename, header=True, shortInput=False)

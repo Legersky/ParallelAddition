@@ -151,7 +151,7 @@ print platform.node()
 print socket.gethostname()
 print os.environ["COMPUTERNAME"]
 ︡89c9888a-d525-4012-8051-4c594142e4df︡︡{"stdout":"compute4-us\n","done":false}︡{"stdout":"compute4-us\n","done":false}︡{"done":false,"stderr":"Error in lines 6-6\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\n  File \"/projects/sage/sage-6.10/local/lib/python/UserDict.py\", line 23, in __getitem__\n    raise KeyError(key)\nKeyError: 'COMPUTERNAME'\n"}︡{"done":true}
-︠26c159fd-e174-4da6-a5c1-c1fbcb0b9a49s︠
+︠26c159fd-e174-4da6-a5c1-c1fbcb0b9a49︠
 
 
 a={1:[],3:['a']}
@@ -162,18 +162,24 @@ a[2].append('r')
 print b
 print a
 ︡c3c67ee1-32d3-4fa9-82de-160d33aea7d3︡︡{"stdout":"{1: [], 3: ['a']}\n","done":false}︡{"done":false,"stderr":"Error in lines 5-5\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nKeyError: 2\n"}︡{"done":true}
-︠d1c3766e-0b77-4596-97d6-0223f6b63cefs︠
-w=(1,2,3,4,5)
+︠d1c3766e-0b77-4596-97d6-0223f6b63cef︠
+w=(1,2)#,3,4,5)
 
-w[1:]
-︡4d35b66c-df5c-469c-a869-2c5f9fc93dc1︡︡{"stdout":"(2, 3, 4, 5)\n","done":false}︡{"done":true}
-︠2567ae4d-d095-4678-8bc6-cb1fd86b4c13︠
+x=w[1:]
+tuple(x)
+︡d65302f4-c3e0-4193-8cd1-864972724f3c︡︡{"stdout":"(2,)\n","done":false}︡{"done":true}
+︠ad1daf45-d9a4-4be9-a1a2-1485baecea02s︠
 
+def isSublist(_list, _sublist):
+    for i in range(0,len(_list)-len(_sublist)+1):
+        if _list[i:i+len(_sublist)]==_sublist:
+            return True
+    return False
 
-
-
-
-
+k=[1,2,3,4,5,6,7,7]
+isSublist(k,[5])
+︡d8a9af14-2551-48a0-81c5-10aec52d7f0f︡︡{"stdout":"True\n","done":false}︡{"done":true}
+︠879f8ad5-2659-47e6-b060-eb2e9e75ff5c︠}
 
 
 

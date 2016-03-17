@@ -66,30 +66,41 @@ class WeightFunctionSearch(object):
 
     def _checkCycles(self, w_tuple):
         w=w_tuple[1:]
-        inspected={}
-        if w[0:-1] in self._nondecreasing_prev:
-            if w[-1] in self._nondecreasing_prev[w[0:-1]]:
-                self._algForParallelAdd.addLog("Checking cycles for " + str(w))
-                inspected[w]=True
-                find_next_letter(w,w_tuple.list())
+        def isSublist(_list, _sublist):
+            for i in range(0,len(_list)-len(_sublist)+1):
+                if _list[i:i+len(_sublist)]==_sublist:
+                    return True
+            return False
 
         def find_next_letter(_w,witness_seq):
-            w_without_first=_w[1:]
-            for x in self._nondecreasing_prev[w_without_first]:
-                witness_seq+=x
-                w_new=w_without_first+(x,)
-                if w_new in inspected:
-                    raise RuntimeErrorParAdd("There is an infinite loop caused by sequence "+str(witness_seq))
-                else:
-                    inspected[w_new]=True
-                    find_next_letter(w_new,witness_seq)
+            w_without_first=tuple(_w[1:])
+            if w_without_first in self._nondecreasing_prev:
+                for x in self._nondecreasing_prev[w_without_first]:
+                    w_new=w_without_first+(x,)
+                    if self._verbose>=2:
+                        print w_new
+                    if isSublist(witness_seq,list(w_new)):
+                        raise RuntimeErrorParAdd("The sequence "+str(witness_seq+[x])[0:-1]+", ... ,"+str(w_new)[1:-1]+", ...]"+" leads to an infinite loop.")
+                    else:
+                        new_witness_seq=witness_seq+[x]
+                        find_next_letter(w_new,copy(new_witness_seq))
+            else:
+                if self._verbose>=2:
+                    print '--------', witness_seq
+
+        if tuple(w[0:-1]) in self._nondecreasing_prev:
+            if w[-1] in self._nondecreasing_prev[w[0:-1]]:
+                #self._algForParallelAdd.addLog("Checking cycles for " + str(w_tuple))
+                find_next_letter(w,list(w_tuple))
+
 
 
     def _addNondecreasingTuple(self,w):
-        if w[0:-1] in self._nondecreasing:
-            self._nondecreasing[w[0:-1]].append(w[-1])
+        w_without_last=tuple(w[0:-1])
+        if w_without_last in self._nondecreasing:
+            self._nondecreasing[w_without_last].append(w[-1])
         else:
-            self._nondecreasing[w[0:-1]]=[w[-1]]
+            self._nondecreasing[w_without_last]=[w[-1]]
 
     def _findQw_once(self,w_tuple,Qw_prev):
         #find set of possible weight coefficients for input w_tuple

@@ -58,20 +58,27 @@ except Exception, e:
 
 maximumOfInputs=2000000
 compareWith='w'
-note='testovani odhalovani zacykleni'
+general_note='zacykli se?'
 
+rows_to_test=[]
 for row in range(3,worksheet.row_count):
+    if worksheet.cell(row, 1).value==compareWith:
+        rows_to_test.append(row)
+
+for row in rows_to_test:
+    gc = gspread.authorize(credentials)
+    sheet=gc.open("ParallelAddition_results")
+    worksheet=sheet.worksheet('inputs')
     try:
-        if worksheet.cell(row, 1).value==compareWith:
-            name = worksheet.cell(row, 2).value
-            print name
-            minPol =worksheet.cell(row, 6).value.replace('t','x')
-            omegaCC= sage.misc.sage_eval.sage_eval(worksheet.cell(row, 5).value)
-            alphabet = worksheet.cell(row, 3).value
-            inputAlphabet = worksheet.cell(row, 4).value
-            if inputAlphabet=='A+A':
-                inputAlphabet=''
-            base =worksheet.cell(row, 7).value
-            load('ewm.sage')         #run extending window method
+        name = worksheet.cell(row, 2).value
+        print name
+        minPol =worksheet.cell(row, 6).value.replace('t','x')
+        omegaCC= sage.misc.sage_eval.sage_eval(worksheet.cell(row, 5).value)
+        alphabet = worksheet.cell(row, 3).value
+        inputAlphabet = worksheet.cell(row, 4).value
+        if inputAlphabet=='A+A':
+            inputAlphabet=''
+        base =worksheet.cell(row, 7).value
+        load('ewm.sage')         #run extending window method
     except ExceptionParAdd, e:
         print e
