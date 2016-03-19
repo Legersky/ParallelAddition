@@ -168,7 +168,7 @@ w=(1,2)#,3,4,5)
 x=w[1:]
 tuple(x)
 ︡d65302f4-c3e0-4193-8cd1-864972724f3c︡︡{"stdout":"(2,)\n","done":false}︡{"done":true}
-︠ad1daf45-d9a4-4be9-a1a2-1485baecea02s︠
+︠ad1daf45-d9a4-4be9-a1a2-1485baecea02︠
 
 def isSublist(_list, _sublist):
     for i in range(0,len(_list)-len(_sublist)+1):
