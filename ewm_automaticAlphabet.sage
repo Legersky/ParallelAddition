@@ -78,7 +78,7 @@ folder_path='./'
 general_note='#A>=|m(1)|+2'
 
 max_coef=1
-m=0
+m=1
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
