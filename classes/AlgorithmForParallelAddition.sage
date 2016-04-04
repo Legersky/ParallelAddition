@@ -12,7 +12,7 @@ class AlgorithmForParallelAddition(object):
     Class for construction of parallel addition algorithms with the rewriting rule x-beta
     """
 #-----------------------------CONSTRUCTOR------------------------------------------------------------------------------------
-    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0, maxInputs=1000000):
+    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0, maxInputs=Infinity):
         self._name=name
             #name of the numeration system
         self._log=[]
@@ -131,15 +131,15 @@ class AlgorithmForParallelAddition(object):
     def setAlphabet(self,A):
         #Check if A is subset of Ring. Set alphabet A
         self._alphabet=[]
-        maxA=0
+        maxA_abs=0
         for a in A:
             if a in self._ring:
                 self._alphabet.append(a)    #adding to alphabet
-                if abs(self.ring2CC(a))>maxA:
-                    maxA=abs(self.ring2CC(a))
+                if abs(self.ring2CC(a))>maxA_abs:
+                    maxA_abs=abs(self.ring2CC(a))
             else:
                 raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
-        self._maximumOfAlphabet=maxA
+        self._maximumOfAlphabet=maxA_abs
 
     def setInputAlphabet(self,B):
         #If B is empty, A+A is used. Set the input alphabet B. Check if A \subsetneq B \subset A+A.
@@ -197,16 +197,83 @@ class AlgorithmForParallelAddition(object):
                 self._base_is_expanding=False
             if self._smallestRoot_abs> abs_root:
                 self._smallestRoot_abs=abs_root
+        real_conjugates=self._base.minpoly().real_roots()
+        self._realConjugatesGreaterOne=[]
+        for conj in real_conjugates:
+            if conj>1:
+                self._realConjugatesGreaterOne.append(conj)
         if not self._base_is_expanding:
             raise ValueErrorParAdd('Base %s is not expanding' %self._base)
 
+    def addRepresentativesToMinMaxElement(self, _set):
+        res=_set
+        for conj in self._realConjugatesGreaterOne:
+            minMissing=True
+            maxMissing=True
+            while minMissing or maxMissing:
+                setRR={}
+                for a in res:
+                    setRR[self.ring2RR(a,conj)]=a
+                maxA=setRR[max(setRR.keys())]
+                minA=setRR[min(setRR.keys())]
+
+                for class_mod_beta_minus_one in self.divide_into_congruent_classes(res, self._base-1):
+                    if (minA in class_mod_beta_minus_one) and (maxA in class_mod_beta_minus_one):
+                        if len(class_mod_beta_minus_one)==2:
+                            res.append(maxA+1)
+                        else:
+                            minMissing=False
+                            maxMissing=False
+                    elif minA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            res.append(minA+(self._base-1))
+                        else:
+                            minMissing=False
+                    elif maxA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            res.append(maxA-(self._base-1))
+                        else:
+                            maxMissing=False
+        return res
+
+    def addRepresentativesToMinMaxElement_integer(self, _set):
+        res=_set
+        for conj in self._realConjugatesGreaterOne:
+            minMissing=True
+            maxMissing=True
+            while minMissing or maxMissing:
+                setRR={}
+                for a in res:
+                    setRR[self.ring2RR(a,conj)]=a
+                maxA=setRR[max(setRR.keys())]
+                minA=setRR[min(setRR.keys())]
+
+                for class_mod_beta_minus_one in self.divide_into_congruent_classes(res, self._base-1):
+                    if (minA in class_mod_beta_minus_one) and (maxA in class_mod_beta_minus_one):
+                        if len(class_mod_beta_minus_one)==2:
+                            res.append(maxA+1)
+                        else:
+                            minMissing=False
+                            maxMissing=False
+                    elif minA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            res.append(minA-1)
+                        else:
+                            minMissing=False
+                    elif maxA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            res.append(maxA+1)
+                        else:
+                            maxMissing=False
+        return res
+
     def findAlphabet(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
-        return self.addRepresentatives(self.addRepresentatives([0],self._base-1),self._base)
+        return self.addRepresentativesToMinMaxElement(self.addRepresentatives(self.addRepresentatives([0, 1, -1],self._base-1),self._base))
 
     def findAlphabet2(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
-        return self.addSmallestRepresentatives(self.addSmallestRepresentatives([0],self._base-1),self._base)
+        return self.addRepresentativesToMinMaxElement(self.addSmallestRepresentatives(self.addSmallestRepresentatives([0, 1, -1],self._base-1),self._base))
 
     def coerceListIntoZomega(self,_list):
         res=[]
@@ -223,13 +290,13 @@ class AlgorithmForParallelAddition(object):
             repr_base = self.divide_into_congruent_classes(alphabet, self._base)
             repr_base_minus_one = self.divide_into_congruent_classes(alphabet, self._base-1)
             if len(repr_base)>=num_base and len(repr_base_minus_one)>=num_base_minus_one:
-                return alphabet
+                return self.addRepresentativesToMinMaxElement_integer(alphabet)
 
             alphabet=self.coerceListIntoZomega(range(-a,a+1))
             repr_base = self.divide_into_congruent_classes(alphabet, self._base)
             repr_base_minus_one = self.divide_into_congruent_classes(alphabet, self._base-1)
             if len(repr_base)>=num_base and len(repr_base_minus_one)>=num_base_minus_one:
-                return alphabet
+                return self.addRepresentativesToMinMaxElement_integer(alphabet)
         raise RuntimeErrorParAdd('Integer alphabet not found.')
 
 
@@ -377,10 +444,7 @@ class AlgorithmForParallelAddition(object):
 
     def findWeightFunction(self, max_iterations, max_input_length, method_weightCoefSet=None, method_weightFunSearch=None):
         #finds and sets Weight Function
-        self.addLog('Checking alphabet for representatives mod base:')
-        self.check_alphabet_for_representatives_mod_base()
-        self.addLog('Checking alphabet for representatives mod base-1:')
-        self.check_alphabet_for_representatives_mod_base_minus_one()
+        self.checkAlphabet()
 
         self._findWeightCoefSet(max_iterations,method_weightCoefSet)
 
@@ -416,6 +480,57 @@ class AlgorithmForParallelAddition(object):
             raise RuntimeErrorParAdd('Weight function must be computed first to get used weight coefficients.')
 
 #-----------------------------ALPHABET CONTROL-------------------------------------------------------------------------------
+    def checkAlphabet(self):
+        self.addLog('Checking alphabet for representatives mod base:')
+        self.check_alphabet_for_representatives_mod_base()
+        self.addLog('Checking alphabet for representatives mod base-1:')
+        self.check_alphabet_for_representatives_mod_base_minus_one()
+
+        #check if the alphabet is minimal
+        if not self._realConjugatesGreaterOne:
+            if len(self._alphabet)==max(abs(self._base.minpoly()(0)),abs(self._base.minpoly()(1))):
+                self._alphabet_is_minimal=True
+            else:
+                self._alphabet_is_minimal=False
+
+        else:     #check alphabet for base with a real conjugate greater than 1
+            self._alphabet_is_minimal=True
+            self.addLog("The base has real conjugates greater than one: %s" %self._realConjugatesGreaterOne)
+
+            for conj in self._realConjugatesGreaterOne:
+                alphabetRR={}
+                for a in self._alphabet:
+                    alphabetRR[self.ring2RR(a,conj)]=a
+                maxA=alphabetRR[max(alphabetRR.keys())]
+                minA=alphabetRR[min(alphabetRR.keys())]
+
+                for class_mod_beta_minus_one in self.divide_into_congruent_classes(self._alphabet, self._base-1):
+                    if (minA in class_mod_beta_minus_one) and (maxA in class_mod_beta_minus_one):
+                        if len(class_mod_beta_minus_one)==2:
+                            raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the minimal element %s modulo base - 1, different than maximal one, and an element which is congruent to the maximal element %s modulo base, different than minimal one. " %(conj, minA, maxA))
+                        elif len(class_mod_beta_minus_one)>3:
+                            self._alphabet_is_minimal=False
+                    elif minA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the minimal element %s modulo base - 1." %(conj, minA))
+                        elif len(class_mod_beta_minus_one)>2:
+                            self._alphabet_is_minimal=False
+                    elif maxA in class_mod_beta_minus_one:
+                        if len(class_mod_beta_minus_one)==1:
+                            raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the maximal element %s modulo base - 1." %(conj, maxA))
+                        elif len(class_mod_beta_minus_one)>2:
+                            self._alphabet_is_minimal=False
+                    elif len(class_mod_beta_minus_one)>1:
+                        self._alphabet_is_minimal=False
+
+            if len(self._alphabet)==abs(self._base.minpoly()(0)):
+                self._alphabet_is_minimal=True
+
+        if self._alphabet_is_minimal:
+            self.addLog("The alphabet is minimal.")
+        else:
+            self.addLog("The alphabet is not minimal.")
+
     def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
         #check alphabet if there are all representatives of elements of _set mod modulus
         repr_missing_for=[]
@@ -739,6 +854,16 @@ class AlgorithmForParallelAddition(object):
         coef.reverse()
         for a in coef:    #Horner scheme
             res*=self._ratRingGen
+            res+=a
+        return res
+
+    def ring2RR(self, num_from_ring, b):
+        #converts number from Ring to RR with real base b
+        res=0
+        coef=num_from_ring.list()
+        coef.reverse()
+        for a in coef:    #Horner scheme
+            res*=b
             res+=a
         return res
 
@@ -1419,7 +1544,17 @@ class AlgorithmForParallelAddition(object):
                     results+=['A+A']
             else:
                 results+=[self._inputAlphabet]
-            results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly(), self._roots, self._abs_values, self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
+            results+=[len(self._alphabet), self._base.minpoly()(0), self._base.minpoly()(1)]
+            if self._alphabet_is_minimal:
+                results+=['yes']
+            else:
+                results+=['no']
+            results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base), str(SR(self.ring2NumberField(self._base))), self._base.minpoly(), self._roots, self._abs_values]
+            if self._realConjugatesGreaterOne:
+                results+=[self._realConjugatesGreaterOne]
+            else:
+                results+=['-']
+            results+=[self.divide_into_congruent_classes(self._alphabet,self._base) , self._missing_classes_mod_base, self.divide_into_congruent_classes(self._alphabet,self._base-1), self._missing_representatives_mod_base_minus_one]
             if self._base_is_expanding:
                 results+=['yes']
             else:

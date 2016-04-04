@@ -56,14 +56,17 @@ except Exception, e:
 
 
 
-maximumOfInputs=5000000
-compareWith='server'
-general_note='dopocteni misto serveru'
+#maximumOfInputs=5000000
+compareWith='bla'
+general_note='nove vypisy'
 
 rows_to_test=[]
-for row in range(3,worksheet.row_count):
-    if worksheet.cell(row, 1).value==compareWith:
-        rows_to_test.append(row)
+
+first_col=worksheet.col_values(1)
+
+for row in range(3,len(first_col)):
+    if first_col[row]==compareWith:
+        rows_to_test.append(row+1)
 
 for row in rows_to_test:
     gc = gspread.authorize(credentials)

@@ -141,49 +141,17 @@ for x in cartesian_product_iterator(t):
             except ExceptionParAdd, e:
                 print e
 ︡59c25e9c-54bb-499c-aee5-b973edafa642︡
-︠91e27250-1787-462b-a948-338a8845b077︠
-
-
-import platform
-import socket
-import os
-
-print platform.node()
-print socket.gethostname()
-print os.environ["COMPUTERNAME"]
-︡89c9888a-d525-4012-8051-4c594142e4df︡︡{"stdout":"compute4-us\n","done":false}︡{"stdout":"compute4-us\n","done":false}︡{"done":false,"stderr":"Error in lines 6-6\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\n  File \"/projects/sage/sage-6.10/local/lib/python/UserDict.py\", line 23, in __getitem__\n    raise KeyError(key)\nKeyError: 'COMPUTERNAME'\n"}︡{"done":true}
-︠26c159fd-e174-4da6-a5c1-c1fbcb0b9a49︠
-
-
-a={1:[],3:['a']}
-print a
-b=a
-a[1].append('e')
-a[2].append('r')
-print b
-print a
-︡c3c67ee1-32d3-4fa9-82de-160d33aea7d3︡︡{"stdout":"{1: [], 3: ['a']}\n","done":false}︡{"done":false,"stderr":"Error in lines 5-5\nTraceback (most recent call last):\n  File \"/projects/sage/sage-6.10/local/lib/python2.7/site-packages/smc_sagews/sage_server.py\", line 905, in execute\n    exec compile(block+'\\n', '', 'single') in namespace, locals\n  File \"\", line 1, in <module>\nKeyError: 2\n"}︡{"done":true}
-︠d1c3766e-0b77-4596-97d6-0223f6b63cef︠
-w=(1,2)#,3,4,5)
-
-x=w[1:]
-tuple(x)
-︡d65302f4-c3e0-4193-8cd1-864972724f3c︡︡{"stdout":"(2,)\n","done":false}︡{"done":true}
-︠ad1daf45-d9a4-4be9-a1a2-1485baecea02︠
-
-def isSublist(_list, _sublist):
-    for i in range(0,len(_list)-len(_sublist)+1):
-        if _list[i:i+len(_sublist)]==_sublist:
-            return True
-    return False
-
-k=[1,2,3,4,5,6,7,7]
-isSublist(k,[5])
-︡d8a9af14-2551-48a0-81c5-10aec52d7f0f︡︡{"stdout":"True\n","done":false}︡{"done":true}
-︠879f8ad5-2659-47e6-b060-eb2e9e75ff5cs︠}
-max([4,2,3])
-︡fe6c473f-195a-494c-a1e5-8e1721f18866︡︡{"stdout":"4\n"}︡{"done":true}
-︠fbe21915-2a8a-4db6-a636-bf027f34026f︠
+︠2320db3d-d4e0-40e7-82af-d8043596128fs︠
+Infinity>100000000000000000000000000000000000000000
+︡eca954a0-6acb-4176-925e-087d11405bb8︡︡{"stdout":"True\n"}︡{"done":true}
+︠1d977a8b-da4f-4c4a-a382-1a942e2ce6f3s︠
+P.<x>=ZZ[x]
+p=x^6+x^5+3*x^4+x^3+2*x+1
+p.roots(SR,multiplicities=False)
+parent(p.real_roots()[1])
+p(1)
+︡9adf45a0-9ef8-4f29-b2db-54398ce84322︡︡{"stdout":"[]\n"}︡{"stdout":"Real Field with 53 bits of precision\n"}︡{"stdout":"9\n"}︡{"done":true}
+︠8848d7a3-b8eb-4309-87ad-65122288c0b3︠
 
 
 
