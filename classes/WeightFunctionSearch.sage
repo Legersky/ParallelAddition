@@ -80,6 +80,7 @@ class WeightFunctionSearch(object):
                     if self._verbose>=2:
                         print w_new
                     if isSublist(witness_seq,list(w_new)):
+                        self._algForParallelAdd._cycled=True
                         raise RuntimeErrorParAdd("The sequence "+str(witness_seq+[x])[0:-1]+", ... ,"+str(w_new)[1:-1]+", ...]"+" leads to an infinite loop.")
                     else:
                         new_witness_seq=witness_seq+[x]

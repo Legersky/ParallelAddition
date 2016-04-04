@@ -140,6 +140,7 @@ for x in cartesian_product_iterator(t):
                 load('ewm.sage')
             except ExceptionParAdd, e:
                 print e
+︡59c25e9c-54bb-499c-aee5-b973edafa642︡
 ︠91e27250-1787-462b-a948-338a8845b077︠
 
 
@@ -179,7 +180,10 @@ def isSublist(_list, _sublist):
 k=[1,2,3,4,5,6,7,7]
 isSublist(k,[5])
 ︡d8a9af14-2551-48a0-81c5-10aec52d7f0f︡︡{"stdout":"True\n","done":false}︡{"done":true}
-︠879f8ad5-2659-47e6-b060-eb2e9e75ff5c︠}
+︠879f8ad5-2659-47e6-b060-eb2e9e75ff5cs︠}
+max([4,2,3])
+︡fe6c473f-195a-494c-a1e5-8e1721f18866︡︡{"stdout":"4\n"}︡{"done":true}
+︠fbe21915-2a8a-4db6-a636-bf027f34026f︠
 
 
 

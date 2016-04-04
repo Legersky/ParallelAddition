@@ -81,6 +81,7 @@ class AlgorithmForParallelAddition(object):
             #set of potential coefficients
         self._weightCoefSetIncrements=[]
         self._oneLettersCheck=False
+        self._cycled=False
         self._weightFunction = None
             #Weight Function
         self._maxInputs=maxInputs
@@ -1438,7 +1439,10 @@ class AlgorithmForParallelAddition(object):
             if self._weightFunction:
                 results+=['OK' , self._weightFunction.getMaxLength()]
             else:
-                results+=['x' ,'-']
+                if self._cycled:
+                    results+=['cycled','-']
+                else:
+                    results+=['x' ,'-']
             results+=[self._weightFunSearch._numbersOfSavedCombinations]
 
             if self._weightFunction:

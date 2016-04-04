@@ -56,9 +56,9 @@ except Exception, e:
 
 
 
-maximumOfInputs=3000000
-compareWith='long'
-general_note='predtim byly stopnuty kvuli delce'
+maximumOfInputs=5000000
+compareWith='server'
+general_note='dopocteni misto serveru'
 
 rows_to_test=[]
 for row in range(3,worksheet.row_count):

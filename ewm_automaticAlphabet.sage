@@ -75,8 +75,8 @@ classes_loaded=True
 
 folder_path='./'
 #-----------------------------------------------------------------------
-max_coef=3
-m=0
+max_coef=0
+m=-1
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
@@ -91,6 +91,7 @@ for x in cartesian_product_iterator(t):
     elif skip:
         pass
     else:
+        x=[3,3]
         p= str(P(list(x)+[1]))
         print p
         name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'
