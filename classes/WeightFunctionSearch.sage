@@ -163,7 +163,7 @@ class WeightFunctionSearch(object):
                                 to_add=self._minimalCovering(list_of_shortest)[0]
                             num+=1
 
-                    elif self._method in [2,3,4,7,8,11,12,15]:
+                    elif self._method in [2,3,4,7,8,11,12,15,21]:
                         num=2
                         while not to_add:
                             shortest=[]
@@ -187,6 +187,8 @@ class WeightFunctionSearch(object):
                                     chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
                                 elif self._method==15:    #pick element from the shortest lists which is closest to already added (absolute value)
                                     chosen_element=self._pick_element_closest_to_point(shortest, self.point_of_gravity_CC(Qww))
+                                elif self._method==21:    #pick element from the shortest lists which is closest to already added (beta norm)
+                                    chosen_element=self._pick_element_closest_to_point_betaNorm(shortest, self.point_of_gravity_Qomega(Qww))
 
                                 if chosen_element!=None:
                                     to_add=[chosen_element]
@@ -199,9 +201,9 @@ class WeightFunctionSearch(object):
 
                         if self._method==5:        #pick element from all resting lists which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
                             to_add=[self._pick_element_close_PoG_by_lattice(elements, self.point_of_gravity(elements))]
-                        elif self._method==9:        #pick element from all resting list which is the closest (in absolute value) to center of gravity of points in all resting lists
+                        elif self._method==9:        #pick element from all resting lists which is the closest (in absolute value) to center of gravity of points in all resting lists
                             to_add=[self._pick_element_close_PoG_CC(elements)]
-                        elif self._method==17:    #pick element from all resting list which is the closest (in beta norm) to the center of gravity of already added
+                        elif self._method==17:    #pick element from all resting lists which is the closest (in beta norm) to the center of gravity of already added
                             to_add=[self._pick_element_closest_to_point_betaNorm(elements, self.point_of_gravity_Qomega(Qww))]
 
                     elif self._method==6:    	    #find the smallest covering coefficients from all resting lists

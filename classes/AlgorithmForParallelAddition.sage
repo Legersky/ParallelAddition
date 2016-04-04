@@ -202,6 +202,10 @@ class AlgorithmForParallelAddition(object):
         for conj in real_conjugates:
             if conj>1:
                 self._realConjugatesGreaterOne.append(conj)
+
+        if not self._realConjugatesGreaterOne:
+            raise RuntimeErrorParAdd('Uz otestovano')
+
         if not self._base_is_expanding:
             raise ValueErrorParAdd('Base %s is not expanding' %self._base)
 

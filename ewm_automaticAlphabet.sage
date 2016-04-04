@@ -34,9 +34,9 @@
 
 #------------EWM SETTING----------------
 max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
-methods_phase1=[8]        #methods in the list are used. If empty, default method is used.
+methods_phase1=[9]        #methods in the list are used. If empty, default method is used.
 max_input_length = 100    #maximal length of the input of the weight function
-methods_phase2=[15]        #methods in the list are used. If empty, default method is used.
+methods_phase2=[21]        #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
 #------------SANITY CHECK---------------
@@ -75,7 +75,9 @@ classes_loaded=True
 
 folder_path='./'
 #-----------------------------------------------------------------------
-max_coef=3
+general_note='#A>=|m(1)|+2'
+
+max_coef=1
 m=0
 t=[]
 P.<x> = ZZ[]
@@ -84,14 +86,16 @@ for i in range(0,2):
 
 skip=False#True
 for x in cartesian_product_iterator(t):
-    if x[0]==1 and x[1]==0:
+    b=x[1]
+    c=x[0]
+    if c==1 and b==0:
         skip=False
-    if abs(x[0])<=m and abs(x[1])<=m:
+    if abs(b)<=m and abs(c)<=m:
         pass
     elif skip:
         pass
     else:
-        p= str(P(list(x)+[1]))
+        p= str(P([c,b,1]))
         print p
         name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'
         minPol =p
@@ -104,13 +108,14 @@ for x in cartesian_product_iterator(t):
         for i in range(0,2):
             u.append(range(-max_coef_base,max_coef_base+1))
         for y in cartesian_product_iterator(u):
-            base =str(y[0])+'*omega'+'+('+str(y[1])+')'
-            name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'+base
-            maximumOfInputs=1000000
-            try:
-                load('ewm.sage')
-            except ExceptionParAdd, e:
-                print e
+            if y[0]:
+                base =str(y[0])+'*omega'+'+('+str(y[1])+')'
+                name = 'Quadratic_gen_'+str(p)+'_automaticAlphabet_'+base
+                maximumOfInputs=1000000
+                try:
+                    load('ewm.sage')
+                except ExceptionParAdd, e:
+                    print e
 
 
 
