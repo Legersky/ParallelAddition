@@ -151,7 +151,38 @@ p.roots(SR,multiplicities=False)
 parent(p.real_roots()[1])
 p(1)
 ︡9adf45a0-9ef8-4f29-b2db-54398ce84322︡︡{"stdout":"[]\n"}︡{"stdout":"Real Field with 53 bits of precision\n"}︡{"stdout":"9\n"}︡{"done":true}
-︠8848d7a3-b8eb-4309-87ad-65122288c0b3︠
+︠8848d7a3-b8eb-4309-87ad-65122288c0b3s︠
+try:
+    import json
+    import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        from oauth2client.client import SignedJwtAssertionCredentials
+        warnings.resetwarnings()
+    try:
+        json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+    except Exception, e:
+        json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
+    scope = ['https://spreadsheets.google.com/feeds']
+    credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+    gc = gspread.authorize(credentials)
+    sheet=gc.open("ParallelAddition_results")
+    worksheet=sheet.worksheet('abeceda')
+except Exception, e:
+    print "Some problem with google spreadsheet:"
+    print e
+# Select a cell range
+cell_list = worksheet.range('A1:A7')
+
+# Update values
+for cell in cell_list:
+    cell.value = "O_o"
+
+# Send update in batch mode
+worksheet.update_cells(cell_list)
+︡990f5e88-a92a-4d78-94e3-f81ed964886e︡︡{"done":true}
+︠e5366efb-244d-4dbf-98f5-1a55309d8baf︠
 
 
 

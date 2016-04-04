@@ -1544,7 +1544,7 @@ class AlgorithmForParallelAddition(object):
                     results+=['A+A']
             else:
                 results+=[self._inputAlphabet]
-            results+=[len(self._alphabet), self._base.minpoly()(0), self._base.minpoly()(1)]
+            results+=[len(self._alphabet), abs(self._base.minpoly()(0)), abs(self._base.minpoly()(1))]
             if self._alphabet_is_minimal:
                 results+=['yes']
             else:
