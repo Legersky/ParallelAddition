@@ -97,10 +97,10 @@ for x in cartesian_product_iterator(t):
     else:
         p= str(P([c,b,1]))
         print p
-        name_gen = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet>m(0)_'
+        name_gen = 'Quadratic_gen_'+str(p)+'_automaticAlphabet>m(0)_'
         minPol =p
         omegaCC= 1+ 1*I
-        alphabet = 'oneMore'
+        alphabet = 'integer2'
         inputAlphabet = ''
 
         max_coef_base=3
