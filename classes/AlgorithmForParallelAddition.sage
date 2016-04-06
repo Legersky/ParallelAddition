@@ -64,6 +64,9 @@ class AlgorithmForParallelAddition(object):
         elif alphabet=='integer':
             self.setAlphabet(self.findIntegerAlphabet())
                 #automatically find an integer alphabet
+        elif alphabet=='integer2':
+            self.setAlphabet(self.findIntegerAlphabet2())
+                #automatically find an integer alphabet whise size is greater than |m(0)|
         else:
             self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
                 #alphabet
@@ -72,7 +75,7 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
-            if alphabet=='integer':
+            if alphabet=='integer' or alphabet=='integer2':
                 self.setSmallerIntegerInputAlphabet()
             else:
                 self.setInputAlphabet([])
@@ -303,6 +306,13 @@ class AlgorithmForParallelAddition(object):
                 return self.addRepresentativesToMinMaxElement_integer(alphabet)
         raise RuntimeErrorParAdd('Integer alphabet not found.')
 
+    def findIntegerAlphabet2(self):
+        A=self.findIntegerAlphabet()
+        if len(A)==self.number_of_representatives(self._base):
+            A.append(max(A)+1)
+            return A
+        else:
+            raise('abeceda vetsi nez m(0)=> uz testovano')
 
     def addRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)
