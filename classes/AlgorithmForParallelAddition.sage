@@ -73,7 +73,7 @@ class AlgorithmForParallelAddition(object):
         else:
             self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
                 #alphabet
-findAlphabet_oneMore
+
         if inputAlphabet:
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
