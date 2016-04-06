@@ -100,7 +100,7 @@ for x in cartesian_product_iterator(t):
         name_gen = 'Quadratic_gen_'+str(p)+'_automaticIntegerAlphabet>m(0)_'
         minPol =p
         omegaCC= 1+ 1*I
-        alphabet = 'integer2'
+        alphabet = ''
         inputAlphabet = ''
 
         max_coef_base=3

@@ -61,6 +61,9 @@ class AlgorithmForParallelAddition(object):
         if alphabet=='':
             self.setAlphabet(self.findAlphabet2())
                 #automatically find an alphabet
+        if alphabet=='oneMore':
+            self.setAlphabet(self.findAlphabet_oneMore())
+                #automatically find an alphabet
         elif alphabet=='integer':
             self.setAlphabet(self.findIntegerAlphabet())
                 #automatically find an integer alphabet
@@ -70,7 +73,7 @@ class AlgorithmForParallelAddition(object):
         else:
             self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
                 #alphabet
-
+findAlphabet_oneMore
         if inputAlphabet:
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
@@ -282,6 +285,17 @@ class AlgorithmForParallelAddition(object):
         #find an alphabet which contains all representatives modulo beta and beta -1
         return self.addRepresentativesToMinMaxElement(self.addSmallestRepresentatives(self.addSmallestRepresentatives([0, 1, -1],self._base-1),self._base))
 
+    def findAlphabet_oneMore(self):
+        A=self.findAlphabet2()
+        if len(A)==self.number_of_representatives(self._base):
+            dist=[]
+            for a in A:
+                dist.append(a-self._base)
+            A.append(self._findAllSmallest_norm(dist))
+            return A
+        else:
+            raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
+
     def coerceListIntoZomega(self,_list):
         res=[]
         for a in _list:
@@ -312,7 +326,7 @@ class AlgorithmForParallelAddition(object):
             A.append(max(A)+1)
             return A
         else:
-            raise('abeceda vetsi nez m(0)=> uz testovano')
+            raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
 
     def addRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)
@@ -375,8 +389,6 @@ class AlgorithmForParallelAddition(object):
         for repre in representatives[num_contained_repre:]:
             chosen_repre.append(self._findSmallest(repre))
         return chosen_repre
-
-
 
     def getRingGenerator(self):
         #return generator of Ring
