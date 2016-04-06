@@ -58,10 +58,14 @@ class AlgorithmForParallelAddition(object):
         self._inverseBaseCompanionMatrix=self._computeInverseCompanionMatrix(self._base)
             # inversion of companion matrix of base
 
+        #the following diagonalizing matrix is necessary for construction of the "lattice" norm
+        self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
+
+
         if alphabet=='':
             self.setAlphabet(self.findAlphabet2())
                 #automatically find an alphabet
-        if alphabet=='oneMore':
+        elif alphabet=='oneMore':
             self.setAlphabet(self.findAlphabet_oneMore())
                 #automatically find an alphabet
         elif alphabet=='integer':
@@ -93,10 +97,6 @@ class AlgorithmForParallelAddition(object):
         self._maxInputs=maxInputs
             #if number of saved inputs of weight function exceeds self._maxInputs, RuntimeErrorParAdd is raised
 
-
-
-        #the following diagonalizing matrix is necessary for construction of the "lattice" norm
-        self._diagonalizingMatrix=matrix(CC,matrix(QQbar,self._inverseBaseCompanionMatrix).eigenmatrix_right()[1])
 
 
         self.addLog("Inicialization...")
@@ -291,7 +291,7 @@ class AlgorithmForParallelAddition(object):
             dist=[]
             for a in A:
                 dist.append(a-self._base)
-            A.append(self._findAllSmallest_norm(dist))
+            A.append(self._findSmallest_norm(dist))
             return A
         else:
             raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
