@@ -293,6 +293,11 @@ class AlgorithmForParallelAddition(object):
                 dist.append(a-self._base)
             A.append(self._findSmallest_norm(dist))
             return A
+            dist=[]
+            for a in A:
+                dist.append(a+self._base)
+            A.append(self._findSmallest_norm(dist))
+            return A
         else:
             raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
 
@@ -324,6 +329,7 @@ class AlgorithmForParallelAddition(object):
         A=self.findIntegerAlphabet()
         if len(A)==self.number_of_representatives(self._base):
             A.append(max(A)+1)
+            A.append(min(A)-1)
             return A
         else:
             raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
