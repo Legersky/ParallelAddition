@@ -74,6 +74,9 @@ class AlgorithmForParallelAddition(object):
         elif alphabet=='integer2':
             self.setAlphabet(self.findIntegerAlphabet2())
                 #automatically find an integer alphabet whise size is greater than |m(0)|
+        elif alphabet=='integer3':
+            self.setAlphabet(self.findIntegerAlphabet3())
+                #automatically find an integer alphabet whise size is greater than 1.3*|m(0)|
         else:
             self.setAlphabet(sage.misc.sage_eval.sage_eval(alphabet, locals={'omega':self._ringGenerator}))
                 #alphabet
@@ -82,7 +85,7 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
-            if alphabet=='integer' or alphabet=='integer2':
+            if alphabet=='integer' or alphabet=='integer2' or alphabet=='integer3':
                 self.setSmallerIntegerInputAlphabet()
             else:
                 self.setInputAlphabet([])
@@ -209,8 +212,8 @@ class AlgorithmForParallelAddition(object):
             if conj>1:
                 self._realConjugatesGreaterOne.append(conj)
 
-        if not self._realConjugatesGreaterOne:
-            raise RuntimeErrorParAdd('Uz otestovano')
+        #if not self._realConjugatesGreaterOne:
+         #   raise RuntimeErrorParAdd('Uz otestovano')
 
         if not self._base_is_expanding:
             raise ValueErrorParAdd('Base %s is not expanding' %self._base)
@@ -333,6 +336,14 @@ class AlgorithmForParallelAddition(object):
             return A
         else:
             raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
+
+    def findIntegerAlphabet3(self):
+        num_base=self.number_of_representatives(self._base)
+        num_base_minus_one=self.number_of_representatives(self._base-1)
+        a=max([num_base_minus_one, round(1.3*num_base)])
+        a=ceil(a/2)
+        alphabet=self.coerceListIntoZomega(range(-a,a+1))
+        return self.addRepresentativesToMinMaxElement_integer(alphabet)
 
     def addRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)

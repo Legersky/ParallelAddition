@@ -75,9 +75,9 @@ classes_loaded=True
 
 #folder_path='./'
 #-----------------------------------------------------------------------
-general_note='#A>=m(1)+2'
+general_note='#A>=1.3*m(0)'
 
-max_coef=5
+max_coef=3
 m=0
 t=[]
 P.<x> = ZZ[]
@@ -97,10 +97,10 @@ for x in cartesian_product_iterator(t):
     else:
         p= str(P([c,b,1]))
         print p
-        name_gen = 'Quadratic_gen_'+str(p)+'_automaticAlphabet>=m(1)+2_'
+        name_gen = 'Quadratic_gen_'+str(p)+'_automaticAlphabet>=1.3*m(0)_'
         minPol =p
         omegaCC= 1+ 1*I
-        alphabet = ''
+        alphabet = 'integer3'
         inputAlphabet = ''
 
         max_coef_base=3

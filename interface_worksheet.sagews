@@ -182,7 +182,12 @@ for cell in cell_list:
 # Send update in batch mode
 worksheet.update_cells(cell_list)
 ︡990f5e88-a92a-4d78-94e3-f81ed964886e︡︡{"done":true}
-︠e5366efb-244d-4dbf-98f5-1a55309d8baf︠
+︠e5366efb-244d-4dbf-98f5-1a55309d8bafs︠
+
+
+ceil(1.5)
+︡dfdfe696-1112-4a10-b52f-e8dbcadcfcba︡︡{"stdout":"2\n"}︡{"done":true}
+︠31b9f61e-05d7-41fa-80ea-a1380a19f079︠
 
 
 
