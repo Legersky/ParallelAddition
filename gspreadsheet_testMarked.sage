@@ -57,8 +57,8 @@ except Exception, e:
 
 
 #maximumOfInputs=5000000
-compareWith='bla'
-general_note='nove vypisy'
+compareWith='oprava'
+general_note='oprava'
 
 rows_to_test=[]
 

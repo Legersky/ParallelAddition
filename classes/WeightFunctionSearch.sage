@@ -92,7 +92,7 @@ class WeightFunctionSearch(object):
         if tuple(w[0:-1]) in self._nondecreasing_prev:
             if w[-1] in self._nondecreasing_prev[w[0:-1]]:
                 #self._algForParallelAdd.addLog("Checking cycles for " + str(w_tuple))
-                find_next_letter(w,list(w_tuple))
+                find_next_letter(w,list(w))
 
 
 
