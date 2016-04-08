@@ -209,8 +209,8 @@ class AlgorithmForParallelAddition(object):
             if conj>1:
                 self._realConjugatesGreaterOne.append(conj)
 
-       # if not self._realConjugatesGreaterOne:
-         #   raise RuntimeErrorParAdd('Uz otestovano')
+        if not self._realConjugatesGreaterOne:
+            raise RuntimeErrorParAdd('Uz otestovano')
 
         if not self._base_is_expanding:
             raise ValueErrorParAdd('Base %s is not expanding' %self._base)
@@ -283,7 +283,7 @@ class AlgorithmForParallelAddition(object):
 
     def findAlphabet2(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
-        return self.addRepresentativesToMinMaxElement(self.addSmallestRepresentatives(self.addSmallestRepresentatives([0, 1, -1],self._base-1),self._base))
+        return self.addRepresentativesToMinMaxElement(self.addSmallestNormRepresentatives(self.addSmallestNormRepresentatives([0, 1, -1],self._base-1),self._base))
 
     def findAlphabet_oneMore(self):
         A=self.findAlphabet2()
@@ -365,7 +365,7 @@ class AlgorithmForParallelAddition(object):
                 if len(representatives)>=num_classes:
                     return representatives_set
 
-    def addSmallestRepresentatives(self, _set, modulus):
+    def addSmallestNormRepresentatives(self, _set, modulus):
         num_classes=self.number_of_representatives(modulus)
         representatives=self.divide_into_congruent_classes(_set, modulus)
         num_contained_repre=len(representatives)
@@ -393,7 +393,7 @@ class AlgorithmForParallelAddition(object):
                     representatives.append([cand2])
             max_coef+=1
         for repre in representatives[num_contained_repre:]:
-            chosen_repre.append(self._findSmallest(repre))
+            chosen_repre.append(self._findSmallest_norm(repre))
         return chosen_repre
 
     def getRingGenerator(self):
