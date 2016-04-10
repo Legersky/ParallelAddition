@@ -290,19 +290,17 @@ class AlgorithmForParallelAddition(object):
 
     def findAlphabet_oneMore(self):
         A=self.findAlphabet2()
-        if len(A)==self.number_of_representatives(self._base):
-            dist=[]
-            for a in A:
-                dist.append(a-self._base)
-            A.append(self._findSmallest_norm(dist))
-            return A
-            dist=[]
-            for a in A:
-                dist.append(a+self._base)
-            A.append(self._findSmallest_norm(dist))
-            return A
-        else:
-            raise RuntimeErrorParAdd('abeceda vetsi nez m(0)=> uz testovano')
+        dist=[]
+        for a in A:
+            dist.append(a-self._base)
+        A.append(self._findSmallest_norm(dist))
+        return A
+        dist=[]
+        for a in A:
+            dist.append(a+self._base)
+        A.append(self._findSmallest_norm(dist))
+        return A
+
 
     def coerceListIntoZomega(self,_list):
         res=[]
@@ -537,7 +535,10 @@ class AlgorithmForParallelAddition(object):
                 self._alphabet_is_minimal=False
 
         else:     #check alphabet for base with a real conjugate greater than 1
-            self._alphabet_is_minimal=True
+            if len(self._alphabet)==max(abs(self._base.minpoly()(0)),abs(self._base.minpoly()(1))+2):
+                self._alphabet_is_minimal=True
+            else:
+                self._alphabet_is_minimal=False
             self.addLog("The base has real conjugates greater than one: %s" %self._realConjugatesGreaterOne)
 
             for conj in self._realConjugatesGreaterOne:
@@ -551,23 +552,12 @@ class AlgorithmForParallelAddition(object):
                     if (minA in class_mod_beta_minus_one) and (maxA in class_mod_beta_minus_one):
                         if len(class_mod_beta_minus_one)==2:
                             raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the minimal element %s modulo base - 1, different than maximal one, and an element which is congruent to the maximal element %s modulo base, different than minimal one. " %(conj, minA, maxA))
-                        elif len(class_mod_beta_minus_one)>3:
-                            self._alphabet_is_minimal=False
                     elif minA in class_mod_beta_minus_one:
                         if len(class_mod_beta_minus_one)==1:
                             raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the minimal element %s modulo base - 1." %(conj, minA))
-                        elif len(class_mod_beta_minus_one)>2:
-                            self._alphabet_is_minimal=False
                     elif maxA in class_mod_beta_minus_one:
                         if len(class_mod_beta_minus_one)==1:
                             raise ValueErrorParAdd("There is a real conjugate of base greater than one %s, therefore alphabet must contain an element which is congruent to the maximal element %s modulo base - 1." %(conj, maxA))
-                        elif len(class_mod_beta_minus_one)>2:
-                            self._alphabet_is_minimal=False
-                    elif len(class_mod_beta_minus_one)>1:
-                        self._alphabet_is_minimal=False
-
-            if len(self._alphabet)==abs(self._base.minpoly()(0)):
-                self._alphabet_is_minimal=True
 
         if self._alphabet_is_minimal:
             self.addLog("The alphabet is minimal.")
@@ -677,7 +667,6 @@ class AlgorithmForParallelAddition(object):
                 c=self.naturalNorm(b-a)
                 if c>bound:
                     bound=c
-        print self._smallestRoot_abs
         return bound/(self._smallestRoot_abs-1)
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
@@ -1652,6 +1641,7 @@ class AlgorithmForParallelAddition(object):
                 Qs_lengths.append(len(Q))
                 same_method.append([method])
 
+        import time
         results=[time.strftime("%Y-%m-%d %H:%M"), self._name,  self._alphabet]
         if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
                 results+=['A+A']

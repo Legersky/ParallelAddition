@@ -25,6 +25,7 @@ try:
 except:
     note=''
 
+methods_phase1_original=copy(methods_phase1)
 if len(methods_phase1)>1:
     print 'Comparing different methods for Phase 1...'
     sys.stdout.flush()
@@ -160,3 +161,5 @@ for method1 in methods_phase1:
             if saveUnsolved and not alg_update and not unsolved_saved:
                 alg.saveUnsolvedInputsToCsv(output_folder+ '/'+filename)
             print '--------------------------end of '+ filename +'---------------------------------------------'
+
+methods_phase1=copy(methods_phase1_original)
