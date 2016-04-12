@@ -47,7 +47,7 @@ try:
     credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
     gc = gspread.authorize(credentials)
     sheet=gc.open("ParallelAddition_results")
-    ws_name='inputs'
+    ws_name=  'inputs'#'successful'
     worksheet=sheet.worksheet(ws_name)
     methods_phase1=sage.misc.sage_eval.sage_eval(worksheet.cell(1, 3).value)       #methods in the list are used. If empty, default method is used.
     methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
@@ -58,8 +58,8 @@ except Exception, e:
 
 
 #maximumOfInputs=5000000
-compareWith='Milena'
-general_note='porovnavani'
+compareWith='ble'
+general_note='porovnavani 4'
 
 rows_to_test=[]
 
@@ -86,7 +86,7 @@ for row in rows_to_test:
         load('ewm.sage')         #run extending window method
         #alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
         #print 'Same weight coefficients sets are found by these group(s) of methods:'
-        #print alg_test.compareMethodsPhase1(methods_phase1)
+        #print alg_test.compareMethodsPhase1(methods_phase1, 'success')
 
     except ExceptionParAdd, e:
         print e

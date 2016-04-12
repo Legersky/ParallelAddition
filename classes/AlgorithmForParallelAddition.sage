@@ -149,6 +149,8 @@ class AlgorithmForParallelAddition(object):
             else:
                 raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
         self._maximumOfAlphabet=maxA_abs
+        if self._minPolynomial.degree()==3 and len(self._alphabet)>50:
+            raise RuntimeErrorParAdd("Cubic base, alphabet has more than 50 elements")
 
     def setInputAlphabet(self,B):
         #If B is empty, A+A is used. Set the input alphabet B. Check if A \subsetneq B \subset A+A.
@@ -563,6 +565,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog("The alphabet is minimal.")
         else:
             self.addLog("The alphabet is not minimal.")
+
 
     def check_alphabet_for_representatives_from_set(self,_set, modulus, log=True):
         #check alphabet if there are all representatives of elements of _set mod modulus
@@ -1623,7 +1626,7 @@ class AlgorithmForParallelAddition(object):
         self.saveToGoogleSpreadsheet('results', results)
 
 
-    def compareMethodsPhase1(self, methods, max_iterations=1000):
+    def compareMethodsPhase1(self, methods,note, max_iterations=1000):
         self.addLog('Comparing different methods in Phase 1:')
         Qs=[self._findWeightCoefSet(max_iterations,methods[0])]
         Qs_lengths=[len(Qs[0])]
@@ -1650,6 +1653,7 @@ class AlgorithmForParallelAddition(object):
         results+=[ SR(self._ratRingGen) ,self.getMinPolynomial(), str(self._base)+ ' = ' + str(SR(self.ring2NumberField(self._base))), self._base.minpoly()]
 
         results+=[same_method, Qs_lengths, Qs]
+        results.append(note)
 
         self.saveToGoogleSpreadsheet('comparePhase1', results)
 

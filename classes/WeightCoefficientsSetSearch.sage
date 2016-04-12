@@ -163,11 +163,11 @@ class WeightCoefficientsSetSearch(object):
             tested_set=Set(self._algForParallelAdd.sumOfSets(B,self._Qk1)).difference(Set(self._algForParallelAdd.sumOfSets(B,self._Qk2)))
                 #it is enough to check (B+Qk1)-(B+Qk2)
             Qk=self._getQk(tested_set.list())
-            if self._algForParallelAdd._minPolynomial.degree()==3 and len(Qk)>500:
-                raise RuntimeErrorParAdd("Weight coefficient has more than 500 elements")
             if len(Qk)==len(self._Qk1):    #no increment
                 return self._Qk1
             else:
+                if self._algForParallelAdd._minPolynomial.degree()==3 and len(Qk)>100:
+                    raise RuntimeErrorParAdd("Cubic base, Weight coefficient set has more than 100 elements")
                 self._Qk2=copy(self._Qk1)
                 self._Qk1=copy(Qk)
             k+=1

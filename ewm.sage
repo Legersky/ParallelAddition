@@ -30,7 +30,7 @@ if len(methods_phase1)>1:
     print 'Comparing different methods for Phase 1...'
     sys.stdout.flush()
 
-    same_methods=alg_test.compareMethodsPhase1(methods_phase1)
+    same_methods=alg_test.compareMethodsPhase1(methods_phase1,note)
     print 'Same weight coefficients sets are found by these group(s) of methods:'
     print same_methods
     note+='Same weight coefficients sets are found by these group(s) of methods:' + str(same_methods)
