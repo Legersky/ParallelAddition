@@ -26,7 +26,7 @@ class WeightFunctionSearch(object):
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         if self._method==None:
-            self._method=4     #set the default method
+            self._method=9     #set the default method
         self._k=0
         self._numbersOfSavedCombinations=[]
 
@@ -163,7 +163,7 @@ class WeightFunctionSearch(object):
                                 to_add=self._minimalCovering(list_of_shortest)[0]
                             num+=1
 
-                    elif self._method in [2,3,4,7,8,11,12,15,21]:
+                    elif self._method in [2,3,4,7,8,11,22,12,23,15,21]:
                         num=2
                         while not to_add:
                             shortest=[]
@@ -181,10 +181,15 @@ class WeightFunctionSearch(object):
                                     chosen_element=self._pick_element_close_PoG(shortest,self.point_of_gravity(shortest))
                                 elif self._method==8:    #pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
                                     chosen_element=self._pick_element_close_PoG_CC(shortest)
-                                elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)
+                                elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)   PROBLEM - implementation dependent
                                     chosen_element=self._algForParallelAdd._findSmallest(shortest)
+                                elif self._method==22:    #pick element from the shortest lists which is the smallest (in absolute value)   
+                                    chosen_element=self._pick_element(self._algForParallelAdd._findAllSmallest(shortest))
                                 elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
+                                #PROBLEM - implementation dependent
                                     chosen_element=self._algForParallelAdd._findSmallest_norm(shortest)
+                                elif self._method==23:    #pick element from the shortest lists which is the smallest (beta-norm)
+                                    chosen_element=self._pick_element(self._algForParallelAdd._findAllSmallest_norm(shortest))
                                 elif self._method==15:    #pick element from the shortest lists which is closest to already added (absolute value)
                                     chosen_element=self._pick_element_closest_to_point(shortest, self.point_of_gravity_CC(Qww))
                                 elif self._method==21:    #pick element from the shortest lists which is closest to already added (beta norm)
@@ -237,7 +242,7 @@ class WeightFunctionSearch(object):
                             elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
                                 to_add=[self._pick_element_closest_to_point_betaNorm(q_with_max_occur, self.point_of_gravity_Qomega(Qww))]
 
-                    elif self._method in [18,19,20]:        #according to alphabet
+                    elif self._method in [18,19,20]:        #according to alphabet PROBLEM - implementation dependent
                         elements=[]
                         for covered in C_covered_by:
                             elements+=C_covered_by[covered]
