@@ -58,8 +58,8 @@ except Exception, e:
 
 
 #maximumOfInputs=5000000
-compareWith='ble'
-general_note='porovnavani 4'
+compareWith='test'
+general_note='dopocteni chybejicich'
 
 rows_to_test=[]
 
