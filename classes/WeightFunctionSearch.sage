@@ -26,7 +26,7 @@ class WeightFunctionSearch(object):
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         if self._method==None:
-            self._method=9     #set the default method
+            self._method=15     #set the default method
         self._k=0
         self._numbersOfSavedCombinations=[]
 
@@ -183,7 +183,7 @@ class WeightFunctionSearch(object):
                                     chosen_element=self._pick_element_close_PoG_CC(shortest)
                                 elif self._method==11:    #pick element from the shortest lists which is the smallest (in absolute value)   PROBLEM - implementation dependent
                                     chosen_element=self._algForParallelAdd._findSmallest(shortest)
-                                elif self._method==22:    #pick element from the shortest lists which is the smallest (in absolute value)   
+                                elif self._method==22:    #pick element from the shortest lists which is the smallest (in absolute value)
                                     chosen_element=self._pick_element(self._algForParallelAdd._findAllSmallest(shortest))
                                 elif self._method==12:    #pick element from the shortest lists which is the smallest (beta-norm)
                                 #PROBLEM - implementation dependent

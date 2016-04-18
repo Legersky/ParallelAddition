@@ -84,9 +84,9 @@ P.<x> = ZZ[]
 for i in range(0,3):
     t.append(range(-max_coef,max_coef+1))
 
-skip=False#True
+skip=True
 for x in cartesian_product_iterator(t):
-    if x[0]==1 and x[1]==0:
+    if x[0]==-2 and x[1]==-2 and x[2]==0:
         skip=False
     if abs(x[0])<=m and abs(x[1])<=m and abs(x[2])<=m:
         pass
