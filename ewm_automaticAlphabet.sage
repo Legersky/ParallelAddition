@@ -36,7 +36,7 @@
 max_iterations = 20      #maximum of iterations in searching for the weight coefficient set
 methods_phase1=[9]        #methods in the list are used. If empty, default method is used.
 max_input_length = 100    #maximal length of the input of the weight function
-methods_phase2=[21]        #methods in the list are used. If empty, default method is used.
+methods_phase2=[22]        #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
 #------------SANITY CHECK---------------
@@ -75,32 +75,32 @@ classes_loaded=True
 
 #folder_path='./'
 #-----------------------------------------------------------------------
-general_note='#A>=1.3*m(0)'
+general_note='#A>=m(1)+2'
 
-max_coef=3
-m=0
+max_coef=5
+m=3
 t=[]
 P.<x> = ZZ[]
 for i in range(0,2):
     t.append(range(-max_coef,max_coef+1))
 
-skip=False#True
+skip=True
 for x in cartesian_product_iterator(t):
     b=x[1]
     c=x[0]
-    if c==1 and b==0:
+    if c==-4 and b==-5:
         skip=False
     if abs(b)<=m and abs(c)<=m:
         pass
     elif skip:
         pass
-    else:
+    elif b^2-4*c>0:
         p= str(P([c,b,1]))
         print p
-        name_gen = 'Quadratic_gen_'+str(p)+'_automaticAlphabet>=1.3*m(0)_'
+        name_gen = 'Quadratic_gen_'+str(p)+'_automaticAlphabet>=m(1)+2_'
         minPol =p
         omegaCC= 1+ 1*I
-        alphabet = 'integer3'
+        alphabet = ''
         inputAlphabet = ''
 
         max_coef_base=3

@@ -59,7 +59,7 @@ except Exception, e:
 
 #maximumOfInputs=5000000
 compareWith='test'
-general_note='dopocteni chybejicich'
+general_note='tabulka'
 
 rows_to_test=[]
 
@@ -83,10 +83,10 @@ for row in rows_to_test:
         if inputAlphabet=='A+A':
             inputAlphabet=''
         base =worksheet.cell(row, 7).value
-        load('ewm.sage')         #run extending window method
-        #alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
-        #print 'Same weight coefficients sets are found by these group(s) of methods:'
-        #print alg_test.compareMethodsPhase1(methods_phase1, 'success')
+        #load('ewm.sage')         #run extending window method
+        alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
+        print 'Same weight coefficients sets are found by these group(s) of methods:'
+        print alg_test.compareMethodsPhase1(methods_phase1, 'tabulka')
 
     except ExceptionParAdd, e:
         print e

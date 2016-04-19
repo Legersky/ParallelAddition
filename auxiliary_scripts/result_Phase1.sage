@@ -76,9 +76,9 @@ names_cmp1=[]
 methods_cmp1=[]
 lens_cmp1=[]
 
-names_cmp1=['Eisenstein\\_1--block\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+3+5\\_complex2 ', 'Penney\\_1--block\\_integer', 'Eisenstein\\_2--block\\_integer', 'Penney\\_2--block\\_integer', 'Eisenstein\\_1--block\\_integer', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Penney\\_1--block\\_complex', 'Eisenstein\\_2--block\\_complex', 'Quadratic+1+0--21\\_integer\\_bigger', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+0--17\\_integer\\_bigger', 'Quadratic+1+0--17\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+0--5\\_integer\\_s', 'Quadratic+1+9+19\\_complex', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0+7\\_integer\\_bigger', 'Quadratic+1+0+7\\_integer', 'Quadratic+1+0+11\\_integer\\_bigger', 'Quadratic+1+0+11\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+2+3\\_complex\\_bigger', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+0--5\\_integer\\_s', 'Quadratic+1+9+19\\_complex']
-methods_cmp1=[[[6, 8, 9, 10, 11]], [[6], [8, 11], [9, 10]], [[6], [8, 11], [9, 10]], [[6], [8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6], [8, 11], [9, 10]], [[6], [8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 11], [9, 10]], [[6, 8], [9, 10, 11]], [[6, 8, 10, 11], [9]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]]]
-lens_cmp1=[[19], [19, 11, 17], [39, 31, 34], [97, 27], [26], [27], [113, 53, 52], [19, 17], [17], [45], [17], [9], [9], [9], [9], [9], [9], [11], [9], [9], [9], [9], [9], [9], [27, 26], [20, 19], [27, 26], [9], [9], [11]]
+#names_cmp1=['Eisenstein\\_1--block\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+3+5\\_complex2 ', 'Penney\\_1--block\\_integer', 'Eisenstein\\_2--block\\_integer', 'Penney\\_2--block\\_integer', 'Eisenstein\\_1--block\\_integer', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Penney\\_1--block\\_complex', 'Eisenstein\\_2--block\\_complex', 'Quadratic+1+0--21\\_integer\\_bigger', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+0--17\\_integer\\_bigger', 'Quadratic+1+0--17\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+0--5\\_integer\\_s', 'Quadratic+1+9+19\\_complex', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0+7\\_integer\\_bigger', 'Quadratic+1+0+7\\_integer', 'Quadratic+1+0+11\\_integer\\_bigger', 'Quadratic+1+0+11\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+2+3\\_complex\\_bigger', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+0--5\\_integer\\_s', 'Quadratic+1+9+19\\_complex']
+#methods_cmp1=[[[6, 8, 9, 10, 11]], [[6], [8, 11], [9, 10]], [[6], [8, 11], [9, 10]], [[6], [8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6], [8, 11], [9, 10]], [[6], [8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 11], [9, 10]], [[6, 8], [9, 10, 11]], [[6, 8, 10, 11], [9]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]], [[6, 8, 9, 10, 11]]]
+#lens_cmp1=[[19], [19, 11, 17], [39, 31, 34], [97, 27], [26], [27], [113, 53, 52], [19, 17], [17], [45], [17], [9], [9], [9], [9], [9], [9], [11], [9], [9], [9], [9], [9], [9], [27, 26], [20, 19], [27, 26], [9], [9], [11]]
 
 
 
@@ -141,7 +141,7 @@ for ind, name in enumerate(data['Name']):
 
 differentPhase1={}
 names_sorted=[]
-methods=[6,8,9,10,11]
+methods=[4,6,8,9,10,11]
 with open('comparePhase1.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -195,7 +195,7 @@ with open('comparePhase1.tex', 'w') as fp:
 #print differentPhase1
 
 
-methods_phase2=[9,11,12,15,18]#
+methods_phase2=[9,15,22,23]
 with open('comparePhase2.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -301,7 +301,78 @@ with open('comparePhase2_time.tex', 'w') as fp:
     sys.stdout = stdout
 
 
+methods=[9]
+methods_phase2=[15]
+with open('compare_poster.tex', 'w') as fp:
+    stdout = sys.stdout
+    sys.stdout = fp
+
+    print '\\begin{tabular}{l|c c c c|ccc|ccc',
+    for i in range(0,len(methods)+len(methods_phase2)):
+        print 'c ',
+    print '}'
+
+    title_tex=''
+    methods_tex=' '
+    for col_title in col_titles_phase1:
+        title_tex+= '\\multirow{2}{*}{'+col_titles_table[col_title]+ '} & '
+        methods_tex+= ' & '
+    title_tex+= '\\multicolumn{5}{c}{$\\#\\Q$} \\\\'
+    print title_tex
+
+    for m in methods:
+        methods_tex+= str(m)+ ' & '
+    print methods_tex[:-2]+'\\\\ \\hline'
+    rows=[]
+    name_prev=''
+    for ind,name in enumerate(data_tex['Name']):
+        if name!=name_prev:
+            rows.append(ind)
+            name_prev=name
+            names_sorted.append(name)
+
+    for row in rows[1:]:
+        row_tex=''
+        for col_title in col_titles_phase1:
+            row_tex+= str(data_tex[col_title][row])+ ' & '
+        pos=names_cmp1.index(data_tex['Name'][row])
+        name=data_tex['Name'][row]
+        lengths={}
+        for ind, m_group in enumerate(methods_cmp1[pos]):
+            for m in m_group:
+                lengths[m]=lens_cmp1[pos][ind]
+            if names_cmp1[pos] in differentPhase1:
+                differentPhase1[names_cmp1[pos]].append(lens_cmp1[pos][ind])
+            else:
+                differentPhase1[names_cmp1[pos]]=[lens_cmp1[pos][ind]]
+        for m in methods:
+            if m in lengths:
+                row_tex+= str(lengths[m])+ ' & '
+            else:
+                row_tex+= '- & '
+
+        for m in methods_phase2:
+            method_res=''
+            for r,name_data_tex in enumerate(data_tex['Name']):
+                #sys.stderr.write(name+'  '+name_data_tex+'\n')
+                #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
+                if name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ and int(data['Phase 2 - method No.'][r])==m:
+                    #sys.stderr.write(str(r))
+                    method_res+=data_tex['One letter inputs (problematic letters)'][r]+ ' & '
+                    if method_res=='\\xmark & ':
+                        method_res+='- & - & '
+                    else:
+                        method_res+=data_tex['Phase 2'][r]+ ' & '
+                        method_res+=data_tex['Length of maximal input of weight function'][r]+ ' & '
+            if not method_res:
+                method_res+='-& '
+            row_tex+=method_res
+
+        print row_tex[0:-2]+'\\\\'
+
+    print '\\end{tabular}'
+    sys.stdout = stdout
 
 
 
-                    #sys.stderr.write(_name)
+
