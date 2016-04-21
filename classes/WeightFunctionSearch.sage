@@ -442,7 +442,6 @@ class WeightFunctionSearch(object):
             return None
 
     def _pick_element_closest_to_point_betaNorm(self,elements, point):
-        #pick the element from elements which is closest in absolute to the center of gravity in CC
         if elements:
             min_norm=[self._algForParallelAdd._ring.coerce(elements[0])]
             for elem in elements[1:]:

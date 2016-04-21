@@ -15,30 +15,31 @@ try:
     gc = gspread.authorize(credentials)
     sheet=gc.open("ParallelAddition_results")
     ws_vybrane=sheet.worksheet('vybrane')
-    ws_results=sheet.worksheet('results_zpracovane')
+    ws_results=sheet.worksheet('results_vybrane')
 except Exception, e:
     print "Some problem with google spreadsheet:"
     print e
 
 chosen_inputs=[]
-chosen_inputs=['Quadratic_x^2 + x + 2_automaticAlphabet', 'x^2 + 2', 'Eisenstein_1-block_complex', 'Quadratic_gen_x^2 - 3*x + 1_automaticAlphabet_-3*omega+(-3)', 'Quadratic_x^2 + x + 4_automaticAlphabet ', 'Quadratic_gen_x^2 - x + 3_automaticAlphabet_-2*omega+(-2)', 'Quadratic_gen_x^2 - x + 3_automaticIntegerAlphabet_-1*omega+(1)', 'Quadratic_gen_x^2 + x + 2_automaticAlphabet_1*omega+(0)', 'x^2 - x + 2_automaticAlphabet', 'Quadratic_gen_x^2 + x + 1_automaticAlphabet_2*omega+(0)', 'Quadratic_gen_x^2 + 3_automaticIntegerAlphabet_-1*omega+(0)', 'Quadratic_gen_x^2 - x + 1_automaticIntegerAlphabet_-3*omega+(2)', 'Quadratic_x^2 + 2_automaticIntegerAlphabet', 'Quadratic_gen_x^2 - 2*x + 3_automaticAlphabet_-1*omega+(-3)', 'Quadratic+1+2+3_complex_bigger', 'Quadratic_gen_x^2 + 2*x + 2_automaticAlphabet_1*omega+(0)', 'Quadratic_gen_x^2 + 1_automaticAlphabet_-3*omega+(0)', 'Quadratic_gen_x^2 - 3*x + 1_automaticAlphabet_-2*omega+(-2)', 'Quadratic_gen_x^2 - 3*x + 1_automaticAlphabet_3*omega+(-3)', 'Quadratic_gen_x^2 + 3*x - 1_automaticAlphabet_1*omega+(-3)', 'Quadratic_gen_x^2 + 3*x - 2_automaticAlphabet_1*omega+(-3)', 'Quadratic_gen_x^2 - x - 3_automaticAlphabet_-2*omega+(2)', 'Quadratic_x^2 - 3*x + 4_automaticAlphabet']
+chosen_inputs=['Eisenstein_1-block_complex', 'Penney_1-block_complex', 'Quadratic+1+0-21_integer', 'Quadratic+1+2+3_complex', 'Quadratic+1+3+5_complex1', 'Quadratic+1+0-17_integer_bigger', 'Quadratic+1+0-17_integer']
 
 if not chosen_inputs:
     chosen_inputs=ws_vybrane.col_values(2)[1:]
     print chosen_inputs
 
 chosen_inputs_category=[]
-chosen_inputs_category=[None, None, None, None, None, None, 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', None, None, None, None, None]
+chosen_inputs_category=['t', 't', 't', 't', 't', 't', 't']
 if not chosen_inputs_category:
     chosen_inputs_category=ws_vybrane.col_values(1)[1:]
     print chosen_inputs_category
 
-col_titles=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Numbers of saved combinations', 'Elapsed time']# ,'Sizes of intermediate weight coefficients sets',, , ,'Phase 1', 'Alphabet', 'Input alphabet',,'Phase 1 - method No.',
+col_titles=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Numbers of saved combinations', 'Elapsed time','Sizes of intermediate weight coefficients sets','Phase 1', 'Alphabet', 'Input alphabet','Phase 1 - method No.', 'Error', 'Base (explicit)','Alphabet dividied into congruence classes mod base -1', 'Alphabet dividied into congruence classes mod base']#
 
-col_titles_tab=['Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?',   'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2', 'Length of maximal input of weight function']#'Name',,,'Phase 1', 'Alphabet', 'Input alphabet','Numbers of saved combinations','Phase 1 - method No.','Phase 2 - method No.'
+col_titles_tab=['Ring generator', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?',   'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2', 'Length of maximal input of weight function']#'Name',,,'Phase 1', 'Alphabet', 'Input alphabet','Numbers of saved combinations','Phase 1 - method No.','Phase 2 - method No.','Minimal polynomial of generator omega'
 
 columns={}
-columns={'Elapsed time': 33, 'Real conjugates of base greater than 1': 16, 'Is alphabet minimal?': 8, '#A': 5, 'Size of weight coefficients set': 24, 'Minimal polynomial of generator omega': 10, 'Phase 2': 29, 'Numbers of saved combinations': 31, 'Base': 11, 'Length of maximal input of weight function': 30, 'Phase 2 - method No.': 26, 'Ring generator': 9, 'Minimal polynomial of base': 13, 'One letter inputs (problematic letters)': 27, 'Name': 2}
+columns={'Elapsed time': 33, 'Alphabet': 3, 'Input alphabet': 4, 'Length of maximal input of weight function': 30, 'Ring generator': 9, 'Name': 2, 'Alphabet dividied into congruence classes mod base': 17, 'Size of weight coefficients set': 24, 'Numbers of saved combinations': 31, 'Base': 11, 'Alphabet dividied into congruence classes mod base -1': 19, 'One letter inputs (problematic letters)': 27, 'Real conjugates of base greater than 1': 16, 'Minimal polynomial of generator omega': 10, 'Error': 34, 'Sizes of intermediate weight coefficients sets': 25, 'Minimal polynomial of base': 13, '#A': 5, 'Base (explicit)': 12, 'Phase 2': 29, 'Phase 1 - method No.': 22, 'Phase 1': 23, 'Phase 2 - method No.': 26, 'Is alphabet minimal?': 8}
+
 
 if not columns:
     col_titles_ws=ws_results.row_values(1)
@@ -68,24 +69,25 @@ col_titles_table={'Real conjugates of base greater than 1':'conj.',
 
 data={}
 
-load('data_both.sage')
+#data=load('cele')
+
 
 if not data:
-    for col_title in col_titles:
-        data[col_title]=ws_results.col_values(columns[col_title])
+    try:
+        for col_title in col_titles:
+            data[col_title]=ws_results.col_values(columns[col_title])
+    except e:
+        print 'problem!!!!!!!!'
+        print e
+        save(data,'cele')
 
-    with open('data_both.sage', 'w') as fp:
-        stdout = sys.stdout
-        sys.stdout = fp
-        print data
-        sys.stdout = stdout
+print data.keys()
 
 
 var('omega')
 var('t')
 
 def getVal(_key,ind):
-    data[_key][ind]
     if _key in ['Is alphabet minimal?', 'Is alphabet minimal?']:
         return data[_key][ind]
     #elif _key in ['Minimal polynomial of base','Minimal polynomial of generator omega']:
@@ -118,21 +120,17 @@ def getVal(_key,ind):
     #elif _key=='Base':
      #   return '$'+data[_key][ind].replace('omega','\omega')+'$'
     else:
-        return '$'+latex(sage.misc.sage_eval.sage_eval(data[_key][ind],locals={'omega':omega, 't':t, 'x':x}))+'$'
-
-data_tex=deepcopy(data)
-for ind, name in enumerate(data['Name']):
-    if ind:
-        for col_title in col_titles:
-            data_tex[col_title][ind]=getVal(col_title,ind)
-
+        try:
+            return '$'+latex(sage.misc.sage_eval.sage_eval(data[_key][ind],locals={'omega':omega, 't':t, 'x':x}))+'$'
+        except:
+            return data[_key][ind]
 
 rows=[]
-category='integer'
+category='t'
 for ind,_input in enumerate(chosen_inputs_category):
     if _input==category:
         for r,_name in enumerate(data['Name']):
-            if _name==chosen_inputs[ind]:
+            if _name==chosen_inputs[ind] and data['Phase 2 - method No.'][r] in ['15','21']:
                 rows.append(r)
 
 _alphabet=['A','B','C','D','E', 'F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V', 'W', 'X','Y', 'Z']
@@ -150,13 +148,53 @@ with open(filename+".tex", 'w') as fp:
     for row in rows:
         code=next(ex_code)
         row_tex='\\ref{ex:'+category+code[0]+code[1]+'} & '
+        row_tex=''
         for col in col_titles_tab:
-            row_tex+=data_tex[col][row]+' & '
+            row_tex+=getVal(col,row)+' & '
         rows_tex.append(row_tex[0:-2]+'\\\\')
 
+        print '\\begin{exmp}'
+        print "\\label{ex:"+category+code[0]+code[1]+'}\n'
 
-    print '\\begin{tabular}{l|c c|c c c| c c| c| c c c }'
+        print 'Parameters:'
+        print '\\begin{tabular}{cc}'
+        print '$\\omega=', getVal('Ring generator',row)[1:], ' & ', '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row)[1:],'\\\\'
+        print "$\\beta=" +getVal('Base',row)[1:-1]+'='+getVal('Base (explicit)',row)[1:]+' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row)[1:]+'\\\\'
+        print 'Real conjugate greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row)
+        print '\\end{tabular}'
+        print '\\begin{itemize}'
+        print "    \\item Minimal polynomial of $\\omega$: "+ getVal('Minimal polynomial of generator omega',row)
+        print "    \\item Base $\\beta=" +getVal('Base',row)[1:]
+        print '    \\item Real conjugate greater than 1: ', getVal('Real conjugates of base greater than 1',row)
+        print "    \\item Minimal polynomial of base: " + getVal('Minimal polynomial of base',row)
+        print "    \\item Alphabet $\\mathcal{A} ="  + getVal('Alphabet',row)[1:]
+        print "    \\item Input alphabet $\\mathcal{B} =" + getVal('Input alphabet',row)[1:]
+        print "    \\item Alphabet divided into congruence classes modulo $\\beta$: ", getVal('Alphabet dividied into congruence classes mod base',row)
+        print "    \\item Alphabet divided into congruence classes modulo $\\beta-1$: ", getVal('Alphabet dividied into congruence classes mod base -1',row)
+        print '\\end{itemize}\n'
+
+        print 'The result of the extending window method is:'
+        print '\\begin{enumerate}'
+        if data['Phase 1'][row]=='OK':
+            print '    \item Phase 1 was successful using method ',getVal('Phase 1 - method No.',row),'.'
+            print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + getVal('Size of weight coefficients set',row)+ '.\n'
+            if data['One letter inputs (problematic letters)'][row]=='OK':
+                print '    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
+                if  data['Phase 2'][row]=='OK':
+                    print '    \item Phase 2 was successful using method ',getVal('Phase 2 - method No.',row),'.'
+                    print 'The length of window $r$ of the weight function $q$ is ', getVal('Length of maximal input of weight function',row) + '.'
+                else:
+                    print '    \item Phase 2 was not successful using method ',getVal('Phase 2 - method No.',row),' ERROR .\n'
+            else:
+                print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ getVal('One letter inputs (problematic letters)',row)[1:]+ ' for some fixed length of window. Thus Phase 2 does not converge.\n'
+        else:
+            print '    \item Phase 1 was not successful: ERROR \n'
+        print '\\end{enumerate}'
+        print '\\end{exmp}'
+
+    print '\\begin{tabular}{l|c|c c c| c c| c| c c c }'
     title='Ex. &'
+    title=''
     for col in col_titles_tab:
         title+= col_titles_table[col]+ ' & '
     print title[0:-2], ' \\\\ \\hline'
