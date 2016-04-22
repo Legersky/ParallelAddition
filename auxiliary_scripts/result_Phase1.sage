@@ -235,7 +235,9 @@ with open('comparePhase2.tex', 'w') as fp:
                 for r,name_data_tex in enumerate(data_tex['Name']):
                     #sys.stderr.write(name+'  '+name_data_tex+'\n')
                     #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
-                    if name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ[0] and (int(data['Phase 1 - method No.'][r]) in nameQ[1]) and int(data['Phase 2 - method No.'][r])==m:
+                    saved=False
+                    if not saved and name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ[0] and (int(data['Phase 1 - method No.'][r]) in nameQ[1]) and int(data['Phase 2 - method No.'][r])==m:
+                        saved=True
                         #sys.stderr.write(str(r))
                         method_res+=data_tex['One letter inputs (problematic letters)'][r]+ ' & '
                         if method_res=='\\xmark & ':
