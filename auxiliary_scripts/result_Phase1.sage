@@ -22,11 +22,11 @@ except Exception, e:
 
 category='integer'
 
-col_titles=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Numbers of saved combinations', 'Elapsed time']# ,'Sizes of intermediate weight coefficients sets',, , ,'Phase 1', 'Alphabet', 'Input alphabet',,'Phase 1 - method No.',
+col_titles=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Phase 1 - method No.','Numbers of saved combinations', 'Elapsed time']# ,'Sizes of intermediate weight coefficients sets',, , ,'Phase 1', 'Alphabet', 'Input alphabet',,
 col_titles_phase1=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?'  ]# 'Size of weight coefficients set','Sizes of intermediate weight coefficients sets',,  'One letter inputs (problematic letters)', 'Phase 2', 'Length of maximal input of weight function','Phase 1', 'Alphabet', 'Input alphabet','Numbers of saved combinations','Phase 1 - method No.','Phase 2 - method No.'
 
 columns={}
-columns={'Elapsed time': 33, 'Real conjugates of base greater than 1': 16, 'Is alphabet minimal?': 8, '#A': 5, 'Size of weight coefficients set': 24, 'Minimal polynomial of generator omega': 10, 'Phase 2': 29, 'Numbers of saved combinations': 31, 'Base': 11, 'Length of maximal input of weight function': 30, 'Phase 2 - method No.': 26, 'Ring generator': 9, 'Minimal polynomial of base': 13, 'One letter inputs (problematic letters)': 27, 'Name': 2}
+columns={'Elapsed time': 33, 'Real conjugates of base greater than 1': 16, 'Is alphabet minimal?': 8, '#A': 5, 'Size of weight coefficients set': 24, 'Minimal polynomial of generator omega': 10, 'Phase 2': 29, 'Phase 1 - method No.': 22, 'Base': 11, 'Length of maximal input of weight function': 30, 'Phase 2 - method No.': 26, 'Numbers of saved combinations': 31, 'Ring generator': 9, 'Minimal polynomial of base': 13, 'One letter inputs (problematic letters)': 27, 'Name': 2}
 
 if not columns:
     col_titles_ws=ws_comparePhase2.row_values(1)
@@ -76,10 +76,11 @@ names_cmp1=[]
 methods_cmp1=[]
 lens_cmp1=[]
 
-names_cmp1=['Eisenstein\\_1--block\\_complex', 'Eisenstein\\_1--block\\_integer', 'Eisenstein\\_2--block\\_complex', 'Penney\\_1--block\\_integer', 'Penney\\_2--block\\_integer', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+9+19\\_complex', 'Eisenstein\\_2--block\\_integer', 'Penney\\_1--block\\_complex', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+3+5\\_complex2 ', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Eisenstein\\_1--block\\_complex', 'Eisenstein\\_1--block\\_integer', 'Eisenstein\\_2--block\\_complex', 'Eisenstein\\_2--block\\_integer', 'Penney\\_1--block\\_complex', 'Penney\\_1--block\\_integer', 'Penney\\_2--block\\_integer', 'Quadratic+1+0--17\\_integer', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+3+5\\_complex2 ', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Quadratic+1+9+19\\_complex']
+names_cmp1=['Eisenstein\\_1--block\\_complex', 'Eisenstein\\_1--block\\_integer', 'Eisenstein\\_2--block\\_complex', 'Eisenstein\\_2--block\\_integer', 'Penney\\_1--block\\_complex', 'Penney\\_1--block\\_integer', 'Penney\\_2--block\\_integer', 'Quadratic+1+0--17\\_integer', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+3+5\\_complex2 ', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Quadratic+1+9+19\\_complex']
 methods_cmp1=[[[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6], [8, 11], [9, 10], [12, 13, 15, 16], [14]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6], [8, 9, 10, 11, 12, 13, 15, 16], [14]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 11, 12, 13, 14, 15, 16], [9, 10]], [[6, 8, 12], [9, 10, 11, 16], [13, 15], [14]], [[6, 14], [8, 11, 12, 16], [9, 10, 13, 15]], [[6], [8, 11], [9, 10], [12, 16], [13, 15], [14]], [[6, 14], [8, 9, 10, 11, 12, 13, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]]]
-[[19], [113, 53, 52, 57, 139], [17], [26], [45], [97, 27, 95], [27], [9], [9], [9], [9], [9], [27, 26], [20, 19, 20, 21], [19, 11, 17], [39, 31, 34, 33, 39, 43], [19, 17], [17], [11]]
 lens_cmp1=[[19], [113, 53, 52, 57, 139], [17], [26], [45], [97, 27, 95], [27], [9], [9], [9], [9], [9], [27, 26], [20, 19, 20, 21], [19, 11, 17], [39, 31, 34, 33, 39, 43], [19, 17], [17], [11]]
+
+
 
 
 
@@ -142,7 +143,7 @@ for ind, name in enumerate(data['Name']):
 
 differentPhase1={}
 names_sorted=[]
-methods=[6,12,8,13,9,14,10,15,11,16]
+methods=[12,13,14,15,16]#[14,8,12,9,13,10,15,11,16]
 with open('comparePhase1.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -181,9 +182,9 @@ with open('comparePhase1.tex', 'w') as fp:
             for m in m_group:
                 lengths[m]=lens_cmp1[pos][ind]
             if names_cmp1[pos] in differentPhase1:
-                differentPhase1[names_cmp1[pos]].append(lens_cmp1[pos][ind])
+                differentPhase1[names_cmp1[pos]].append([lens_cmp1[pos][ind],m_group])# append(lens_cmp1[pos][ind])
             else:
-                differentPhase1[names_cmp1[pos]]=[lens_cmp1[pos][ind]]
+                differentPhase1[names_cmp1[pos]]=[[lens_cmp1[pos][ind],m_group]] #[lens_cmp1[pos][ind]]
         for m in methods:
             if m in lengths:
                 row_tex+= str(lengths[m])+ ' & '
@@ -223,18 +224,18 @@ with open('comparePhase2.tex', 'w') as fp:
         if name in ['Quadratic+1+4+5\\_complex1','Quadratic+1+3+5\\_complex2 ']:
             diffPhase1=differentPhase1[name]
         else:
-            diffPhase1=differentPhase1[name][1:]
+            diffPhase1=differentPhase1[name]#[1:]
         for nameQ in diffPhase1:
             row_tex=''
             if _name:
                 row_tex='\\multirow{'+str(len(diffPhase1))+ '}{*}{'+_name+'}'
-            row_tex+=' & $'+str(nameQ)+'$ &'
+            row_tex+=' & $'+str(nameQ[0])+'/'+str(nameQ[1])+'$ &'
             for m in methods_phase2:
                 method_res=''
                 for r,name_data_tex in enumerate(data_tex['Name']):
                     #sys.stderr.write(name+'  '+name_data_tex+'\n')
                     #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
-                    if name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ and int(data['Phase 2 - method No.'][r])==m:
+                    if name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ[0] and (int(data['Phase 1 - method No.'][r]) in nameQ[1]) and int(data['Phase 2 - method No.'][r])==m:
                         #sys.stderr.write(str(r))
                         method_res+=data_tex['One letter inputs (problematic letters)'][r]+ ' & '
                         if method_res=='\\xmark & ':
@@ -256,53 +257,53 @@ with open('comparePhase2.tex', 'w') as fp:
 
 
 
-with open('comparePhase2_time.tex', 'w') as fp:
-    stdout = sys.stdout
-    sys.stdout = fp
+# with open('comparePhase2_time.tex', 'w') as fp:
+    # stdout = sys.stdout
+    # sys.stdout = fp
 
-    print '\\begin{tabular}{l|c|',
-    for i in range(0,len(methods_phase2)-1):
-        print 'r ',
-    print 'r}'
+    # print '\\begin{tabular}{l|c|',
+    # for i in range(0,len(methods_phase2)-1):
+        # print 'r ',
+    # print 'r}'
 
-    title_tex='\\multirow{1}{*}{Name} & \\multirow{1}{*}{$\\#\\Q$}&'
- #   for col_title in col_titles_phase1:
-#        title_tex+= col_titles_table[col_title]+ ' & '
-#    title_tex+= '$\\#\\Q\\,:$'
-    title2=' &  '
-    for m in methods_phase2[0:-1]:
-        title_tex+= '$'+str(m)+ '$ & '
-    print title_tex+'$'+str(methods_phase2[-1])+ '$ '+'\\\\'
+    # title_tex='\\multirow{1}{*}{Name} & \\multirow{1}{*}{$\\#\\Q$}&'
+ # #   for col_title in col_titles_phase1:
+# #        title_tex+= col_titles_table[col_title]+ ' & '
+# #    title_tex+= '$\\#\\Q\\,:$'
+    # title2=' &  '
+    # for m in methods_phase2[0:-1]:
+        # title_tex+= '$'+str(m)+ '$ & '
+    # print title_tex+'$'+str(methods_phase2[-1])+ '$ '+'\\\\'
 
 
-    for name in names_sorted[1:]:
-        _name=name
-        for nameQ in differentPhase1[name]:
-            row_tex=''
-            if _name:
-                row_tex='\\multirow{'+str(len(differentPhase1[name]))+ '}{*}{'+_name+'}'
-            row_tex+=' & $'+str(nameQ)+'$ &'
-            for m in methods_phase2:
-                method_res=''
-                for r,name_data_tex in enumerate(data_tex['Name']):
-                    #sys.stderr.write(name+'  '+name_data_tex+'\n')
-                    #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
-                    if name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ and int(data['Phase 2 - method No.'][r])==m:
-                        #sys.stderr.write(str(r))
-                        if data_tex['Phase 2'][r]=='\\checkmark':
-                            method_res+=data_tex['Elapsed time'][r][0:-5]+ ' & '
-                        else:
-                            method_res+='('+data_tex['Elapsed time'][r][0:-5]+ ') & '
-                if not method_res:
-                    method_res+='-& '
-                row_tex+=method_res
+    # for name in names_sorted[1:]:
+        # _name=name
+        # for nameQ in differentPhase1[name]:
+            # row_tex=''
+            # if _name:
+                # row_tex='\\multirow{'+str(len(differentPhase1[name]))+ '}{*}{'+_name+'}'
+            # row_tex+=' & $'+str(nameQ)+'$ &'
+            # for m in methods_phase2:
+                # method_res=''
+                # for r,name_data_tex in enumerate(data_tex['Name']):
+                    # #sys.stderr.write(name+'  '+name_data_tex+'\n')
+                    # #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
+                    # if name_data_tex==name and int(data['Phase 1 - method No.'][r])==nameQ and int(data['Phase 2 - method No.'][r])==m:
+                        # #sys.stderr.write(str(r))
+                        # if data_tex['Phase 2'][r]=='\\checkmark':
+                            # method_res+=data_tex['Elapsed time'][r][0:-5]+ ' & '
+                        # else:
+                            # method_res+='('+data_tex['Elapsed time'][r][0:-5]+ ') & '
+                # if not method_res:
+                    # method_res+='-& '
+                # row_tex+=method_res
 
-            print row_tex[0:-2]+'\\\\'
-            _name=''
-        print '\\hline'
+            # print row_tex[0:-2]+'\\\\'
+            # _name=''
+        # print '\\hline'
 
-    print '\\end{tabular}'
-    sys.stdout = stdout
+    # print '\\end{tabular}'
+    # sys.stdout = stdout
 
 
 

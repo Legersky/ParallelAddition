@@ -58,8 +58,8 @@ class WeightCoefficientsSetSearch(object):
             #Method 7 == 2, but A+A is taken even if the input alphabet is different
             #Method 8  takes first the only possible candidates and then add all smallest elements (absolute value)
             #Method 9  takes first the only possible candidates and then add all smallest elements (natural norm)
-            #6-12 8-13 9-14 10-15 11-16
-            if self._method in [2,3,6,12,7,8,13,9,14]:
+            #6-14 8-12 9-13 10-15 11-16
+            if self._method in [2,3,6,7,8,9,12,13,14]:
                 for cand_for_elem in copy(candidates):
                     if len(cand_for_elem)==1:
                         weightCoef=cand_for_elem[0]
@@ -140,7 +140,7 @@ class WeightCoefficientsSetSearch(object):
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
         if self._method in [4,5]:
-            #Method 4 - weight coefficients set given by bound (norm)
+            #Method 4 - weight coefficients set given by bound (norm)     SOMETHING IS WRONG!!!!!!!!!!!!!!!!!!!!!!!!!
             #Method 5 - weight coefficients set given by bound (abs) ONLY QUADRATIC COMPLEX !!!!!!!!!!!!!!!!!!!!!
             if self._method==4:
                 bound=self._algForParallelAdd.computeBound_norm()

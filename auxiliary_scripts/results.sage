@@ -76,6 +76,7 @@ if not data:
     try:
         for col_title in col_titles:
             data[col_title]=ws_results.col_values(columns[col_title])
+        save(data,'cele')
     except e:
         print 'problem!!!!!!!!'
         print e
