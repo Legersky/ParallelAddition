@@ -69,7 +69,7 @@ col_titles_table={'Real conjugates of base greater than 1':'conj.',
 
 data={}
 
-#data=load('cele')
+data=load('cele')
 
 
 if not data:
@@ -118,8 +118,8 @@ def getVal(_key,ind):
         return data[_key][ind].replace('_','\\_').replace('-','--')
     elif _key=='Elapsed time':
         return data[_key][ind]
-    #elif _key=='Base':
-     #   return '$'+data[_key][ind].replace('omega','\omega')+'$'
+    elif _key=='Error':
+        return data[_key][ind].replace('omega','\\omega').replace('[','$(').replace(']',']$')
     else:
         try:
             return '$'+latex(sage.misc.sage_eval.sage_eval(data[_key][ind],locals={'omega':omega, 't':t, 'x':x}))+'$'
@@ -140,6 +140,9 @@ ex_code=iter(cartesian_product([_alphabet,_alphabet]))
 
 filename='results_'+category
 
+def setBraces(s):
+    return s.replace('[','\\{').replace(']','\\}')
+
 shortInput=False
 with open(filename+".tex", 'w') as fp:
     stdout = sys.stdout
@@ -157,40 +160,31 @@ with open(filename+".tex", 'w') as fp:
         print '\\begin{exmp}'
         print "\\label{ex:"+category+code[0]+code[1]+'}\n'
 
-        print 'Parameters:'
-        print '\\begin{tabular}{cc}'
-        print '$\\omega=', getVal('Ring generator',row)[1:], ' & ', '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row)[1:],'\\\\'
-        print "$\\beta=" +getVal('Base',row)[1:-1]+'='+getVal('Base (explicit)',row)[1:]+' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row)[1:]+'\\\\'
-        print 'Real conjugate greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row)
-        print '\\end{tabular}'
-        print '\\begin{itemize}'
-        print "    \\item Minimal polynomial of $\\omega$: "+ getVal('Minimal polynomial of generator omega',row)
-        print "    \\item Base $\\beta=" +getVal('Base',row)[1:]
-        print '    \\item Real conjugate greater than 1: ', getVal('Real conjugates of base greater than 1',row)
-        print "    \\item Minimal polynomial of base: " + getVal('Minimal polynomial of base',row)
-        print "    \\item Alphabet $\\mathcal{A} ="  + getVal('Alphabet',row)[1:]
-        print "    \\item Input alphabet $\\mathcal{B} =" + getVal('Input alphabet',row)[1:]
-        print "    \\item Alphabet divided into congruence classes modulo $\\beta$: ", getVal('Alphabet dividied into congruence classes mod base',row)
-        print "    \\item Alphabet divided into congruence classes modulo $\\beta-1$: ", getVal('Alphabet dividied into congruence classes mod base -1',row)
-        print '\\end{itemize}\n'
-
-        print 'The result of the extending window method is:'
-        print '\\begin{enumerate}'
+        print 'Parameters:\n'
+        print '\\begin{tabular}{ll}'
+        print '$\\omega=', getVal('Ring generator',row)[1:], ' & $\\beta=' +getVal('Base',row)[1:-1]+'='+getVal('Base (explicit)',row)[1:]+ '\\\\'
+        print '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row)[1:],' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row)[1:]+'\\\\'
+        print 'Real conjugate of $\\beta$ greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row), '\\\\ \hline'
+        print "\multicolumn{2}{p{0.6\\textwidth}}{$\\mathcal{A} ="  + setBraces(getVal('Alphabet',row)[1:])+'}', '\\\\'
+        print "\multicolumn{2}{l}{$\\mathcal{B} =" + setBraces(getVal('Input alphabet',row)[1:])+'}', '\\\\ \hline'
+        print "\multicolumn{2}{l}{$\A$ divided into congruence classes modulo $\\beta$: ", setBraces(getVal('Alphabet dividied into congruence classes mod base',row))+'}', '\\\\'
+        print "\multicolumn{2}{l}{$\A$ divided into congruence classes modulo $\\beta-1$: ", setBraces(getVal('Alphabet dividied into congruence classes mod base -1',row))+'}', '\\\\'
+        print ' & \\\\ \\hline'
+        print 'Phase 1 (method ',getVal('Phase 1 - method No.',row),'): &'
         if data['Phase 1'][row]=='OK':
-            print '    \item Phase 1 was successful using method ',getVal('Phase 1 - method No.',row),'.'
-            print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + getVal('Size of weight coefficients set',row)+ '.\n'
+            print '\\checkmark, $\\#\\mathcal{Q} =' + getVal('Size of weight coefficients set',row)+ '$ \\\\ '
             if data['One letter inputs (problematic letters)'][row]=='OK':
-                print '    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
+                print '$b,b,\\dots,b$ inputs: & \\checkmark \\\\'
                 if  data['Phase 2'][row]=='OK':
-                    print '    \item Phase 2 was successful using method ',getVal('Phase 2 - method No.',row),'.'
-                    print 'The length of window $r$ of the weight function $q$ is ', getVal('Length of maximal input of weight function',row) + '.'
+                    print 'Phase 2 (method ',getVal('Phase 2 - method No.',row),'): & \\checkmark , $r=', getVal('Length of maximal input of weight function',row) + '$ \\\\'
                 else:
-                    print '    \item Phase 2 was not successful using method ',getVal('Phase 2 - method No.',row),' ERROR .\n'
+                    print 'Phase 2 (method ',getVal('Phase 2 - method No.',row),'): & \\xmark , ', getVal('Error',row) + '\\\\'
             else:
-                print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ getVal('One letter inputs (problematic letters)',row)[1:]+ ' for some fixed length of window. Thus Phase 2 does not converge.\n'
+                print 'Failing $b,b,\\dots,b$ inputs: & '+ setBraces(data['One letter inputs (problematic letters)'][row])+ '\\\\'
         else:
-            print '    \item Phase 1 was not successful: ERROR \n'
-        print '\\end{enumerate}'
+            print '\\xmark \\\\'
+        print '\\end{tabular}\n'
+
         print '\\end{exmp}'
 
     print '\\begin{tabular}{l|c|c c c| c c| c| c c c }'

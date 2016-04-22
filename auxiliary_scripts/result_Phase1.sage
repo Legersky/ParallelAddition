@@ -202,16 +202,16 @@ with open('comparePhase2.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
 
-    print '\\begin{tabular}{l|c|',
+    print '\\begin{tabular}{l|cc|',
     for i in range(0,len(methods_phase2)-1):
         print 'ccc| ',
     print 'ccc}'
 
-    title_tex='\\multirow{2}{*}{Name} & \\multirow{2}{*}{$\\#\\Q$}&'
+    title_tex='\\multirow{2}{*}{Name}  & Methods & \\multirow{2}{*}{$\\#\\Q$}&'
  #   for col_title in col_titles_phase1:
 #        title_tex+= col_titles_table[col_title]+ ' & '
 #    title_tex+= '$\\#\\Q\\,:$'
-    title2=' &  '
+    title2=' & Phase 1&  '
     for m in methods_phase2[0:-1]:
         title_tex+= '\\multicolumn{3}{c|}{$'+str(m)+ '$} & '
         title2+='&$bbb$ & Ph.2 & $r$ '
@@ -221,37 +221,43 @@ with open('comparePhase2.tex', 'w') as fp:
 
     for name in names_sorted[1:]:
         _name=name
-        if name in ['Quadratic+1+4+5\\_complex1','Quadratic+1+3+5\\_complex2 ']:
-            diffPhase1=differentPhase1[name]
-        else:
-            diffPhase1=differentPhase1[name]#[1:]
+        diffPhase1=differentPhase1[name]
+        n=0
         for nameQ in diffPhase1:
-            row_tex=''
-            if _name:
-                row_tex='\\multirow{'+str(len(diffPhase1))+ '}{*}{'+_name+'}'
-            row_tex+=' & $'+str(nameQ[0])+'/'+str(nameQ[1])+'$ &'
-            for m in methods_phase2:
-                method_res=''
-                for r,name_data_tex in enumerate(data_tex['Name']):
-                    #sys.stderr.write(name+'  '+name_data_tex+'\n')
-                    #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
+            if Set(nameQ[1]).intersection(Set(methods)):
+                n+=1
+        for nameQ in diffPhase1:
+            #sys.stderr.write(name+'\n')
+            #sys.stderr.write(str(nameQ[1])+'\n')
+            if Set(nameQ[1]).intersection(Set(methods)):
+                row_tex=''
+                if _name:
+                    row_tex='\\multirow{'+str(n)+ '}{*}{'+_name+'}'
+                ms=Set(nameQ[1]).intersection(Set(methods)).list()
+                ms.sort()
+                row_tex+='& $'+str(ms)[1:-1]+'$ & $'+str(nameQ[0])+'$ &'
+                for m in methods_phase2:
+                    method_res=''
                     saved=False
-                    if not saved and name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ[0] and (int(data['Phase 1 - method No.'][r]) in nameQ[1]) and int(data['Phase 2 - method No.'][r])==m:
-                        saved=True
-                        #sys.stderr.write(str(r))
-                        method_res+=data_tex['One letter inputs (problematic letters)'][r]+ ' & '
-                        if method_res=='\\xmark & ':
-                            method_res+='- & - & '
-                        else:
-                            method_res+=data_tex['Phase 2'][r]+ ' & '
-                            method_res+=data_tex['Length of maximal input of weight function'][r]+ ' & '
-                            #method_res+=str(sum(sage.misc.sage_eval.sage_eval(data['Numbers of saved combinations'][r])))+ ' & '
-                if not method_res:
-                    method_res+='\\multicolumn{3}{c|}{-} & '
-                row_tex+=method_res
+                    for r,name_data_tex in enumerate(data_tex['Name']):
+                        #sys.stderr.write(name+'  '+name_data_tex+'\n')
+                        #sys.stderr.write(str(nameQ)+' - '+str(data['Size of weight coefficients set'][r])+'\n')
+                        if not saved and name_data_tex==name and int(data['Size of weight coefficients set'][r])==nameQ[0] and (int(data['Phase 1 - method No.'][r]) in nameQ[1]) and int(data['Phase 2 - method No.'][r])==m:
+                            saved=True
+                            #sys.stderr.write(str(r))
+                            method_res+=data_tex['One letter inputs (problematic letters)'][r]+ ' & '
+                            if method_res=='\\xmark & ':
+                                method_res+='- & - & '
+                            else:
+                                method_res+=data_tex['Phase 2'][r]+ ' & '
+                                method_res+=data_tex['Length of maximal input of weight function'][r]+ ' & '
+                                #method_res+=str(sum(sage.misc.sage_eval.sage_eval(data['Numbers of saved combinations'][r])))+ ' & '
+                    if not method_res:
+                        method_res+='\\multicolumn{3}{c|}{-} & '
+                    row_tex+=method_res
 
-            print row_tex[0:-2]+'\\\\'
-            _name=''
+                print row_tex[0:-2]+'\\\\'
+                _name=''
         print '\\hline'
     print '\\end{tabular}'
     sys.stdout = stdout
