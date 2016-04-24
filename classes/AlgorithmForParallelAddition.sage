@@ -149,8 +149,8 @@ class AlgorithmForParallelAddition(object):
             else:
                 raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
         self._maximumOfAlphabet=maxA_abs
-        if self._minPolynomial.degree()==3 and len(self._alphabet)>50:
-            raise RuntimeErrorParAdd("Cubic base, alphabet has more than 50 elements")
+        if self._minPolynomial.degree()==3 and len(self._alphabet)>20:
+            raise RuntimeErrorParAdd("Cubic base, alphabet has more than 20 elements")
 
     def setInputAlphabet(self,B):
         #If B is empty, A+A is used. Set the input alphabet B. Check if A \subsetneq B \subset A+A.
