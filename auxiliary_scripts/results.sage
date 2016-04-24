@@ -112,14 +112,14 @@ def getVal(_key,ind):
             return '\\xmark'
     elif _key=='Input alphabet' and data[_key][ind]=='A+A':
         return '$\\A+\\A$'
-    elif _key=='Length of maximal input of weight function':
+    elif _key in ['Length of maximal input of weight function','Phase 2 - method No.','Phase 1 - method No.']:
         return data[_key][ind]
     elif _key=='Name':
         return data[_key][ind].replace('_','\\_').replace('-','--')
     elif _key=='Elapsed time':
         return data[_key][ind]
     elif _key=='Error':
-        return data[_key][ind].replace('omega','\\omega').replace('[','$(').replace(']',']$')
+        return data[_key][ind].replace('omega','\\omega').replace('[','$(').replace(']',')$').replace('*','')
     else:
         try:
             return '$'+latex(sage.misc.sage_eval.sage_eval(data[_key][ind],locals={'omega':omega, 't':t, 'x':x}))+'$'
@@ -160,25 +160,30 @@ with open(filename+".tex", 'w') as fp:
         print '\\begin{exmp}'
         print "\\label{ex:"+category+code[0]+code[1]+'}\n'
 
-        print 'Parameters:\n'
+        print '\n\\rule{0cm}{0cm}\n'
         print '\\begin{tabular}{ll}'
         print '$\\omega=', getVal('Ring generator',row)[1:], ' & $\\beta=' +getVal('Base',row)[1:-1]+'='+getVal('Base (explicit)',row)[1:]+ '\\\\'
         print '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row)[1:],' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row)[1:]+'\\\\'
-        print 'Real conjugate of $\\beta$ greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row), '\\\\ \hline'
-        print "\multicolumn{2}{p{0.6\\textwidth}}{$\\mathcal{A} ="  + setBraces(getVal('Alphabet',row)[1:])+'}', '\\\\'
-        print "\multicolumn{2}{l}{$\\mathcal{B} =" + setBraces(getVal('Input alphabet',row)[1:])+'}', '\\\\ \hline'
-        print "\multicolumn{2}{l}{$\A$ divided into congruence classes modulo $\\beta$: ", setBraces(getVal('Alphabet dividied into congruence classes mod base',row))+'}', '\\\\'
-        print "\multicolumn{2}{l}{$\A$ divided into congruence classes modulo $\\beta-1$: ", setBraces(getVal('Alphabet dividied into congruence classes mod base -1',row))+'}', '\\\\'
+        print 'Real conjugate of $\\beta$ greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row), '\\\\ \\hline'
+        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\A ="  + setBraces(getVal('Alphabet',row)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\'
+        if data['Is alphabet minimal?'][row]=='yes':
+            print '$\\#\\A=',getVal('#A',row),'$ & \\A is minimal. \\\\'
+        else:
+            print '$\\#\\A=',getVal('#A',row),'$ & \\A is not minimal. \\\\'
+        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\B ="  + setBraces(getVal('Input alphabet',row)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
+        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base',row))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
+        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta-1$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base -1',row))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\'
         print ' & \\\\ \\hline'
-        print 'Phase 1 (method ',getVal('Phase 1 - method No.',row),'): &'
+        print ' & \\\\'
+        print 'Phase 1 (method ',str(getVal('Phase 1 - method No.',row))+'): &'
         if data['Phase 1'][row]=='OK':
             print '\\checkmark, $\\#\\mathcal{Q} =' + getVal('Size of weight coefficients set',row)+ '$ \\\\ '
             if data['One letter inputs (problematic letters)'][row]=='OK':
                 print '$b,b,\\dots,b$ inputs: & \\checkmark \\\\'
                 if  data['Phase 2'][row]=='OK':
-                    print 'Phase 2 (method ',getVal('Phase 2 - method No.',row),'): & \\checkmark , $r=', getVal('Length of maximal input of weight function',row) + '$ \\\\'
+                    print 'Phase 2 (method ',str(getVal('Phase 2 - method No.',row))+'): & \\checkmark , $r=', getVal('Length of maximal input of weight function',row) + '$ \\\\'
                 else:
-                    print 'Phase 2 (method ',getVal('Phase 2 - method No.',row),'): & \\xmark , ', getVal('Error',row) + '\\\\'
+                    print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth} Phase 2 (method ",str(getVal('Phase 2 - method No.',row))+') fails because ', getVal('Error',row).replace('The', 'the') + '\\end{minipage} }\\\\'
             else:
                 print 'Failing $b,b,\\dots,b$ inputs: & '+ setBraces(data['One letter inputs (problematic letters)'][row])+ '\\\\'
         else:
@@ -186,6 +191,8 @@ with open(filename+".tex", 'w') as fp:
         print '\\end{tabular}\n'
 
         print '\\end{exmp}'
+        print '\n'
+        print '\n'
 
     print '\\begin{tabular}{l|c|c c c| c c| c| c c c }'
     title='Ex. &'

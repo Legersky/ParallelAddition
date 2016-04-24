@@ -88,7 +88,7 @@ skip=True
 for x in cartesian_product_iterator(t):
     b=x[1]
     c=x[0]
-    if c==-4 and b==-5:
+    if c==-3 and b==-5:
         skip=False
     if abs(b)<=m and abs(c)<=m:
         pass
