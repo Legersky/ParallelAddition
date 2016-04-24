@@ -1,5 +1,0 @@
-#!/bin/bash
-
-for input_name in $1*.sage
-do  ../../sage-devel/sage/sage extending_window_method.sage $input_name $i
-done
