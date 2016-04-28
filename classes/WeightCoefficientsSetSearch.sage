@@ -18,7 +18,7 @@ class WeightCoefficientsSetSearch(object):
 
         self._method=method
         if self._method==None:
-            self._method=9     #set the default method
+            self._method=13     #set the default method
 
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
