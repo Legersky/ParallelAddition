@@ -298,6 +298,11 @@ class WeightFunctionSearch(object):
 
     def findWeightFunction(self, max_input_length):
         # checks different w \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
+        betaQ=[]
+        for q in self._weightCoefSet:
+            betaQ.append(self._base*q)
+        if not Set(self._algForParallelAdd.sumOfSets(self._algForParallelAdd._inputAlphabet, self._weightCoefSet)).issubset(Set(self._algForParallelAdd.sumOfSets(self._alphabet, betaQ))):
+            raise RuntimeErrorParAdd('B+Q is not subset of A+beta Q.')
         self._Qw_w[()]=self._weightCoefSet
         combinations=[()]
         self._k=0
