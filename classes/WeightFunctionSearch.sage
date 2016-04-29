@@ -218,7 +218,7 @@ class WeightFunctionSearch(object):
                                 list_of_all.append(Set(C_covered_by[covered]))
                             to_add=self._minimalCovering(list_of_all)[0]
 
-                    elif self._method in [13,14,16]:
+                    elif self._method in [13,14,16,24]:
                             occur={}
                             for covering in C_covered_by.values():
                                 for q in covering:
@@ -237,6 +237,8 @@ class WeightFunctionSearch(object):
 
                             if self._method ==13:    	    #highest occurrencies, closest to 0 in beta-norm
                                 to_add=[self._algForParallelAdd._findSmallest_norm(q_with_max_occur)]
+                            if self._method ==24:    	    #highest occurrencies, closest to 0 in beta-norm
+                                to_add=[self._pick_element(self._algForParallelAdd._findAllSmallest_norm(q_with_max_occur))]
                             elif self._method ==14:    	    #highest occurrencies, closest center of gravity of already added (in absolute value)
                                 to_add=[self._pick_element_closest_to_point(q_with_max_occur, self.point_of_gravity_CC(Qww))]
                             elif self._method ==16:    	    #highest occurrencies, closest center of gravity of already added (in beta norm)
@@ -324,6 +326,12 @@ class WeightFunctionSearch(object):
 
     def check_one_letter_inputs(self, max_input_length):
         #check if there is a unique weight coefficient for inputs given by repetition of one letter
+        betaQ=[]
+        for q in self._weightCoefSet:
+            betaQ.append(self._base*q)
+        if not Set(self._algForParallelAdd.sumOfSets(self._algForParallelAdd._inputAlphabet, self._weightCoefSet)).issubset(Set(self._algForParallelAdd.sumOfSets(self._alphabet, betaQ))):
+            raise RuntimeErrorParAdd('B+Q is not subset of A+beta Q.')
+
         self._Qw_w[()]=self._weightCoefSet
         longest=[()]
         self._algForParallelAdd._problematicLetters=[]

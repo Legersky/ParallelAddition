@@ -34,9 +34,9 @@
 
 #------------EWM SETTING----------------
 max_iterations = 30      #maximum of iterations in searching for the weight coefficient set
-methods_phase1=[9]        #methods in the list are used. If empty, default method is used.
+methods_phase1=[15]        #methods in the list are used. If empty, default method is used.
 max_input_length = 100    #maximal length of the input of the weight function
-methods_phase2=[21]        #methods in the list are used. If empty, default method is used.
+methods_phase2=[15]        #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
 #------------SANITY CHECK---------------
@@ -77,17 +77,17 @@ folder_path='./'
 #-----------------------------------------------------------------------
 general_note='cubic 2'
 
-max_coef=10
+max_coef=5
 m=0
 t=[]
 P.<x> = ZZ[]
 
-skip=True
+skip=False
 for x in range(-max_coef,max_coef+1):
-if skip:
+    if skip:
         pass
     else:
-        p= str(P+[1]))
+        p= str(P([x,0,0,1]))
         print p
         name_gen = 'Cubic_gen_'+str(p)+'_automaticAlphabet_'
         minPol =p
@@ -95,7 +95,7 @@ if skip:
         alphabet = ''
         inputAlphabet = ''
 
-        max_coef_base=2
+        max_coef_base=3
         u=[]
         for i in range(0,3):
             u.append(range(-max_coef_base,max_coef_base+1))
