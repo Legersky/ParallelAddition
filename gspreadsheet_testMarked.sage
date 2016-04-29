@@ -47,7 +47,7 @@ try:
     credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
     gc = gspread.authorize(credentials)
     sheet=gc.open("ParallelAddition_results")
-    ws_name= 'successful'#'inputs'#
+    ws_name= 'inputs'#'successful'#
     worksheet=sheet.worksheet(ws_name)
     methods_phase1=sage.misc.sage_eval.sage_eval(worksheet.cell(1, 3).value)       #methods in the list are used. If empty, default method is used.
     methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
