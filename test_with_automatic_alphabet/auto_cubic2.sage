@@ -77,7 +77,7 @@ folder_path='./'
 #-----------------------------------------------------------------------
 general_note='cubic 2'
 
-max_coef=5
+max_coef=2
 m=0
 t=[]
 P.<x> = ZZ[]
@@ -95,7 +95,7 @@ for x in range(-max_coef,max_coef+1):
         alphabet = ''
         inputAlphabet = ''
 
-        max_coef_base=3
+        max_coef_base=1
         u=[]
         for i in range(0,3):
             u.append(range(-max_coef_base,max_coef_base+1))
