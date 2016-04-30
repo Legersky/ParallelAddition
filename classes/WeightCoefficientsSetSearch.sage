@@ -50,7 +50,7 @@ class WeightCoefficientsSetSearch(object):
         if self._verbose>=1: print "Number of elements in Qk: ", len(res)
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
 
-        if self._method in [1,2,3,6,7, 8,9,10,11, 12,13,14,15,16]:
+        if self._method in [1,2,3,6,7, 8,9,10,11, 12,13,14,15,16,17]:
             #Method 1 chooses the smallest element (the embedding to CC is necessary here)
             #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary)
             #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
@@ -102,7 +102,7 @@ class WeightCoefficientsSetSearch(object):
                         if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
 
 
-            if self._method in [12,13,14,15,16]:
+            if self._method in [12,13,14,15,16,17]:
                 weightCoefs=[]
                 for cand_for_elem in candidates:
                     intersect=Set(cand_for_elem).intersection(res)
@@ -111,7 +111,7 @@ class WeightCoefficientsSetSearch(object):
                             weightCoefs+=self._algForParallelAdd._findAllSmallest(cand_for_elem)
                         elif self._method in [13]:
                             weightCoefs+=self._algForParallelAdd._findAllSmallest_norm(cand_for_elem)
-                        elif self._method in [14]:
+                        elif self._method in [14,17]:
                             weightCoefs+=cand_for_elem
                         elif self._method in [15]:
                             weightCoefs+=self._algForParallelAdd._findAllSmallest_norm(cand_for_elem)

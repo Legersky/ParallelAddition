@@ -187,7 +187,23 @@ worksheet.update_cells(cell_list)
 
 ceil(1.5)
 ︡dfdfe696-1112-4a10-b52f-e8dbcadcfcba︡︡{"stdout":"2\n"}︡{"done":true}
-︠31b9f61e-05d7-41fa-80ea-a1380a19f079︠
+︠31b9f61e-05d7-41fa-80ea-a1380a19f079s︠
+
+
+methods=[14,12,16,13,15]#[14,8,12,9,13,10,15,11,16]
+methods1_letter={14:'1a', 12:'1b', 16:'1c', 13:'1d',15:'1e'}
+︡ce3d907d-011f-4319-84b2-53ca70090360︡︡{"done":true}
+︠ce893f50-f26e-4961-b736-a83ca6e0d64bs︠
+methods_tex=''
+for m in methods:
+    methods_tex+= methods1_letter[m]+' & '
+print methods_tex[:-2]+'\\\\ \\hline'
+var('omega')
+︡764edaca-224c-4f0d-81c6-4ecc37529332︡︡{"stdout":"1a & 1b & 1c & 1d & 1e \\\\ \\hline\n"}︡{"stdout":"omega\n"}︡{"done":true}
+︠f7159037-1ad7-441b-be98-a32172c65992s︠
+69-len([-4*omega - 2, 3, 4, 3*omega - 1, -omega + 3, 2*omega - 4, 2*omega - 3, 2*omega - 2, -3*omega - 3, 2*omega + 2, 2*omega + 3, 2*omega + 4, omega - 4, omega - 3, -2*omega + 4, omega + 3, omega + 4, 4*omega - 2, 4*omega, 4*omega + 1, 4*omega + 2, 3*omega - 3, 3*omega - 2, 3*omega, 3*omega + 1, 3*omega + 2, 3*omega + 3, -2*omega - 4, -4*omega - 1, -4*omega, -4*omega + 1, -4*omega + 2, -3*omega - 2, -3*omega, -3*omega + 1, -3*omega + 2, -3*omega + 3, -omega - 4, -omega - 3, -2*omega + 2, -2*omega + 3, -omega + 4, 4*omega - 1, -2*omega - 3, -4, -3])
+︡053d0ec1-9fd2-4c09-8c95-7509ce145320︡︡{"stdout":"23\n"}︡{"done":true}
+︠7626e68c-0ba7-4436-820a-8e31cb76f76b︠
 
 
 

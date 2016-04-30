@@ -58,8 +58,8 @@ except Exception, e:
 
 
 #maximumOfInputs=5000000
-compareWith=[ 'test']
-general_note='dopocteni'
+compareWith=[ 'cub']
+general_note='kubicke a killnute'
 
 rows_to_test=[]
 
@@ -86,7 +86,7 @@ for row in rows_to_test:
         load('ewm.sage')         #run extending window method
         #alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
         #print 'Same weight coefficients sets are found by these group(s) of methods:'
-        #print alg_test.compareMethodsPhase1(methods_phase1, 'prepocitani')
+        #print alg_test.compareMethodsPhase1(methods_phase1, general_note)
 
     except ExceptionParAdd, e:
         print e

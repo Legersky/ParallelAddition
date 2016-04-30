@@ -25,6 +25,8 @@ _alphabet=['A','B','C','D','E', 'F','G','H','I','J','K','L','M','N','O','P','Q',
 col_titles=['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Numbers of saved combinations', 'Elapsed time','Sizes of intermediate weight coefficients sets','Phase 1', 'Alphabet', 'Input alphabet','Phase 1 - method No.', 'Error', 'Base (explicit)','Alphabet dividied into congruence classes mod base -1', 'Alphabet dividied into congruence classes mod base']
 
 
+def setBraces(s):
+    return s.replace('[','\\{').replace(']','\\}')
 
 #['Name','Ring generator','Minimal polynomial of generator omega', 'Base', 'Minimal polynomial of base','Real conjugates of base greater than 1','#A', 'Is alphabet minimal?', 'Size of weight coefficients set',  'One letter inputs (problematic letters)', 'Phase 2','Length of maximal input of weight function','Phase 2 - method No.','Phase 1 - method No.','Numbers of saved combinations', 'Elapsed time', 'Base (explicit)', 'Alphabet', 'Input alphabet']# ,'Sizes of intermediate weight coefficients sets',, , ,'Phase 1',,
 
@@ -62,17 +64,14 @@ col_titles_table={'Real conjugates of base greater than 1':'conj.',
 
 data={}
 
-load('data.sage')
+data=load('comp')
+
 
 if not data:
     for col_title in col_titles:
         data[col_title]=ws_comparePhase2.col_values(columns[col_title])
 
-    with open('data.sage', 'w') as fp:
-        stdout = sys.stdout
-        sys.stdout = fp
-        print 'data=',data
-        sys.stdout = stdout
+    save(data,'comp')
 
 var('omega')
 var('t')
@@ -81,28 +80,43 @@ var('t')
 names_cmp1=[]
 methods_cmp1=[]
 lens_cmp1=[]
+sort_cmp1=[]
 
-names_cmp1=['Eisenstein\\_1--block\\_complex', 'Eisenstein\\_1--block\\_integer', 'Eisenstein\\_2--block\\_complex', 'Eisenstein\\_2--block\\_integer', 'Penney\\_1--block\\_complex', 'Penney\\_1--block\\_integer', 'Penney\\_2--block\\_integer', 'Quadratic+1+0--17\\_integer', 'Quadratic+1+0--2\\_integer', 'Quadratic+1+0--21\\_integer', 'Quadratic+1+0--3\\_integer', 'Quadratic+1+0--5\\_integer', 'Quadratic+1+2+3\\_complex', 'Quadratic+1+3+4\\_complex', 'Quadratic+1+3+5\\_complex1', 'Quadratic+1+3+5\\_complex2 ', 'Quadratic+1+4+5\\_complex1', 'Quadratic+1+4+5\\_complex2', 'Quadratic+1+9+19\\_complex']
-methods_cmp1=[[[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6], [8, 11], [9, 10], [12, 13, 15, 16], [14]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[12, 13, 15, 16], [14]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 11, 12, 13, 14, 15, 16], [9, 10]], [[6, 8, 12], [9, 10, 11, 16], [13, 15], [14]], [[6, 14], [8, 11, 12, 16], [9, 10, 13,15]], [[6], [8, 11], [9, 10], [12, 16], [13, 15], [14]], [[6, 14], [8, 9, 10, 11, 12, 13, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]], [[6, 8, 9, 10, 11, 12, 13, 14, 15, 16]]]
-lens_cmp1=[[19], [113, 53, 52, 57, 139], [17], [26], [45], [49, 141], [27], [9], [9], [9], [9], [9], [27, 26], [20, 19, 20, 21], [19, 11, 17], [39, 31, 34, 33, 39, 43], [19, 17], [17], [11]]
+if 1:
+    names_cmp1=load('names_cmp1')
+    methods_cmp1=load('methods_cmp1')
+    lens_cmp1=load('lens_cmp1')
+    sort_cmp1=load('sort_cmp1')
 
 
-
-
-if not names_cmp1 or not methods_cmp1 or not lens_cmp1:
+if not names_cmp1 or not methods_cmp1 or not lens_cmp1 or not sort_cmp1:
     names_cmp1_tmp=ws_comparePhase1.col_values(2)
     methods_cmp1_tmp=ws_comparePhase1.col_values(9)
     lens_cmp1_tmp=ws_comparePhase1.col_values(10)
-    sort_cmp1=ws_comparePhase1.col_values(12)
-    for ind, s in enumerate(sort_cmp1):
-        if s=='kontrola novych metod':
+    sort_cmp1_tmp=ws_comparePhase1.col_values(12)
+    for ind, s in enumerate(sort_cmp1_tmp):
+        if s in ['kontrola novych metod','ex ano']:
             names_cmp1.append(names_cmp1_tmp[ind].replace('_','\\_').replace('-','--'))
             methods_cmp1.append(sage.misc.sage_eval.sage_eval(methods_cmp1_tmp[ind]))
             lens_cmp1.append(sage.misc.sage_eval.sage_eval(lens_cmp1_tmp[ind]))
+            sort_cmp1.append(s)
 
-    print names_cmp1
+    print sort_cmp1
     print methods_cmp1
     print lens_cmp1
+    print names_cmp1
+    save(names_cmp1,'names_cmp1')
+    save(methods_cmp1,'methods_cmp1')
+    save(lens_cmp1,'lens_cmp1')
+    save(sort_cmp1,'sort_cmp1')
+
+ex={}
+for ind, s in enumerate(sort_cmp1):
+    if s=='ex ano':
+        ex[names_cmp1[ind]]=True
+    else:
+        ex[names_cmp1[ind]]=False
+print ex
 
 def getVal(_key,ind):
     if _key in ['Is alphabet minimal?', 'Is alphabet minimal?']:
@@ -150,7 +164,8 @@ for ind, name in enumerate(data['Name']):
 
 differentPhase1={}
 names_sorted=[]
-methods=[12,13,14,15,16]#[14,8,12,9,13,10,15,11,16]
+methods=[14,12,16,13,15]#[14,8,12,9,13,10,15,11,16]
+methods1_letter={14:'1a', 12:'1b', 16:'1c', 13:'1d',15:'1e', 4:'thm'}
 with open('comparePhase1.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -170,7 +185,7 @@ with open('comparePhase1.tex', 'w') as fp:
     print title_tex
 
     for m in methods:
-        methods_tex+= str(m)+ ' & '
+        methods_tex+= methods1_letter[m]+' & '
     print methods_tex[:-2]+'\\\\ \\hline'
     rows=[]
     name_prev=''
@@ -182,7 +197,10 @@ with open('comparePhase1.tex', 'w') as fp:
 
     for row in rows[1:]:
         code=next(ex_code)
-        row_tex='\\ref{ex:'+category+code[0]+code[1]+'} & '
+        if ex[data_tex['Name'][row]]:
+            row_tex='\\ref{ex:'+category+code[0]+code[1]+'} & '
+        else:
+            row_tex=' & '
         for col_title in col_titles_phase1:
             row_tex+= str(data_tex[col_title][row])+ ' & '
         pos=names_cmp1.index(data_tex['Name'][row])
@@ -206,7 +224,8 @@ with open('comparePhase1.tex', 'w') as fp:
 #print differentPhase1
 
 
-methods_phase2=[9,15,22,23]
+methods_phase2=[9,15,22,23,14]
+methods2_letter={9:'2a',15:'2b',22:'2c', 23:'2d', 14:'2e'}
 with open('comparePhase2.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -223,9 +242,9 @@ with open('comparePhase2.tex', 'w') as fp:
 #    title_tex+= '$\\#\\Q\\,:$'
     title2=' & & Phase 1&  '
     for m in methods_phase2[0:-1]:
-        title_tex+= '\\multicolumn{3}{c|}{$'+str(m)+ '$} & '
+        title_tex+= '\\multicolumn{3}{c|}{$'+methods2_letter[m]+ '$} & '
         title2+='&$bbb$ & Ph.2 & $r$ '
-    print title_tex+'\\multicolumn{3}{c}{$'+str(methods_phase2[-1])+ '$} '+'\\\\'
+    print title_tex+'\\multicolumn{3}{c}{$'+methods2_letter[methods_phase2[-1]]+ '$} '+'\\\\'
     print title2 + '&$bbb$ & Ph.2 & $r$ \\\\ \\hline'
 
 
@@ -240,16 +259,24 @@ with open('comparePhase2.tex', 'w') as fp:
             if Set(nameQ[1]).intersection(Set(methods)):
                 n+=1
         for nameQ in diffPhase1:
-            #sys.stderr.write(name+'\n')
-            #sys.stderr.write(str(nameQ[1])+'\n')
-            if Set(nameQ[1]).intersection(Set(methods)):
+            if Set(nameQ[1]).intersection(Set(methods)) or nameQ[1]==[4]:
+                if nameQ[1]==[4]:
+                    n+=1
                 if _name:
-                    row_tex='\\multirow{'+str(n)+ '}{*}{\\ref{ex:'+category+code[0]+code[1]+'} } &' +'\\multirow{'+str(n)+ '}{*}{'+_name+'}'
+                    if ex[name]:
+                        row_tex='\\multirow{'+str(n)+ '}{*}{\\ref{ex:'+category+code[0]+code[1]+'} } &'
+                    else:
+                        row_tex='\\multirow{'+str(n)+ '}{*}{ }  &'
+                    row_tex+='\\multirow{'+str(n)+ '}{*}{'+_name+'}'
                 else:
                     row_tex=' & '
-                ms=Set(nameQ[1]).intersection(Set(methods)).list()
+                ms=[]
+                for met in Set(nameQ[1]).intersection(Set(methods)).list():
+                    ms.append(methods1_letter[met])
                 ms.sort()
-                row_tex+='& $'+str(ms)[1:-1]+'$ & $'+str(nameQ[0])+'$ &'
+                if nameQ[1]==[4]:
+                    ms='thm.'
+                row_tex+='& '+str(ms)[1:-1].replace("'",'') +' & $'+str(nameQ[0])+'$ &'
                 for m in methods_phase2:
                     method_res=''
                     saved=False
@@ -277,7 +304,37 @@ with open('comparePhase2.tex', 'w') as fp:
     sys.stdout = stdout
 
 
+with open('alphabets.tex', 'w') as fp:
+    stdout = sys.stdout
+    sys.stdout = fp
 
+    ex_code=iter(cartesian_product([_alphabet,_alphabet]))
+    print '\\begin{tabular}{ll|c}',
+
+    print 'Ex.  & Name & $\\A$'
+
+    for name in names_sorted[1:]:
+        _name=name
+        diffPhase1=differentPhase1[name]
+        code=next(ex_code)
+
+        if ex[name]:
+            row_tex='\\multirow{'+str(n)+ '}{*}{\\ref{ex:'+category+code[0]+code[1]+'} } &'
+        else:
+            row_tex='\\multirow{'+str(n)+ '}{*}{ }  &'
+        row_tex+='\\multirow{'+str(n)+ '}{*}{'+_name+'}'
+
+        print row_tex
+
+        row1=0
+        for r,name_data_tex in enumerate(data_tex['Name']):
+            if name_data_tex==name:
+                row1=r
+                break
+        print "\\begin{minipage}{\\textwidth}\\begin{dmath*}"  + setBraces(getVal('Alphabet',row1)[1:-1])+' \\end{dmath*}\\end{minipage} \\\\'
+
+    print '\\end{tabular}'
+    sys.stdout = stdout
 
 # with open('comparePhase2_time.tex', 'w') as fp:
     # stdout = sys.stdout
@@ -327,14 +384,11 @@ with open('comparePhase2.tex', 'w') as fp:
     # print '\\end{tabular}'
     # sys.stdout = stdout
 
-def setBraces(s):
-    return s.replace('[','\\{').replace(']','\\}')
 
 
 
 
 
-methods_phase2=[9,15,22,23]
 with open('comparePhase2_examples.tex', 'w') as fp:
     stdout = sys.stdout
     sys.stdout = fp
@@ -343,64 +397,70 @@ with open('comparePhase2_examples.tex', 'w') as fp:
     for name in names_sorted[1:]:
         _name=name
         code=next(ex_code)
-        diffPhase1=differentPhase1[name]
-        row1=0
-        for r,name_data_tex in enumerate(data_tex['Name']):
-            if name_data_tex==name:
-                row1=r
-                break
+
+        if ex[name]:
+            diffPhase1=differentPhase1[name]
+            row1=0
+            for r,name_data_tex in enumerate(data_tex['Name']):
+                if name_data_tex==name:
+                    row1=r
+                    break
 
 
-        print '\\begin{exmp}'
-        print "\\label{ex:"+category+code[0]+code[1]+'}\n'
-        print name
-        print '\n\\rule{0cm}{0cm}\n'
-        print '\\begin{tabular}{ll}'
-        print '$\\omega=', getVal('Ring generator',row1)[1:], ' & $\\beta=' +getVal('Base',row1)[1:-1]+'='+getVal('Base (explicit)',row1)[1:]+ '\\\\'
-        print '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row1)[1:],' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row1)[1:]+'\\\\'
-        print 'Real conjugate of $\\beta$ greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row1), '\\\\'
+            print '\\begin{exmp}'
+            print "\\label{ex:"+category+code[0]+code[1]+'}\n'
+            print name
+            print '\n\\rule{0cm}{0cm}\n'
+            print '\\begin{tabular}{ll}'
+            print '$\\omega=', getVal('Ring generator',row1)[1:], ' & $\\beta=' +getVal('Base',row1)[1:-1]+'='+getVal('Base (explicit)',row1)[1:]+ '\\\\'
+            print '$m_\\omega(t)=',getVal('Minimal polynomial of generator omega',row1)[1:],' & '+ '$m_\\beta(x)=',getVal('Minimal polynomial of base',row1)[1:]+'\\\\'
+            print 'Real conjugate of $\\beta$ greater than 1: ',' & ', getVal('Real conjugates of base greater than 1',row1), '\\\\'
 
-        if data['Is alphabet minimal?'][row1]=='yes':
-            print '$\\#\\A=',getVal('#A',row1),'$ & $\\A$ is minimal. \\\\'
-        else:
-            print '$\\#\\A=',getVal('#A',row1),'$ & $\\A$ is not minimal. \\\\'
-   #     print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\B ="  + setBraces(getVal('Input alphabet',row1)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
-        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\A ="  + setBraces(getVal('Alphabet',row1)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\'
-        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base',row1))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
-        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta-1$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base -1',row1))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\'
-        print ' & \\\\ \\hline'
-        print ' & \\\\'
-        print '\\end{tabular}\n'
-        print '\\begin{tabular}{ll}'
-        for nameQ in diffPhase1:
-            if Set(nameQ[1]).intersection(Set(methods)):
-                ms=Set(nameQ[1]).intersection(Set(methods)).list()
-                ms.sort()
-                print 'Phase 1 (methods $'+str(ms)[1:-1]+'$): &'
-                print '\\checkmark, $\\#\\mathcal{Q} =' + str(nameQ[0])+ '$ \\\\ '
-                for m in methods_phase2:
-                    method_res=''
-                    saved=False
-                    print 'Method ',str(m)+': &\\\\'
-                    for row,name_data_tex in enumerate(data_tex['Name']):
-                        if not saved and name_data_tex==name and int(data['Size of weight coefficients set'][row])==nameQ[0] and (int(data['Phase 1 - method No.'][row]) in nameQ[1]) and int(data['Phase 2 - method No.'][row])==m:
-                            saved=True
-                            if data['One letter inputs (problematic letters)'][row]=='OK':
-                                print '$b,b,\\dots,b$ inputs: & \\checkmark \\\\'
-                                if  data['Phase 2'][row]=='OK':
-                                    print 'Phase 2: & \\checkmark , $r=', getVal('Length of maximal input of weight function',row) + '$ \\\\'
+            if data['Is alphabet minimal?'][row1]=='yes':
+                print '$\\#\\A=',getVal('#A',row1),'$ & $\\A$ is minimal. \\\\'
+            else:
+                print '$\\#\\A=',getVal('#A',row1),'$ & $\\A$ is not minimal. \\\\'
+       #     print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\B ="  + setBraces(getVal('Input alphabet',row1)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
+            print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}\\begin{dmath*}\\A ="  + setBraces(getVal('Alphabet',row1)[1:-1])+' \\end{dmath*}\\end{minipage} }\\\\'
+            print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base',row1))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\[10pt]'
+            print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth}$\A$ divided into congruence classes modulo $\\beta-1$: \\begin{dmath*}"  + setBraces(getVal('Alphabet dividied into congruence classes mod base -1',row1))[1:-1]+' \\end{dmath*}\\end{minipage} }\\\\'
+            print ' & \\\\ \\hline'
+            print ' & \\\\'
+            print '\\end{tabular}\n'
+            print '\\begin{tabular}{ll}'
+            for nameQ in diffPhase1:
+                if Set(nameQ[1]).intersection(Set(methods))  or nameQ[1]==[4]:
+                    ms=[]
+                    for met in Set(nameQ[1]).intersection(Set(methods)).list():
+                        ms.append(methods1_letter[met])
+                    ms.sort()
+                    if nameQ[1]==[4]:
+                        ms='thm.'
+                    print 'Phase 1 (methods '+str(ms)[1:-1].replace("'",'') +'): &'
+                    print '\\checkmark, $\\#\\mathcal{Q} =' + str(nameQ[0])+ '$ \\\\ '
+                    for m in methods_phase2:
+                        method_res=''
+                        saved=False
+                        print 'Method ',methods2_letter[m]+': &\\\\'
+                        for row,name_data_tex in enumerate(data_tex['Name']):
+                            if not saved and name_data_tex==name and int(data['Size of weight coefficients set'][row])==nameQ[0] and (int(data['Phase 1 - method No.'][row]) in nameQ[1]) and int(data['Phase 2 - method No.'][row])==m:
+                                saved=True
+                                if data['One letter inputs (problematic letters)'][row]=='OK':
+                                    print '$b,b,\\dots,b$ inputs: & \\checkmark \\\\'
+                                    if  data['Phase 2'][row]=='OK':
+                                        print 'Phase 2: & \\checkmark , $r=', getVal('Length of maximal input of weight function',row) + '$ \\\\'
+                                    else:
+                                        print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth} Phase 2 fails because ", getVal('Error',row).replace('The', 'the') + '\\end{minipage} }\\\\'
                                 else:
-                                    print "\multicolumn{2}{l}{\\begin{minipage}{\\textwidth} Phase 2 fails because ", getVal('Error',row).replace('The', 'the') + '\\end{minipage} }\\\\'
-                            else:
-                                print 'Failing $b,b,\\dots,b$ inputs: & $'+ setBraces(data['One letter inputs (problematic letters)'][row].replace('omega','\\omega').replace('*',''))+ '$ \\\\'
+                                    print 'Failing $b,b,\\dots,b$ inputs: & $'+ setBraces(data['One letter inputs (problematic letters)'][row].replace('omega','\\omega').replace('*',''))+ '$ \\\\'
 
-                print '\\hline'
+                    print '\\hline'
 
-        print '\\end{tabular}\n'
+            print '\\end{tabular}\n'
 
-        print '\\end{exmp}'
-        print '\n'
-        print '\n'
+            print '\\end{exmp}'
+            print '\n'
+            print '\n'
     sys.stdout = stdout
 
 
