@@ -57,11 +57,11 @@ class WeightCoefficientsSetSearch(object):
         if self._method in [1,2,3,6,7, 8,9,10,11, 12,13,14,15,16,17]:
             #Method 1 chooses the smallest element (the embedding to CC is necessary here)
             #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary)
-            #Method 3 takes first the only possible candidates and then chooses the smallest element in the natural norm
+            #Method 3 takes first the only possible candidates and then chooses the smallest element in the beta norm
             #Method 6 takes first the only possible candidates and all in non-covered lists
             #Method 7 == 2, but A+A is taken even if the input alphabet is different
             #Method 8  takes first the only possible candidates and then add all smallest elements (absolute value)
-            #Method 9  takes first the only possible candidates and then add all smallest elements (natural norm)
+            #Method 9  takes first the only possible candidates and then add all smallest elements (beta norm)
             #6-14 8-12 9-13 10-15 11-16
             if self._method in [2,3,6,7,8,9,12,13,14]:
                 for cand_for_elem in copy(candidates):
@@ -161,7 +161,7 @@ class WeightCoefficientsSetSearch(object):
                 for (ind, a) in enumerate(comb):
                     cand=self._algForParallelAdd.list2Ring(list(a))
                     if self._method==4:
-                        cand_size=self._algForParallelAdd.naturalNorm(cand)
+                        cand_size=self._algForParallelAdd.betaNorm(cand)
                     elif self._method==5:
                         cand_size=abs(self._algForParallelAdd.ring2CC(cand))
                     if cand_size<bound:

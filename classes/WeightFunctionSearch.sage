@@ -325,8 +325,6 @@ class WeightFunctionSearch(object):
 
             self._nondecreasing_prev=self._nondecreasing
             self._nondecreasing={}
-            #if len(combinations)> 500000:
-            #    raise RuntimeErrorParAdd('Number of combinations to next iteration exceeded 500 000!!!')
         return self._weightFunction
 
     def check_one_letter_inputs(self, max_input_length):
@@ -464,9 +462,9 @@ class WeightFunctionSearch(object):
             min_norm=[self._algForParallelAdd._ring.coerce(elements[0])]
             for elem in elements[1:]:
                 elem=self._algForParallelAdd._ring.coerce(elem)
-                if self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))<self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
+                if self._algForParallelAdd.betaNorm_vect(point-vector(elem.list()))<self._algForParallelAdd.betaNorm_vect(point-vector(min_norm[0].list())):
                     min_norm=[elem]
-                elif self._algForParallelAdd.naturalNorm_vect(point-vector(elem.list()))==self._algForParallelAdd.naturalNorm_vect(point-vector(min_norm[0].list())):
+                elif self._algForParallelAdd.betaNorm_vect(point-vector(elem.list()))==self._algForParallelAdd.betaNorm_vect(point-vector(min_norm[0].list())):
                     min_norm.append(elem)
             return self._pick_element(min_norm)
         else:

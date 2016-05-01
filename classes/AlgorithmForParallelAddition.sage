@@ -664,7 +664,7 @@ class AlgorithmForParallelAddition(object):
         bound =0
         for a in self._alphabet:
             for b in self._inputAlphabet:
-                c=self.naturalNorm(b-a)
+                c=self.betaNorm(b-a)
                 if c>bound:
                     bound=c
         return bound/(self._smallestRoot_abs-1)
@@ -808,10 +808,10 @@ class AlgorithmForParallelAddition(object):
 
     def _findAllSmallest_norm(self,list_from_Ring):
         #finds smallest (in norm) element of list_from_Ring
-        smallestNorm=self.naturalNorm(list_from_Ring[0])
+        smallestNorm=self.betaNorm(list_from_Ring[0])
         smallest=[list_from_Ring[0]]
         for num in list_from_Ring[1:]:
-            numNorm=self.naturalNorm(num)
+            numNorm=self.betaNorm(num)
             if numNorm==smallestNorm:
                 smallest.append(num)
             elif numNorm<smallestNorm:
@@ -836,26 +836,26 @@ class AlgorithmForParallelAddition(object):
         return list_from_Ring[greatest_in]
 
     def _findSmallest_norm(self,list_from_Ring):
-        #finds smallest (in natural norm) element of list_from_Ring
-        smallestNorm=self.naturalNorm(list_from_Ring[0])
+        #finds smallest (in beta norm) element of list_from_Ring
+        smallestNorm=self.betaNorm(list_from_Ring[0])
         smallest_in=0
         i=0
         for num in list_from_Ring[1:]:
-            numNorm=self.naturalNorm(num)
+            numNorm=self.betaNorm(num)
             i+=1
             if numNorm<smallestNorm:
                 smallestNorm=numNorm
                 smallest_in=i
         if self._verbose>=1:
-            print 'Searching for the smallest element in the natural norm'
+            print 'Searching for the smallest element in the beta norm'
             print smallestNorm
         return list_from_Ring[smallest_in]
 
-    def naturalNorm(self,num):
+    def betaNorm(self,num):
         num=self._ring(num)
         return (self._diagonalizingMatrix*vector(num.list())).norm()
 
-    def naturalNorm_vect(self,num):
+    def betaNorm_vect(self,num):
         return (self._diagonalizingMatrix*num).norm()
 
 #-----------------------------RING CONVERSIONS, AUXILIARY RING FUNCTIONS-----------------------------------------------------
