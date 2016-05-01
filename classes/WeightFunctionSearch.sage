@@ -5,7 +5,7 @@ class WeightFunctionSearch(object):
     searching for Weight Function
     """
 #-----------------------------CONSTRUCTOR, SETTERS-------------------------------------------------------------------
-    def __init__(self, algForParallelAdd, weightCoefSet, method,maxInputs):
+    def __init__(self, algForParallelAdd, weightCoefSet, method):
         self._algForParallelAdd = algForParallelAdd
             #class AlgorithmForParallelAddition
         self._alphabet = algForParallelAdd.getAlphabet()
@@ -18,7 +18,7 @@ class WeightFunctionSearch(object):
 
         self._B=algForParallelAdd.getInputAlphabet()
             #alphabet of inputs (sequence to rewrite)
-        self._weightFunction= WeightFunction(self._B,maxInputs)
+        self._weightFunction= WeightFunction(self._B)
             #weight function
         self._weightCoefSet=weightCoefSet
             #starting set of weight coefficients
@@ -26,7 +26,12 @@ class WeightFunctionSearch(object):
             #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
         self._method=method
         if self._method==None:
-            self._method=15     #set the default method
+            self._method='2b'     #set the default method
+
+        methods2_letter={'2a':9,'2b':15,'2c':22, '2d':23, '2e':14}
+        if self._method in methods2_letter:
+            self._method=methods2_letter[self._method]
+
         self._k=0
         self._numbersOfSavedCombinations=[]
 

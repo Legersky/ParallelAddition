@@ -16,19 +16,23 @@ class WeightCoefficientsSetSearch(object):
             #base
         self._verbose=algForParallelAdd._verbose
 
+
         self._method=method
         if self._method==None:
-            self._method=13     #set the default method
+            self._method='1d'     #set the default method
+        methods1_letter={'1a':14,'1b':12, '1c':16, '1d':13,'1e':15}
+        if self._method in methods1_letter:
+            self._method=methods1_letter[self._method]
 
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
 
 #-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET-------------------------------------------------------------------
 
-    def _findCandidates(self,C):
-        # it finds \forall elem_c \in C the list cand_for_elem(elem_c): \forall x \in cand_for_elem(elem_c): elem_c \in A + \beta x
+    def _findCandidates(self,to_cover):
+        # it finds \forall elem_c \in to_cover the list cand_for_elem(elem_c): \forall x \in cand_for_elem(elem_c): elem_c \in A + \beta x
         candidates=[]
-        for elem_c in C:
+        for elem_c in to_cover:
             cand_for_elem=[]
             num_cand=0
             for a in self._alphabet:
@@ -133,9 +137,9 @@ class WeightCoefficientsSetSearch(object):
         else:
             raise ValueErrorParAdd("Method number %s for WeightCoefficientsSet is not implemented" % self._method)
 
-    def _getQk(self,C):
+    def _getQk(self,to_cover):
         #it extends Qk1 to Qk such that C \subset A + \beta Qk
-        return self._chooseQk_FromCandidates(self._findCandidates(C))
+        return self._chooseQk_FromCandidates(self._findCandidates(to_cover))
 
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
