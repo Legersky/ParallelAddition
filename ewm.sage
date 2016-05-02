@@ -12,7 +12,7 @@ except:
 try:
     folder_path
 except:
-    folder_path='./'
+    folder_path='./outputs/'
 
 try:
     max_iterations
