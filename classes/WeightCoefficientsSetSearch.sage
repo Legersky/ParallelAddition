@@ -27,6 +27,13 @@ class WeightCoefficientsSetSearch(object):
     def __repr__(self):
         return "Instance of PotentialCoefficientsSet using method %s" %self._method
 
+    def getMethod(self):
+        methods1_letter={14:'1a', 12:'1b', 16:'1c', 13:'1d',15:'1e'}
+        if self._method in methods1_letter:
+            return methods1_letter[self._method]
+        else:
+            return self._method
+
 #-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET-------------------------------------------------------------------
 
     def _findCandidates(self,to_cover):
@@ -46,7 +53,7 @@ class WeightCoefficientsSetSearch(object):
         return candidates
 
     def _chooseQk_FromCandidates(self,candidates):
-        #using candidates in candidates it enlarges Qk1 to Qk so that B + Qk1 \subset A + \beta Qk
+        #using candidates in candidates it extends Qk1 to Qk so that B + Qk1 \subset A + \beta Qk
         #returns Qk
         res=Set(self._Qk1)
         added_elem=[]
@@ -144,8 +151,8 @@ class WeightCoefficientsSetSearch(object):
     def findWeightCoefficientsSet(self, maxIterations):
         # call  _chooseQkFromCandidates until there is no increment
         if self._method in [4,5]:
-            #Method 4 - weight coefficients set given by bound (norm)     SOMETHING IS WRONG!!!!!!!!!!!!!!!!!!!!!!!!!
-            #Method 5 - weight coefficients set given by bound (abs) ONLY QUADRATIC COMPLEX !!!!!!!!!!!!!!!!!!!!!
+            #Method 4 - weight coefficients set given by bound (norm)     DO NOT USE
+            #Method 5 - weight coefficients set given by bound (abs)      DO NOT USE
             if self._method==4:
                 bound=self._algForParallelAdd.computeBound_norm()
             elif self._method==5:

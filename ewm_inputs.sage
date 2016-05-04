@@ -18,13 +18,13 @@ methods_phase2=['2c']     #methods in the list are used. If empty, default metho
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
 #------------SANITY CHECK---------------
-sanityCheck=False        #run sanity check
+sanityCheck=True        #run sanity check
 
 #------------SAVING---------------------
-info=True                #save general info to .tex file
+info=False                #save general info to .tex file
 WFcsv=False              #save weight function to .csv file
 localConversionCsv=False #save local conversion to .csv file
-saveLog=True             #save log file
+saveLog=False             #save log file
 
 #------------IMAGES--------------------
 alphabet_img=False      #save image of alphabet and input alphabet

@@ -454,7 +454,7 @@ class AlgorithmForParallelAddition(object):
     def _findWeightCoefSet(self, max_iterations, method_number):
         #finds and sets Weight Coefficients set
         self._weightCoefSetSearch=WeightCoefficientsSetSearch(self,method_number)
-        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %self._weightCoefSetSearch._method)
+        self.addLog("Phase 1 - Searching for the Weight Coefficient Set using method %s..." %self._weightCoefSetSearch.getMethod())
         self._weightCoefSet=copy(self._weightCoefSetSearch.findWeightCoefficientsSet(max_iterations))
         return self._weightCoefSet
 
@@ -474,7 +474,7 @@ class AlgorithmForParallelAddition(object):
             self._length_OneLetterInputs=len(longest[0])
             self.addLog("Length of one letter input: %s: " %self._length_OneLetterInputs)
             self.addLog("Number of letters with longest input: %s" %len(longest))
-            self.addLog("Searching the Weight Function using method %s..." %self._weightFunSearch._method)
+            self.addLog("Searching the Weight Function using method %s..." %self._weightFunSearch.getMethod())
             self._weightFunction = copy(self._weightFunSearch.findWeightFunction(max_input_length))
         else:
             raise ValueErrorParAdd("There are no values in the weight coefficient set Q.")
@@ -688,10 +688,13 @@ class AlgorithmForParallelAddition(object):
     def parallelConversion(self,_w):
         w=copy(_w)
         #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
-        if self._verbose== 2 : print "Converting: ", w
+        if self._verbose== 2 : pass
+        print "Converting: ", w
         maxLength=self._weightFunction.getMaxLength()
-        w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        w[:0]=([0]*(maxLength))    #prepending zeros in smaller exponents
+        print "max length ", maxLength
+        w=w+([0]*(maxLength+1))    #padding by zeros in greater exponents
+        w=([0]*(maxLength)) +w    #prepending zeros in smaller exponents
+        print w
         z=[]
         q_i_prev=0
         if self._verbose>=2:
@@ -751,10 +754,15 @@ class AlgorithmForParallelAddition(object):
 
     def sanityCheck_conversion(self, num_digits):
         #tries to convert all possible number of lenght num_digits with digits from input alphabet
-        allNumbers = list(CartesianProduct(*(self._inputAlphabet for i in range(0,num_digits))))
+        alphs=[]
+        for i in range(0,num_digits):
+            alphs.append(self._inputAlphabet)
+        allNumbers=cartesian_product(alphs)
         errors=0
         self.addLog("Sanity check of %s digits..." %num_digits)
-        for num_list in allNumbers:
+        n=0
+        for num_list in enumerate(allNumbers):
+            n+=1
             num_converted=self.parallelConversion(num_list)
             if self._verbose>=1:
                 print 'Converting', num_list
@@ -764,9 +772,9 @@ class AlgorithmForParallelAddition(object):
                     print 'problem: %s does not equal to  %s' %(num_list, num_converted)
                 errors+=1
         if self._verbose>=1:
-            print "Tested: ", len(allNumbers)
+            print "Tested: ", n
             print "Number of errors", errors
-        self.addLog("Tested: " + str(len(allNumbers)))
+        self.addLog("Tested: " + str(n))
         self.addLog("Number of errors: " + str(errors))
         return errors
 
@@ -1525,28 +1533,7 @@ class AlgorithmForParallelAddition(object):
 
     def saveToGoogleSpreadsheet(self,_worksheet, row):
         try:
-            import json
-            import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
-            import warnings
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                from oauth2client.client import SignedJwtAssertionCredentials
-                warnings.resetwarnings()
-
-
-            try:
-                json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
-            except Exception, e:
-                json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
-
-            scope = ['https://spreadsheets.google.com/feeds']
-
-            credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-
-            gc = gspread.authorize(credentials)
-
-
-            sheet=gc.open("ParallelAddition_results")
+            sheet=getGoogleSpreadsheet()
 
             worksheet=sheet.worksheet(_worksheet)
 
@@ -1588,13 +1575,13 @@ class AlgorithmForParallelAddition(object):
                 results+=['yes']
             else:
                 results+=['no']
-            results+=[self._weightCoefSetSearch._method]
+            results+=[self._weightCoefSetSearch.getMethod()]
             if self._weightCoefSet:
                 results+=['OK' ,len(self._weightCoefSet)]
             else:
                 results+=['x' ,'-']
             results+=[self._weightCoefSetSearch._numbersOfElementsInIterations]
-            results+=[self._weightFunSearch._method]
+            results+=[self._weightFunSearch.getMethod()]
             if self._oneLettersCheck:
                 results+=['OK', self._length_OneLetterInputs]
             else:
@@ -1652,3 +1639,39 @@ class AlgorithmForParallelAddition(object):
         self.saveToGoogleSpreadsheet('comparePhase1', results)
 
         return same_method
+
+
+def getGoogleSpreadsheet():
+    try:
+        import json
+        import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            from oauth2client.client import SignedJwtAssertionCredentials
+            warnings.resetwarnings()
+
+
+        try:
+            json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
+        except Exception, e:
+            json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
+
+        scope = ['https://spreadsheets.google.com/feeds']
+
+        credentials=SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+        gc = gspread.authorize(credentials)
+
+        sheet=gc.open("ParallelAddition_results")
+        return sheet
+    except:
+        import json
+        import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
+        from oauth2client.service_account import ServiceAccountCredentials
+
+        scope = ['https://spreadsheets.google.com/feeds']
+        credentials = ServiceAccountCredentials.from_json_keyfile_name('vysledkyParallel-b1ae50e4c6ea.json', scope)
+        gc = gspread.authorize(credentials)
+
+        sheet=gc.open("ParallelAddition_results")
+        return sheet

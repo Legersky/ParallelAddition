@@ -76,8 +76,6 @@ for method1 in methods_phase1:
             if method1!=None or method2!=None:
                 output_folder+='/methods_'+str(method1)+'-'+str(method2)
 
-            #output_folder+='/'
-
             if filename:
                 d = os.path.dirname(output_folder+'/')
                 if not os.path.exists(d):

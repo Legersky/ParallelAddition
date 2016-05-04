@@ -41,6 +41,13 @@ class WeightFunctionSearch(object):
     def __repr__(self):
         return "Instance of WeightFunctionSearch"
 
+    def getMethod(self):
+        methods2_letter={9:'2a',15:'2b',22:'2c', 23:'2d', 14:'2e'}
+        if self._method in methods2_letter:
+            return methods2_letter[self._method]
+        else:
+            return self._method
+
 #-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
     def _find_weightCoef_for_comb_B(self, combinations):
         #finds weight coefficients for combinations + letter from self._B if it is possible, function returns combinations for which wider window is necessary to get weight coefficient
