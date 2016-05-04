@@ -63,7 +63,7 @@ class AlgorithmForParallelAddition(object):
 
 
         if alphabet=='':
-            self.setAlphabet(self.findAlphabet2())
+            self.setAlphabet(self.findAlphabet())
                 #automatically find an alphabet
         elif alphabet=='oneMore':
             self.setAlphabet(self.findAlphabet_oneMore())
@@ -85,10 +85,10 @@ class AlgorithmForParallelAddition(object):
             self.setInputAlphabet(sage.misc.sage_eval.sage_eval(inputAlphabet, locals={'omega':self._ringGenerator}))
             #different input alphabet (if None, then alphabet + alphabet is used)
         else:
-            if alphabet=='integer' or alphabet=='integer2' or alphabet=='integer3':
-                self.setSmallerIntegerInputAlphabet()
-            else:
-                self.setInputAlphabet([])
+            #if alphabet=='integer' or alphabet=='integer2' or alphabet=='integer3':
+              #  self.setSmallerIntegerInputAlphabet()
+            #else:
+            self.setInputAlphabet([])
 
         self._weightCoefSet=[]
             #set of potential coefficients
@@ -279,16 +279,13 @@ class AlgorithmForParallelAddition(object):
                             maxMissing=False
         return res
 
-    def findAlphabet(self):
-        #find an alphabet which contains all representatives modulo beta and beta -1
-        return self.addRepresentativesToMinMaxElement(self.addRepresentatives(self.addRepresentatives([0, 1, -1],self._base-1),self._base))
 
-    def findAlphabet2(self):
+    def findAlphabet(self):
         #find an alphabet which contains all representatives modulo beta and beta -1
         return self.addRepresentativesToMinMaxElement(self.addSmallestNormRepresentatives(self.addSmallestNormRepresentatives([0, 1, -1],self._base-1),self._base))
 
     def findAlphabet_oneMore(self):
-        A=self.findAlphabet2()
+        A=self.findAlphabet()
         dist=[]
         for a in A:
             dist.append(a-self._base)
