@@ -1,7 +1,9 @@
 # ParallelAddition
 implementation of the extending window method for construction of algorithms for parallel addition
 
-For basic use, load AlgorithmForParallelAddition.sage, create an instance of AlgorithmForParallelAddition and call.
+For description of the method, see Construction of algorithms for parallel addition.pdf 
+
+For basic use, load AlgorithmForParallelAddition.sage, create an instance of AlgorithmForParallelAddition and call findWeightFunction.
 
 We also provide an interface - a shell script with given parameters is executed. If the network access is enabled and the modul gspread is installed, then results of computation are automatically saved to Google spreadsheet https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit?usp=sharing. The spreadsheet can be also used for loading input parameters.
 
