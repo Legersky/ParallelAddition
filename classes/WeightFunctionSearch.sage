@@ -47,6 +47,31 @@ class WeightFunctionSearch(object):
             return methods2_letter[self._method]
         else:
             return self._method
+# 0 - add the first element in the first shortest list (implementation dependent)
+# 1 - find the smallest covering coefficients from the shortest lists (really slow !!!)
+# 2 - random from the shortest lists
+# 3 - pick element from the shortest lists lexicographically according to coordinates in lattice
+# 4 - pick element from the shortest list which is the closest (according to lattice) to rounded center of gravity of points in shortest lists (default)
+# 5 - pick element from all resting list which is the closest (according to lattice) to rounded center of gravity of points in all resting lists
+# 6 - find the smallest covering coefficients from all resting lists (really slow !!!)
+# 7 - pick element from the shortest list which is the closest (in absolute value) to rounded center of gravity of points in shortest lists
+# 8 - pick element from the shortest list which is the closest (in absolute value) to center of gravity of points in shortest lists
+# 9 = 2a - pick element from all resting list which is the closest (in absolute value) to center of gravity of points in all resting lists
+# 10 - each value covered separately by the point closest to point of gravity of covering values - deleted
+# 11 - pick element from the shortest lists which is the smallest (in absolute value) - implementation dependent
+# 12 - pick element from the shortest lists which is the smallest (beta-norm) - implementation dependent
+# 13 - pick element from those with highest occurrencies, which is the closest to 0 in beta-norm
+# 14 = 2e - pick element from those with highest occurrencies, which is the closest to the center of gravity of already added (in absolute value)
+# 15 = 2b - pick element from the shortest lists which is closest to already added (absolute value)
+# 16 - pick element from those with highest occurrencies, which is the closest to center of gravity of already added (in beta norm)
+# 17 - pick element from all resting which is the closest (in beta norm) to the center of gravity of already added
+# 18 - pick element according to covering by alphabets
+# 19 - pick more elements according to covering by alphabets
+# 20 - another way to pick an element according to covering by alphabets
+# 21 - pick element from the shortest lists which is closest to already added (beta norm)
+# 22 = 2c - pick element from the shortest lists which is the smallest (in absolute value)
+# 23 = 2d - pick element from the shortest lists which is the smallest (beta-norm)
+
 
 #-----------------------------SEARCH FOR WEIGHT FUNCTION-------------------------------------------------------------------
     def _find_weightCoef_for_comb_B(self, combinations):
@@ -103,7 +128,6 @@ class WeightFunctionSearch(object):
 
         if tuple(w[0:-1]) in self._nondecreasing_prev:
             if w[-1] in self._nondecreasing_prev[w[0:-1]]:
-                #self._algForParallelAdd.addLog("Checking cycles for " + str(w_tuple))
                 find_next_letter(w,list(w))
 
 
@@ -122,7 +146,6 @@ class WeightFunctionSearch(object):
         if w_tuple_without_first in self._Qw_w:
             C=self._algForParallelAdd.sumOfSets([w0],self._Qw_w[w_tuple_without_first])
 
-            #Qw_prev=self._Qw_w[w_tuple[0:-1]]
             Qww=[]
             if self._verbose>=2:
                 print 'To be covered:' , C
@@ -141,7 +164,7 @@ class WeightFunctionSearch(object):
             to_add=[]
 
             if self._method ==10:    #each value covered separately by the point closest to point of gravity of covering values
-                raise ValueErrorParAdd('Method 10 has been deleted. (Bez synergii to vubec nefunguje)')
+                raise ValueErrorParAdd('Method 10 has been deleted.')
 
             while C_covered_by:        #while there are uncovered elements
                 if self._verbose>=2:
@@ -298,14 +321,8 @@ class WeightFunctionSearch(object):
                 print "Qw_w for ", w_tuple, " was found: "
                 print Qww
 
-            #self._Qw_w[w_tuple]=self.convex(w_tuple,Qww)
             self._Qw_w[w_tuple]=Qww
-            #if len(Qw_prev)==len(Qww) and len(Qww)>1:
-             #   print w_tuple
 
-
-
-#            self.opravy(w_tuple)
             return Qww
         else:
             raise  RuntimeErrorParAdd("There is no Qww for: ", w_tuple_without_first)

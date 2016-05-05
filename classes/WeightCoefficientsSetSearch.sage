@@ -33,6 +33,22 @@ class WeightCoefficientsSetSearch(object):
             return methods1_letter[self._method]
         else:
             return self._method
+# 1 - chooses the smallest element (the embedding to CC is necessary here)
+# 2 - takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary here) - dependent on order of digits in alphabet!!!
+# 3 - takes first the only possible candidates and then chooses the smallest element in the natural norm  - dependent on order of digits in alphabet!!!
+# 4 - weight coefficients set given by bound (norm) DO NOT USE
+# 5 - weight coefficients set given by bound (abs) DO NOT USE
+# 6 - takes first the only possible candidates and all in non-covered lists - implementation dependent
+# 7 == 9, but A+A is taken even if the input alphabet is different
+# 8 -  takes first the only possible candidates and then add all smallest elements (absolute value) - implementation dependent
+# 9 - takes first the only possible candidates and then add all smallest elements (natural norm) - implementation dependent
+# 10 - chooses all smallest elements (in beta-norm) - implementation dependent
+# 11 - chooses all smallest elements (absolute value) - implementation dependent
+# 12 = 1b -  takes first the only possible candidates and then add all smallest elements (absolute value)
+# 13 = 1d - takes first the only possible candidates and then add all smallest elements (natural norm) (default)
+# 14 = 1a - takes first the only possible candidates and all in non-covered lists
+# 15 = 1e - chooses all smallest elements (in beta-norm)
+# 16 = 1c - chooses all smallest elements (absolute value)
 
 #-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET-------------------------------------------------------------------
 
@@ -62,14 +78,6 @@ class WeightCoefficientsSetSearch(object):
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
 
         if self._method in [1,2,3,6,7, 8,9,10,11, 12,13,14,15,16,17]:
-            #Method 1 chooses the smallest element (the embedding to CC is necessary here)
-            #Method 2 takes first the only possible candidates and then chooses the smallest element (in absolute value, the embedding to CC is necessary)
-            #Method 3 takes first the only possible candidates and then chooses the smallest element in the beta norm
-            #Method 6 takes first the only possible candidates and all in non-covered lists
-            #Method 7 == 2, but A+A is taken even if the input alphabet is different
-            #Method 8  takes first the only possible candidates and then add all smallest elements (absolute value)
-            #Method 9  takes first the only possible candidates and then add all smallest elements (beta norm)
-            #6-14 8-12 9-13 10-15 11-16
             if self._method in [2,3,6,7,8,9,12,13,14]:
                 for cand_for_elem in copy(candidates):
                     if len(cand_for_elem)==1:

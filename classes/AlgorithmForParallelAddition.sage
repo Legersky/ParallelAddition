@@ -125,9 +125,6 @@ class AlgorithmForParallelAddition(object):
         self._missing_representatives_mod_base_minus_one='-'
         self._weightCoefSetSearch=None
 
-        #if self._printLogLatex:
-         #   self.addLog("Plotting the lattice and shifts of the alphabet centered in the points divisible by the base: ")
-          #  show(self.plotLattice())
 
     def __repr__(self):
         return "Instance of AlgorithmForParallelAddition with beta %s (root of %s) and alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet)
@@ -140,14 +137,13 @@ class AlgorithmForParallelAddition(object):
         maxA_abs=0
         for a in A:
             if a in self._ring:
-                self._alphabet.append(a)    #adding to alphabet
+                self._alphabet.append(self._ring.coerce(a))    #adding to alphabet
                 if abs(self.ring2CC(a))>maxA_abs:
                     maxA_abs=abs(self.ring2CC(a))
             else:
                 raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s)) so it cannot be used for alphabet." %(a, self._genCCValue, self._minPolynomial))
         self._maximumOfAlphabet=maxA_abs
-       # if self._minPolynomial.degree()==3 and len(self._alphabet)>20:
-       #    raise RuntimeErrorParAdd("Cubic base, alphabet has more than 20 elements")
+
 
     def setInputAlphabet(self,B):
         #If B is empty, A+A is used. Set the input alphabet B. Check if A \subsetneq B \subset A+A.
@@ -156,7 +152,7 @@ class AlgorithmForParallelAddition(object):
             self._inputAlphabet=[]
             for b in B:
                 if b in alphabetPlusAlphabet:
-                    self._inputAlphabet.append(b)    #adding to input alphabet
+                    self._inputAlphabet.append(self._ring.coerce(b))    #adding to input alphabet
                 else:
                     raise ValueErrorParAdd("Value %s is not element of alphabet + alphabet so it cannot be used for inputAlphabet." %b)
             for a in self._alphabet:
@@ -210,9 +206,6 @@ class AlgorithmForParallelAddition(object):
         for conj in real_conjugates:
             if conj>1:
                 self._realConjugatesGreaterOne.append(conj)
-
-        #if not self._realConjugatesGreaterOne:
-         #   raise RuntimeErrorParAdd('Uz otestovano')
 
         if not self._base_is_expanding:
             raise ValueErrorParAdd('Base %s is not expanding' %self._base)
@@ -688,13 +681,11 @@ class AlgorithmForParallelAddition(object):
     def parallelConversion(self,_w):
         w=copy(_w)
         #converts w = [w_0, w_1, ...] with digits from input alphabet to number in BaseRing with digits in alphabet A
-        if self._verbose== 2 : pass
-        print "Converting: ", w
         maxLength=self._weightFunction.getMaxLength()
-        print "max length ", maxLength
-        w=w+([0]*(maxLength+1))    #padding by zeros in greater exponents
-        w=([0]*(maxLength)) +w    #prepending zeros in smaller exponents
-        print w
+        for j in range(0,maxLength):
+            w=(self._ring.coerce(0),)+w+(self._ring.coerce(0),)
+        #w=([0]*(maxLength))+w + ([0]*(maxLength+1))  #prepending zeros in smaller exponents and #padding by zeros in greater exponents
+        w=tuple(w+(self._ring.coerce(0),))
         z=[]
         q_i_prev=0
         if self._verbose>=2:
@@ -761,13 +752,13 @@ class AlgorithmForParallelAddition(object):
         errors=0
         self.addLog("Sanity check of %s digits..." %num_digits)
         n=0
-        for num_list in enumerate(allNumbers):
+        for num_list in allNumbers:
             n+=1
-            num_converted=self.parallelConversion(num_list)
+            num_converted=self.parallelConversion(tuple(num_list))
             if self._verbose>=1:
                 print 'Converting', num_list
                 print '----------> ', num_converted
-            if not self.list2BaseRing(num_converted) == self.list2BaseRing(num_list):
+            if not self.list2BaseRing(num_converted) == self.list2BaseRing(list(num_list)):
                 if self._verbose>=0:
                     print 'problem: %s does not equal to  %s' %(num_list, num_converted)
                 errors+=1
@@ -869,6 +860,7 @@ class AlgorithmForParallelAddition(object):
         res=0
         digits=copy(_digits)
         digits.reverse()
+        type(digits)
         for a in digits:    #Horner scheme
             res*=self._base
             res+=a

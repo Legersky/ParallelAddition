@@ -13,18 +13,18 @@ inputAlphabet = ''
 base ='omega - 1'
 
 #------------EWM SETTING----------------
-methods_phase1=['1a']     #methods in the list are used. If empty, default method is used.
-methods_phase2=['2c']     #methods in the list are used. If empty, default method is used.
+methods_phase1=['1a', '1d']     #methods in the list are used. If empty, default method is used.
+methods_phase2=['2c', '2d']     #methods in the list are used. If empty, default method is used.
 #Cartesian product of lists methods_phase1 and methods_phase2 is computed
 
 #------------SANITY CHECK---------------
-sanityCheck=True        #run sanity check
+sanityCheck=False        #run sanity check
 
 #------------SAVING---------------------
-info=False                #save general info to .tex file
+info=True                #save general info to .tex file
 WFcsv=False              #save weight function to .csv file
 localConversionCsv=False #save local conversion to .csv file
-saveLog=False             #save log file
+saveLog=True             #save log file
 
 #------------IMAGES--------------------
 alphabet_img=False      #save image of alphabet and input alphabet

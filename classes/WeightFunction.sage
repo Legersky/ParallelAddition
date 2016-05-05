@@ -26,7 +26,7 @@ class WeightFunction(object):
         maxLength=self._maxLength
         w=list(w)
         w.extend([0]*(maxLength+1))    #padding by zeros in greater exponents
-        #minLength=1
+
         for i in range(0,len(w)):
             if not w[i] in self._inputAlphabet:
                 raise ValueErrorParAdd("Digit %s is not in the input alphabet" %w[i])
