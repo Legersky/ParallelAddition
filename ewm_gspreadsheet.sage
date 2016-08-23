@@ -5,7 +5,7 @@
 # Values in the columns 'Name', 'Alphabet',	'Input alphabet', 'Ring generator',	'Minimal polynomial of generator omega' and 'Base'
 # must be filled for the tested rows
 
-compareWith=['this', 'that']    #if some of these values is found in column A, the correspondig row will be tested
+compareWith=['kblock']    #if some of these values is found in column A, the correspondig row will be tested
 general_note='my own note'
 
 # Do not change order of rows in the  list 'inputs' when processing!
