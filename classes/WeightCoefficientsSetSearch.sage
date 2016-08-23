@@ -195,7 +195,7 @@ class WeightCoefficientsSetSearch(object):
             for q in self._Qk1:
                 betaQ.append(self._base*q)
             if not Set(self._algForParallelAdd.sumOfSets(self._inputAlphabet, self._Qk1)).issubset(Set(self._algForParallelAdd.sumOfSets(self._alphabet, betaQ))):
-                raise RuntimeErrorParAdd('For Q computed by method %s: A+A+Q is not subset of A+beta Q.' %self._method)
+                raise RuntimeErrorParAdd('There are some problems with implementation, please do not use method %s in Phase 1. (For Q computed by this method: A+A+Q is not subset of A+beta Q.) ' %self._method)
             return self._Qk1
 
 
