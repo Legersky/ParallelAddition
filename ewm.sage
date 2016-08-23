@@ -21,6 +21,10 @@ except:
     max_iterations=Infinity
     max_input_length=Infinity
 
+try:
+    kblock
+except:
+    kblock=1
 
 alg=None
 alg_update=False
@@ -31,7 +35,7 @@ if methods_phase1==[]:
 if methods_phase2==[]:
     methods_phase2=[None]
 
-alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
+alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False, kblock=kblock)
 try:
     note=general_note+', '
 except:
@@ -62,9 +66,9 @@ for method1 in methods_phase1:
                 verbosity=0
 
             try:
-                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity, maxInputs=maximumOfInputs)
+                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity, maxInputs=maximumOfInputs, kblock=kblock)
             except:
-                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity)
+                alg= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=True, verbose=verbosity, kblock=kblock)
 
 
 

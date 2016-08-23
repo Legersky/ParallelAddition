@@ -50,6 +50,9 @@ for row in rows_to_test:
         omegaCC= sage.misc.sage_eval.sage_eval(worksheet.cell(row, 5).value)
         alphabet = worksheet.cell(row, 3).value
         inputAlphabet = worksheet.cell(row, 4).value
+        kblock = worksheet.cell(row, 8).value
+        if kblock=='':
+            kblock=1
         if inputAlphabet=='A+A':
             inputAlphabet=''
         base =worksheet.cell(row, 7).value

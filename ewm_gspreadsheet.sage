@@ -8,8 +8,15 @@
 compareWith=['this', 'that']    #if some of these values is found in column A, the correspondig row will be tested
 general_note='my own note'
 
+# Do not change order of rows in the  list 'inputs' when processing!
+
+
 onlyComparePhase1=False     #if True, then comparing of methods for Phase 1 given in the cell C1 is run without Phase 2.
+
+# !!DO NOT CHANGE!!
+load_attach_path('~')
+load_attach_path('/home/legerjan/ParallelAddition')
+load_attach_path('/home/legerjan/ParallelAddition/classes')
 
 load('run_gspreadsheet.sage')
 
-# Do not change order of rows in the  list 'inputs' when processing!

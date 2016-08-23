@@ -12,7 +12,7 @@ class AlgorithmForParallelAddition(object):
     Class for construction of parallel addition algorithms with the rewriting rule x-beta
     """
 #-----------------------------CONSTRUCTOR------------------------------------------------------------------------------------
-    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0):
+    def __init__(self, minPol_str, embd, alphabet, base, name='NumerationSystem', inputAlphabet='', printLog=True, printLogLatex=False, verbose=0, kblock=1):
         self._name=name
             #name of the numeration system
         self._log=[]
@@ -22,6 +22,8 @@ class AlgorithmForParallelAddition(object):
         self._printLogLatex=printLogLatex
             #log are printed using latex if True
         self._verbose=verbose
+
+        self._kblock=sage.misc.sage_eval.sage_eval(kblock)
 
         P.<x>=ZZ[]
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
@@ -133,6 +135,11 @@ class AlgorithmForParallelAddition(object):
 
     def setAlphabet(self,A):
         #Check if A is subset of Ring. Set alphabet A
+        if self._kblock>1:
+            A_tmp=copy(A)
+            for k in range(1,self._kblock):
+                A_tmp=self.sumOfSets(A_tmp,self.scalarTimesSet(self._base_original^k,A))
+            A=A_tmp
         self._alphabet=[]
         maxA_abs=0
         for a in A:
@@ -184,6 +191,9 @@ class AlgorithmForParallelAddition(object):
 
     def setBase(self, base):
         #set base
+        if self._kblock>1:
+            self._base_original=base
+            base=base^self._kblock
         if base in self._ring:
                 self._base=self._ring.coerce(base)
                 self._minimalPolynomialOfBase=self._base.minpoly()
@@ -915,6 +925,15 @@ class AlgorithmForParallelAddition(object):
             for b in B:
                 res=res+Set([a+b])
         return res.list()
+
+    def scalarTimesSet(self, alpha, A):
+        #outputs set alpha times A if A is a subset of Ring, and alpha its element
+        res=[]
+        for a in A:
+            if not(a in self._ring):
+                raise TypeErrorParAdd("Value %s is not element of Ring (omega = %s (root of %s))." %(a, self._genCCValue, self._minPolynomial))
+            res.append(alpha*a)
+        return res
 
     def _computeCompanionMatrix(self,num):
         #compute  matrix to companion matrix of num using Horner scheme:
