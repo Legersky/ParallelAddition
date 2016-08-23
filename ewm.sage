@@ -47,7 +47,7 @@ if len(methods_phase1)>1:
     sys.stdout.flush()
 
     try:
-        SMQSetProgressText(0.1, text='Comparing different methods for Phase 1...')
+        SMQSetProgressText(0.1, text='Comparing different methods for Phase 1... (Progress bar is only for one input line!!)')
     except:
         pass
 
@@ -66,7 +66,7 @@ for method1 in methods_phase1:
     for method2 in methods_phase2:
         try:
             try:
-                SMQSetProgressText(k*0.9/l, text='Processing methods '+ str(method1)+' and '+str(method2))
+                SMQSetProgressText(k*0.9/l, text='Processing methods '+ str(method1)+' and '+str(method2)+' (Progress bar is only for one input line!!)')
                 k+=1
             except:
                 pass
