@@ -46,6 +46,11 @@ if len(methods_phase1)>1:
     print 'Comparing different methods for Phase 1...'
     sys.stdout.flush()
 
+    try:
+        SMQSetProgressText(0.1, text='Comparing different methods for Phase 1...')
+    except:
+        pass
+
     same_methods=alg_test.compareMethodsPhase1(methods_phase1,note)
     print 'Same weight coefficients sets are found by these group(s) of methods:'
     print same_methods
@@ -54,10 +59,17 @@ if len(methods_phase1)>1:
     for group in same_methods:
         methods_phase1.append(group[0])
 
+l=len(methods_phase1)*len(methods_phase2)
+k=1
 
 for method1 in methods_phase1:
     for method2 in methods_phase2:
         try:
+            try:
+                SMQSetProgressText(k*0.9/l, text='Processing methods '+ str(method1)+' and '+str(method2))
+                k+=1
+            except:
+                pass
             start=time.clock()
 
             try:
