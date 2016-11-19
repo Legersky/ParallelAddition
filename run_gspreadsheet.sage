@@ -1,5 +1,6 @@
 compareWith=['klasika']
 general_note='my own note'
+onlyComparePhase1=False
 
 try:
     sanityCheck
