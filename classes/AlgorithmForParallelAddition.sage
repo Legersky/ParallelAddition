@@ -1456,7 +1456,10 @@ class AlgorithmForParallelAddition(object):
             header=header+ 'output digit'
             print header
 
-            allNumbers = list(CartesianProduct(*(self._inputAlphabet for i in range(0,self._weightFunction.getMaxLength()+1))))
+            for_cartProd=[]
+            for i in range(0,self._weightFunction.getMaxLength()+1):
+                for_cartProd.append(self._inputAlphabet)
+            allNumbers = list(cartesian_product(for_cartProd))
             for num_list in allNumbers:
                 out_digit=self.localConversion(num_list)
                 line=' '
