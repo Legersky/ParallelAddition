@@ -29,8 +29,8 @@ try:
     sheet=getGoogleSpreadsheet()
     ws_name= 'inputs'
     worksheet=sheet.worksheet(ws_name)
-    methods_phase1=sage.misc.sage_eval.sage_eval(worksheet.cell(1, 3).value)       #methods in the list are used. If empty, default method is used.
-    methods_phase2=sage.misc.sage_eval.sage_eval(worksheet.cell(2, 3).value)        #methods in the list are used. If empty, default method is used.
+    methods_phase1=sage.misc.sage_eval.sage_eval(str(worksheet.cell(1, 3).value))       #methods in the list are used. If empty, default method is used.
+    methods_phase2=sage.misc.sage_eval.sage_eval(str(worksheet.cell(2, 3).value))        #methods in the list are used. If empty, default method is used.
 except Exception, e:
     print "Some problem with google spreadsheet:"
     print e
@@ -50,7 +50,7 @@ for row in rows_to_test:
         name = worksheet.cell(row, 2).value
         print name
         minPol =worksheet.cell(row, 6).value.replace('t','x')
-        omegaCC= sage.misc.sage_eval.sage_eval(worksheet.cell(row, 5).value)
+        omegaCC= sage.misc.sage_eval.sage_eval(str(worksheet.cell(row, 5).value))
         alphabet = worksheet.cell(row, 3).value
         inputAlphabet = worksheet.cell(row, 4).value
         kblock = worksheet.cell(row, 8).value
