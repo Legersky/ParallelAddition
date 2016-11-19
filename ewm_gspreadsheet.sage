@@ -1,3 +1,4 @@
+### Inputs from Google spreadsheet
 # This script loads inputs from the list 'inputs' of google spreadsheet
 # https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit#gid=209657865
 
@@ -12,6 +13,24 @@ general_note='my own note'
 
 
 onlyComparePhase1=False     #if True, then comparing of methods for Phase 1 given in the cell C1 is run without Phase 2.
+#------------SANITY CHECK---------------
+sanityCheck=False         #run sanity check
+
+#------------SAVING---------------------
+info=True               #save general info to .tex file
+WFcsv=True              #save weight function to .csv file
+localConversionCsv=True #save local conversion to .csv file
+saveSetting=False        #save inputs setting as a dictionary
+saveLog=True             #save log file
+
+#------------IMAGES--------------------
+alphabet_img=False        #save image of alphabet and input alphabet
+phase1_images=False       #save step-by-step images of phase 1
+weightCoefSet_img=False   #save image of the weight coefficient set
+phase2_images=False       #save step-by-step images of phase 2
+#for input:
+phase2_input='(omega,1,omega,1,omega,1,omega,1)'
+
 
 # !!DO NOT CHANGE!!
 load_attach_path('~')
