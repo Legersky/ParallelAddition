@@ -23,7 +23,7 @@ class AlgorithmForParallelAddition(object):
             #log are printed using latex if True
         self._verbose=verbose
 
-        self._kblock=sage.misc.sage_eval.sage_eval(kblock)
+        self._kblock=sage.misc.sage_eval.sage_eval(str(kblock))
 
         P.<x>=ZZ[]
         minPol=sage.misc.sage_eval.sage_eval(minPol_str,locals={'x':x}, cmds='P.<x>=ZZ[]')
