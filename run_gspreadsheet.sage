@@ -1,20 +1,23 @@
-#------------SANITY CHECK---------------
-sanityCheck=False         #run sanity check
+try:
+    sanityCheck
+except:
+    #------------SANITY CHECK---------------
+    sanityCheck=False         #run sanity check
 
-#------------SAVING---------------------
-info=False                #save general info to .tex file
-WFcsv=False              #save weight function to .csv file
-localConversionCsv=False #save local conversion to .csv file
-saveSetting=False        #save inputs setting as a dictionary
-saveLog=False             #save log file
+    #------------SAVING---------------------
+    info=False                #save general info to .tex file
+    WFcsv=False              #save weight function to .csv file
+    localConversionCsv=False #save local conversion to .csv file
+    saveSetting=False        #save inputs setting as a dictionary
+    saveLog=False             #save log file
 
-#------------IMAGES--------------------
-alphabet_img=False        #save image of alphabet and input alphabet
-phase1_images=False       #save step-by-step images of phase 1
-weightCoefSet_img=False   #save image of the weight coefficient set
-phase2_images=False       #save step-by-step images of phase 2
-#for input:
-phase2_input='(omega,1,omega,1,omega,1,omega,1)'
+    #------------IMAGES--------------------
+    alphabet_img=False        #save image of alphabet and input alphabet
+    phase1_images=False       #save step-by-step images of phase 1
+    weightCoefSet_img=False   #save image of the weight coefficient set
+    phase2_images=False       #save step-by-step images of phase 2
+    #for input:
+    phase2_input='(omega,1,omega,1,omega,1,omega,1)'
 
 folder_path='./outputs/'
 load_attach_path('./classes')
