@@ -1,4 +1,5 @@
 compareWith=['klasika']
+general_note='my own note'
 
 try:
     sanityCheck
