@@ -1,3 +1,5 @@
+compareWith=['klasika']
+
 try:
     sanityCheck
 except:
