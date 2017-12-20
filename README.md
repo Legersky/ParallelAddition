@@ -12,13 +12,13 @@ We provide two options of loading inputs for running the implemented extending w
 ## ewm_inputs.sage
 Launch in a shell by typing `sage ewm_inputs.sage`. The parameters are given in the head of the file **ewm_inputs.sage**.
 
-We describe four parts of the file:
+There are four parts to be filled in:
 
  * The name of the numeration system, minimal polynomial of generator omega, an approximate value of omega, the base beta, alphabet A and input alphabet B are set in the part INPUTS. Different methods of choice for Phase 1 and 2 can be set. If there are more methods in the lists, then methods for Phase 1 are compared first. Next, each distinct result is processed with each method for Phase 2.
 
  * For verification of output, `sanityCheck_conversion` is launched according to the boolean value in the part SANITY CHECK. 
 
- * The boolean values in the part SAVING determines which formats of the outputs are saved. All outputs are saved in the folder *./outputs/<name>/*, where *<name>* is the name of the numeration system. General information about the computation can be saved in the LaTeX format, a computed weight function and local digit set conversion in the CSV file format.  A log of the whole computation can be saved as a text file.
+ * The boolean values in the part SAVING determines which formats of the outputs are saved. All outputs are saved in the folder *./outputs/<name>/*, where <name> is the name of the numeration system. General information about the computation can be saved in the LaTeX format, a computed weight function and local digit set conversion in the CSV file format.  A log of the whole computation can be saved as a text file.
 
  * Figures of the alphabet, input alphabet or weight coefficients set are saved in the PNG format in the folder *./outputs/<name>/img/* according to the boolean values in the part IMAGES. Images of individual steps of both phases of the extending window method can be also saved. For Phase 2, searching for a weight coefficient  is plotted for given input digits.
 
