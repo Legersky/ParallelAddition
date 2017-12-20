@@ -11,6 +11,8 @@ alphabet = '[0, 1, -1, omega, -omega, -omega - 1, omega + 1]'
 inputAlphabet = ''
 #Base (use 'omega' as ring generator)
 base ='omega - 1'
+#k-block
+kblock=2
 
 #------------EWM SETTING----------------
 methods_phase1=['1a', '1d']     #methods in the list are used. If empty, default method is used.
