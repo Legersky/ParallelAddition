@@ -1,7 +1,8 @@
 # ParallelAddition
 # Implementation of the extending window method for construction of algorithms for parallel addition
 
-For description of the method, see the Master thesis [Construction of algorithms for parallel addition.pdf](http://jan.legersky.cz/pdf/master_thesis_parallel_addition.pdf)
+For description of the method, see the Master thesis [Construction of algorithms for parallel addition.pdf](http://jan.legersky.cz/pdf/master_thesis_parallel_addition.pdf).
+It contains also a more detailed description of the implementation.
 
 For basic use, load **AlgorithmForParallelAddition.sage**, create an instance of `AlgorithmForParallelAddition` and call `findWeightFunction`.
 
