@@ -6,7 +6,7 @@ It contains also a more detailed description of the implementation.
 
 For basic use, load **AlgorithmForParallelAddition.sage**, create an instance of `AlgorithmForParallelAddition` and call `findWeightFunction`.
 
-We also provide an interface - a shell script with given parameters is executed. If the network access is enabled and the modul `gspread` is installed, then results of computation are automatically saved to [Google spreadsheet](https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit?usp=sharing). The spreadsheet can be also used for loading input parameters.
+We also provide an interface - a shell script with given parameters is executed. If the network access is enabled and the modul `gspread` is installed, then results of computation are automatically saved to [Google spreadsheet](https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit?usp=sharing). The spreadsheet can be also used for loading input parameters. If you do not want to share results of your computations in this spreadsheet, remove `.json` file from your code folder.
 
 We provide two options of loading inputs for running the implemented extending window method. SageMath must be installed as they are executed as shell scripts.
 
