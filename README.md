@@ -14,7 +14,7 @@ Launch in a shell by typing `sage ewm_inputs.sage`. The parameters are given in 
 
 There are four parts to be filled in:
 
- * The name of the numeration system, minimal polynomial of generator $\omega$, an approximate value of omega, the base beta, alphabet A, input alphabet B and k-block are set in the part INPUTS. Different methods of choice for Phase 1 and 2 can be set. If there are more methods in the lists, then methods for Phase 1 are compared first. Next, each distinct result is processed with each method for Phase 2.
+ * The name of the numeration system, minimal polynomial of generator omega, an approximate value of omega, the base beta, alphabet A, input alphabet B and k-block are set in the part INPUTS. Different methods of choice for Phase 1 and 2 can be set. If there are more methods in the lists, then methods for Phase 1 are compared first. Next, each distinct result is processed with each method for Phase 2.
 
  * For verification of output, `sanityCheck_conversion` is launched according to the boolean value in the part SANITY CHECK. 
 
