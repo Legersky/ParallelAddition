@@ -1,12 +1,11 @@
-# ParallelAddition
-# Implementation of the extending window method for construction of algorithms for parallel addition
+# ParallelAddition - implementation of the extending window method for construction of algorithms for parallel addition
 
 For description of the method, see the Master thesis [Construction of algorithms for parallel addition.pdf](http://jan.legersky.cz/pdf/master_thesis_parallel_addition.pdf).
 It contains also a more detailed description of the implementation.
 
 For basic use, load **AlgorithmForParallelAddition.sage**, create an instance of `AlgorithmForParallelAddition` and call `findWeightFunction`.
 
-We also provide an interface - a shell script with given parameters is executed. If the network access is enabled and the modul `gspread` is installed, then results of computation are automatically saved to [Google spreadsheet](https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit?usp=sharing). The spreadsheet can be also used for loading input parameters. If you do not want to share results of your computations in this spreadsheet, remove `.json` file from your code folder.
+We also provide an interface - a shell script with given parameters is executed. If the network access is enabled and the modul `gspread` is installed, then results of computation are automatically saved to [Google spreadsheet](https://docs.google.com/spreadsheets/d/1TnhrHdefHfHa0WSeVs4q6XVj3epjPlPlnoekE0E1xeM/edit?usp=sharing). The spreadsheet can be also used for loading input parameters. If you do not want to share results of your computations in this spreadsheet, remove **vysledkyParallel-b1ae50e4c6ea.json** file from your code folder.
 
 We provide two options of loading inputs for running the implemented extending window method. SageMath must be installed as they are executed as shell scripts.
 
@@ -15,7 +14,7 @@ Launch in a shell by typing `sage ewm_inputs.sage`. The parameters are given in 
 
 There are four parts to be filled in:
 
- * The name of the numeration system, minimal polynomial of generator omega, an approximate value of omega, the base beta, alphabet A, input alphabet B and k-block are set in the part INPUTS. Different methods of choice for Phase 1 and 2 can be set. If there are more methods in the lists, then methods for Phase 1 are compared first. Next, each distinct result is processed with each method for Phase 2.
+ * The name of the numeration system, minimal polynomial of generator $\omega$, an approximate value of omega, the base beta, alphabet A, input alphabet B and k-block are set in the part INPUTS. Different methods of choice for Phase 1 and 2 can be set. If there are more methods in the lists, then methods for Phase 1 are compared first. Next, each distinct result is processed with each method for Phase 2.
 
  * For verification of output, `sanityCheck_conversion` is launched according to the boolean value in the part SANITY CHECK. 
 
