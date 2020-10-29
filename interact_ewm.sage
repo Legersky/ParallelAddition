@@ -32,12 +32,12 @@ def _(frame_label=text_control('<h3>Load inputs: </h3>', label=''),
 
         if setting_name:
             setting = load('./examples/'+ setting_name )
-            print "The following setting was loaded from ./examples/" + setting_name
+            print("The following setting was loaded from ./examples/" + setting_name)
             if not 'inputAlphabet' in setting:
                 setting['inputAlphabet']=''
             if not 'name' in setting:
                 setting['name']=setting_name
-            print setting
+            print(setting)
             global setting_global
             setting_global=setting
             alg= AlgorithmForParallelAddition(setting['minPol_alpGen'], setting['embedding'], setting['alphabet'], setting['base'], setting['name'], setting['inputAlphabet'],  printLog=True, printLogLatex=True)
@@ -50,8 +50,8 @@ def _(frame_label=text_control('<h3>Load inputs: </h3>', label=''),
         save(alg.getDictOfSetting(), './examples/last')
 
     except ExceptionParAdd, e:
-        print "Error:"
-        print e
+        print("Error:")
+        print(e)
 
 #------------------------main algorithm-----------------------------------------------------
 @interact(auto_update=False)
@@ -84,11 +84,11 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
 
         if saveSetting:
             setting=alg.getDictOfSetting()
-            print "The following setting was saved to ./examples/" + filename
-            print setting
+            print("The following setting was saved to ./examples/" + filename)
+            print(setting)
             save(setting,'./examples/'+ filename )
 
-        print " "
+        print(" ")
         start=time.clock()
         alg.findWeightFunction(max_iterations,max_input_len, method_weightCoefSet=method1, method_weightFunSearch=method2)
         end=time.clock()
@@ -98,10 +98,10 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
         alg_update=True
 
 
-        print ' '
+        print(' ')
 
 
-        print "Saving..."
+        print("Saving...")
         sys.stdout.flush()
         if WFcsv:
             alg.saveWeightFunctionToCsvFile("./outputs/"+filename+'/'+filename)
@@ -109,15 +109,15 @@ def _(frame_label=text_control('<h3>Find weight function: </h3>', label=''),
             alg.saveLocalConversionToCsvFile("./outputs/"+filename+'/'+filename)
 
     except KeyboardInterrupt:
-        print "Keyboard Interrupt:"
+        print("Keyboard Interrupt:")
         if saveUnsolved:
             alg.saveUnsolvedInputsToCsv("./outputs/"+filename+'/'+filename)
             unsolved_saved=True
         message='Keyboard Interrupt'
 
     except ExceptionParAdd, e:
-        print "Error:"
-        print str(e)
+        print("Error:")
+        print(str(e))
         message=str(e)
 
     finally:
@@ -150,8 +150,8 @@ def _(frame_label=text_control('<h3>Sanity check: </h3>', label=''),
             alg.saveLog("./outputs/"+alg.getName()+'/'+alg.getName())
 
     except ExceptionParAdd, e:
-        print "Error:"
-        print e
+        print("Error:")
+        print(e)
 
 
 #-----------------weight function------------------------------------------------------------
@@ -168,8 +168,8 @@ def _(frame_label=text_control('<h3>Weight function: </h3>', label=''),
         show("Weight coefficient for input tuple $(x_j, \dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" ,
              latex(alg.getWeightFunction()(inp_alpRing)),'$')
     except ExceptionParAdd, e:
-        print "Error:"
-        print e
+        print("Error:")
+        print(e)
 
 #-----------------phase 1 plot-----------------------------------------------------------
 @interact(auto_update=False)
@@ -187,8 +187,8 @@ def _(frame_label=text_control('<h3>Construction of the weight coefficients set:
             alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase1',img_size=_size)
 
     except ExceptionParAdd, e:
-        print "Error:"
-        print e
+        print("Error:")
+        print(e)
 
 #-----------------phase 2 plot-----------------------------------------------------------
 @interact(auto_update=False)
@@ -211,5 +211,5 @@ def _(frame_label=text_control('<h3>Construction of the weight function: </h3>',
             alg.saveImages(imgs,'./outputs/'+alg.getName()+ '/'+ folder,'phase2',img_size=_size)
 
     except ExceptionParAdd, e:
-        print "Error:"
-        print e
+        print("Error:")
+        print(e

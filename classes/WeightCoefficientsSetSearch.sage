@@ -74,7 +74,7 @@ class WeightCoefficientsSetSearch(object):
         res=Set(self._Qk1)
         added_elem=[]
         self._numbersOfElementsInIterations.append(len(res))
-        if self._verbose>=1: print "Number of elements in Qk: ", len(res)
+        if self._verbose>=1: print("Number of elements in Qk: ", len(res))
         self._algForParallelAdd.addLog( "Number of elements in Qk: "+ str(len(res)))
 
         if self._method in [1,2,3,6,7, 8,9,10,11, 12,13,14,15,16,17]:
@@ -82,11 +82,11 @@ class WeightCoefficientsSetSearch(object):
                 for cand_for_elem in copy(candidates):
                     if len(cand_for_elem)==1:
                         weightCoef=cand_for_elem[0]
-                        if self._verbose>=2: print "Only element: ", weightCoef
+                        if self._verbose>=2: print("Only element: ", weightCoef)
                         if not weightCoef in res:            #pick and add the only element if it is not in Qk1 yet
                             res=res.union(Set([weightCoef]))
-                            if self._verbose>=2: print "Added coefficient:"
-                            if self._verbose>=2: print weightCoef
+                            if self._verbose>=2: print("Added coefficient:")
+                            if self._verbose>=2: print(weightCoef)
                             added_elem.append(weightCoef)
                         candidates.remove(cand_for_elem)    #remove cand_for_elem from candidates
 
@@ -95,7 +95,7 @@ class WeightCoefficientsSetSearch(object):
                     intersect=Set(cand_for_elem).intersection(res)
                     if intersect.is_empty():                #check if there is already some candidate in Qk1
                         if self._method in [1,2,3]:
-                            if self._verbose>=2: print "Searching smallest element."
+                            if self._verbose>=2: print("Searching smallest element.")
                             if self._method in [1,2]:
                                 weightCoef=self._algForParallelAdd._findSmallest(cand_for_elem)
                             elif self._method in [3]:
@@ -118,7 +118,7 @@ class WeightCoefficientsSetSearch(object):
                             res=res.union(Set(weightCoefs))
                             added_elem+=Set(weightCoefs).list()
                     else:
-                        if self._verbose>=2: print "Candidate(s) %s is already in Qk1:" %intersect
+                        if self._verbose>=2: print("Candidate(s) %s is already in Qk1:" %intersect)
 
 
             if self._method in [12,13,14,15,16,17]:
@@ -141,8 +141,8 @@ class WeightCoefficientsSetSearch(object):
 
 
 
-            if self._verbose>=1: print "Added coefficients:"
-            if self._verbose>=1: print added_elem
+            if self._verbose>=1: print("Added coefficients:")
+            if self._verbose>=1: print(added_elem)
             self._algForParallelAdd.addLog("Added coefficients:")
             self._algForParallelAdd.addLog(added_elem, latex=True)
             self._algForParallelAdd.addWeightCoefSetIncrement(added_elem)
@@ -181,7 +181,7 @@ class WeightCoefficientsSetSearch(object):
                         cand_size=abs(self._algForParallelAdd.ring2CC(cand))
                     if cand_size<bound:
                         Q.append(cand)
-                print len(Q)
+                print(len(Q))
                 if num_prev==len(Q):
                     break
 
@@ -215,7 +215,7 @@ class WeightCoefficientsSetSearch(object):
         k=0
         while True:
             if k>=maxIterations-1:
-                if self._verbose>=1: print "Phase 1 doesn't stop after %s loops" %(k+1)
+                if self._verbose>=1: print("Phase 1 doesn't stop after %s loops" %(k+1))
                 raise RuntimeErrorParAdd("Searching Weight coefficient set requires more interations than given maximum: " + str(maxIterations))
             tested_set=Set(self._algForParallelAdd.sumOfSets(B,self._Qk1)).difference(Set(self._algForParallelAdd.sumOfSets(B,self._Qk2)))
                 #it is enough to check (B+Qk1)-(B+Qk2)

@@ -43,7 +43,7 @@ except:
 
 methods_phase1_original=copy(methods_phase1)
 if len(methods_phase1)>1:
-    print 'Comparing different methods for Phase 1...'
+    print('Comparing different methods for Phase 1...')
     sys.stdout.flush()
 
     try:
@@ -52,8 +52,8 @@ if len(methods_phase1)>1:
         pass
 
     same_methods=alg_test.compareMethodsPhase1(methods_phase1,note)
-    print 'Same weight coefficients sets are found by these group(s) of methods:'
-    print same_methods
+    print('Same weight coefficients sets are found by these group(s) of methods:')
+    print(same_methods)
     note+='Same weight coefficients sets are found by these group(s) of methods:' + str(same_methods)
     methods_phase1=[]
     for group in same_methods:
@@ -99,7 +99,7 @@ for method1 in methods_phase1:
             else:
                 raise ValueErrorParAdd("Filename is missing.")
 
-            print " "
+            print(" ")
 
             if images:
                 if alphabet_img:
@@ -115,9 +115,9 @@ for method1 in methods_phase1:
 
             alg_update=True
 
-            print '\n'
+            print('\n')
 
-            print "Saving..."
+            print("Saving...")
             sys.stdout.flush()
 
             if WFcsv:
@@ -131,11 +131,11 @@ for method1 in methods_phase1:
             message='successfull'
 
         except KeyboardInterrupt:
-            print "Keyboard Interrupt:"
+            print("Keyboard Interrupt:")
             message='Keyboard Interrupt'
 
         except ExceptionParAdd, e:
-            print "Error:"
+            print("Error:")
             alg.addLog(e)
             message=str(e)
 
@@ -173,6 +173,6 @@ for method1 in methods_phase1:
                     imgs2=alg.plotPhase2(sage.misc.sage_eval.sage_eval(phase2_input, locals={'omega':alg.getRingGenerator()}))
                     alg.saveImages(imgs2,output_folder+'/img','phase2')
 
-            print '--------------------------end of '+ filename +'---------------------------------------------'
+            print('--------------------------end of '+ filename +'---------------------------------------------')
 
 methods_phase1=copy(methods_phase1_original)

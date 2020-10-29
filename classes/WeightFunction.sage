@@ -51,16 +51,16 @@ class WeightFunction(object):
         self._mapping[_input]=coef
         self._num_of_saved+=1
 
-#-----------------------------PRINT FUNCTIONS-------------------------------------------------------------------
+#-----------------------------print FUNCTIONS-------------------------------------------------------------------
     def printInfo(self):
-        print "Maximal input length: %s" %self._maxLength
-        print "Number of inputs:", len(self._mapping.keys())
+        print("Maximal input length: %s" %self._maxLength)
+        print("Number of inputs:", len(self._mapping.keys()))
 
     def printLatexInfo(self):
-        print "Maximal input length: $" + latex(self._maxLength)  + '$'
-        print '\n'
-        print "Number of inputs: $" + latex(len(self._mapping.keys())) + '$'
-        print '\n'
+        print("Maximal input length: $" + latex(self._maxLength)  + '$')
+        print('\n')
+        print("Number of inputs: $" + latex(len(self._mapping.keys())) + '$')
+        print('\n')
 
     def printMapping(self):
         self.printInfo()
@@ -70,8 +70,8 @@ class WeightFunction(object):
     def printLatexMapping(self):
         self.printLatexInfo()
         for inp, coef in self._mapping.items():
-            print "Input $(w_j, \dots , w_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$'
-            print '\n'
+            print("Input $(w_j, \dots , w_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$')
+            print('\n')
 
     def printCsvMapping(self):
         for inp, coef in self._mapping.items():
@@ -81,5 +81,5 @@ class WeightFunction(object):
             for i in range(len(inp),self._maxLength):
                 line=line+'; '
             line=line+ str(coef)
-            print line
+            print(line)
 

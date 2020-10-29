@@ -32,8 +32,8 @@ try:
     methods_phase1=sage.misc.sage_eval.sage_eval(str(worksheet.cell(1, 3).value))       #methods in the list are used. If empty, default method is used.
     methods_phase2=sage.misc.sage_eval.sage_eval(str(worksheet.cell(2, 3).value))        #methods in the list are used. If empty, default method is used.
 except Exception, e:
-    print "Some problem with google spreadsheet:"
-    print e
+    print("Some problem with google spreadsheet:")
+    print(e)
 
 rows_to_test=[]
 
@@ -48,7 +48,7 @@ for row in rows_to_test:
     worksheet=sheet.worksheet(ws_name)
     try:
         name = worksheet.cell(row, 2).value
-        print name
+        print(name)
         minPol =worksheet.cell(row, 6).value.replace('t','x')
         omegaCC= sage.misc.sage_eval.sage_eval(str(worksheet.cell(row, 5).value))
         alphabet = worksheet.cell(row, 3).value
@@ -61,10 +61,10 @@ for row in rows_to_test:
         base =worksheet.cell(row, 7).value
         if onlyComparePhase1:
             alg_test= AlgorithmForParallelAddition(minPol,CC(omegaCC), alphabet,base,name,inputAlphabet, printLog=False)
-            print 'Same weight coefficients sets are found by these group(s) of methods:'
-            print alg_test.compareMethodsPhase1(methods_phase1, general_note)
+            print('Same weight coefficients sets are found by these group(s) of methods:')
+            print(alg_test.compareMethodsPhase1(methods_phase1, general_note))
         else:
             load('ewm.sage')         #run extending window method
 
     except ExceptionParAdd, e:
-        print e
+        print(e)

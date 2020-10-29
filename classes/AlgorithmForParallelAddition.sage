@@ -573,7 +573,7 @@ class AlgorithmForParallelAddition(object):
                 if self.divide(b-a, modulus)!=None:
                     repr_for_b=True
                     if self._verbose>=1:
-                        print b,'=',a,'+(',self.divide(b-a, modulus),')*(', modulus,')'
+                        print(b,'=',a,'+(',self.divide(b-a, modulus),')*(', modulus,')')
             if not repr_for_b:
                 repr_missing_for.append(b)
         if log:
@@ -699,7 +699,7 @@ class AlgorithmForParallelAddition(object):
         z=[]
         q_i_prev=0
         if self._verbose>=2:
-            print 'Converting: ', _w
+            print('Converting: ', _w)
         for i in range(maxLength,len(w)):
             input_tuple=w[i-maxLength:i+1]    #input to weight function
             q_i=self._weightFunction(reversed(input_tuple))        #getting weight coefficient
@@ -708,9 +708,9 @@ class AlgorithmForParallelAddition(object):
                 raise RuntimeErrorParAdd("Digit %s of sequence %s was converted to %s which is not in the alphabet A!" %(w[i],w,z_i))
             z.append(z_i)                    #conversion to alphabet A
             q_i_prev=q_i
-            if self._verbose==2 :print "Converted digit:", z[-1]
+            if self._verbose==2 :print("Converted digit:", z[-1])
         if self._verbose>=2:
-            print '----------> ', z
+            print('----------> ', z)
         return z
 
     def localConversion(self,w):
@@ -748,9 +748,9 @@ class AlgorithmForParallelAddition(object):
                 aplusb=self.addParallel(a, b)
                 if not self.list2BaseRing(aplusb) == (a_AlphRing+b_AlphRing):
                     if self._verbose>=1:
-                        print 'problem: %s + %s' %(a, b)
+                        print('problem: %s + %s' %(a, b))
                     errors+=1
-        if self._verbose>=1: print "Number of errors", errors
+        if self._verbose>=1: print("Number of errors", errors)
         return errors
 
     def sanityCheck_conversion(self, num_digits):
@@ -766,15 +766,15 @@ class AlgorithmForParallelAddition(object):
             n+=1
             num_converted=self.parallelConversion(tuple(num_list))
             if self._verbose>=1:
-                print 'Converting', num_list
-                print '----------> ', num_converted
+                print('Converting', num_list)
+                print('----------> ', num_converted)
             if not self.list2BaseRing(num_converted) == self.list2BaseRing(list(num_list)):
                 if self._verbose>=0:
-                    print 'problem: %s does not equal to  %s' %(num_list, num_converted)
+                    print('problem: %s does not equal to  %s' %(num_list, num_converted))
                 errors+=1
         if self._verbose>=1:
-            print "Tested: ", n
-            print "Number of errors", errors
+            print("Tested: ", n)
+            print("Number of errors", errors)
         self.addLog("Tested: " + str(n))
         self.addLog("Number of errors: " + str(errors))
         return errors
@@ -792,8 +792,8 @@ class AlgorithmForParallelAddition(object):
                 smallestAbs=numAbs
                 smallest_in=i
         if self._verbose>=1:
-            print 'Searching for the smallest element in the absolute value'
-            print smallestAbs
+            print('Searching for the smallest element in the absolute value')
+            print(smallestAbs)
         return list_from_Ring[smallest_in]
 
     def _findAllSmallest(self,list_from_Ring):
@@ -808,8 +808,8 @@ class AlgorithmForParallelAddition(object):
                 smallestAbs=numAbs
                 smallest=[num]
         if self._verbose>=1:
-            print 'Searching for the smallest element in the absolute value'
-            print smallestAbs
+            print('Searching for the smallest element in the absolute value')
+            print(smallestAbs)
         return smallest
 
     def _findAllSmallest_norm(self,list_from_Ring):
@@ -837,8 +837,8 @@ class AlgorithmForParallelAddition(object):
                 greatestAbs=numAbs
                 greatest_in=i
         if self._verbose>=1:
-            print 'Searching for the greatest element in the absolute value'
-            print greatestAbs
+            print('Searching for the greatest element in the absolute value')
+            print(greatestAbs)
         return list_from_Ring[greatest_in]
 
     def _findSmallest_norm(self,list_from_Ring):
@@ -853,8 +853,8 @@ class AlgorithmForParallelAddition(object):
                 smallestNorm=numNorm
                 smallest_in=i
         if self._verbose>=1:
-            print 'Searching for the smallest element in the beta norm'
-            print smallestNorm
+            print('Searching for the smallest element in the beta norm')
+            print(smallestNorm)
         return list_from_Ring[smallest_in]
 
     def betaNorm(self,num):
@@ -980,34 +980,34 @@ class AlgorithmForParallelAddition(object):
             return self.list2Ring(res_list)    #conversion to Ring
         return self.divide(divided_number, self._base)
 
-#-----------------------------PRINT FUNCTIONS--------------------------------------------------------------------------------
+#-----------------------------print FUNCTIONS--------------------------------------------------------------------------------
     def addLog(self,_log, latex=False):
         #save log _log
         if self._printLog:
             if latex and self._printLogLatex:
                 show(_log)
             else:
-                print _log
+                print(_log)
             sys.stdout.flush()
         self._log.append(_log)
 
     def printWeightFunction(self):
         #print weight function q
-        print "Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print("Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s:" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet))
         self._weightFunction.printMapping()
 
     def printWeightFunctionInfo(self):
         #print info about weight function q
-        print "Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet)
+        print("Info about Weight Function for RingGenerator omega %s (root of %s), alphabet %s and input alphabet %s" %(self._genCCValue, self._minPolynomial, self._alphabet, self._inputAlphabet))
         if self._weightFunction:
             self._weightFunction.printInfo()
         else:
             "There is no Weight Function."
 
     def printWeightCoefSet(self):
-        print "Weight Coefficient Set is:"
+        print("Weight Coefficient Set is:")
         show(self._weightCoefSet)
-        print "Number of elements: ", len(self._weightCoefSet)
+        print("Number of elements: ", len(self._weightCoefSet))
 
     def printLatexInfo(self, shortInput):
         #print info about numeration system and results of extending window method
@@ -1015,35 +1015,35 @@ class AlgorithmForParallelAddition(object):
             return latex(_list).replace('\left[','\{').replace('right]','}')
 
         forTable='%'
-        print '\\begin{exmp}'
-        print "\\textbf{", self._name.replace('_','\\_') , '}\n'
+        print('\\begin{exmp}')
+        print("\\textbf{", self._name.replace('_','\\_') , '}\n')
         forTable+= self._name.replace('_','\\_') + ' & \\ref{ex:' + self._name.replace('_','')+ '} &'
-        print "\\label{ex:" + self._name.replace('_','')+ '}\n'
+        print("\\label{ex:" + self._name.replace('_','')+ '}\n')
         if not shortInput:
-            print 'Parameters:'
-            print '\\begin{itemize}'
-            print "    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$'
-            print "    \item Base $\\beta=" + latex(self.getBase()) + '$'
-            print "    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$'
-            print "    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$'
+            print('Parameters:')
+            print('\\begin{itemize}')
+            print("    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$')
+            print("    \item Base $\\beta=" + latex(self.getBase()) + '$')
+            print("    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$')
+            print("    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$')
             if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print "    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$"
+                print("    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$")
             else:
-                print "    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
-            print '\\end{itemize}\n'
+                print("    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$')
+            print('\\end{itemize}\n')
         else:
-            print "The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n'
+            print("The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n')
             if not Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print "The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$'
+                print("The input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$')
 
         if self._num_missing_classes_mod_base==1:
-            print 'There is missing a congruence class modulo $\\beta$ with the representative ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.'
+            print('There is missing a congruence class modulo $\\beta$ with the representative ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.')
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._num_missing_classes_mod_base>1:
-            print 'There are missing  congruence classes modulo $\\beta$ with the representatives ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.'
+            print('There are missing  congruence classes modulo $\\beta$ with the representatives ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.')
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._missing_representatives_mod_base_minus_one:
-            print 'The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$.'
+            print('The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$).')
             forTable+='no & -- & -- & -- & -- \\\\'
         else:
             forTable+=' yes &'
@@ -1053,31 +1053,31 @@ class AlgorithmForParallelAddition(object):
                 forTable+=' yes &'
             else:
                 forTable+=' no &'
-            print 'The result of the extending window method is:'
-            print '\\begin{enumerate}'
+            print('The result of the extending window method is:')
+            print('\\begin{enumerate}')
             if self._weightCoefSet:
-                print '    \item Phase 1 was successful.'
-                print "The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n'
+                print('    \item Phase 1 was successful.')
+                print("The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n')
                 forTable+= ' \\checkmark &'
                 if self._oneLettersCheck:
-                    print '    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n'
+                    print('    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n')
                     forTable+= ' \\checkmark &'
                     if self._weightFunction:
-                        print '    \item Phase 2 was successful.'
-                        print 'The length of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.'
+                        print('    \item Phase 2 was successful.')
+                        print('The length of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.')
                         forTable+= ' \\checkmark \\\\'
                     else:
-                        print '    \item Phase 2 was not successful.\n'
+                        print('    \item Phase 2 was not successful.\n')
                         forTable+= ' \\xmark \\\\'
                 else:
-                    print '    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for some fixed length of window. Thus Phase 2 does not converge.\n'
+                    print('    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for some fixed length of window. Thus Phase 2 does not converge.\n')
                     forTable+= ' \\xmark & --\\\\'
             else:
-                print '    \item Phase 1 was not successful. \n'
+                print('    \item Phase 1 was not successful. \n')
                 forTable+= ' \\xmark & -- & --\\\\'
-            print '\\end{enumerate}'
-        print '\\end{exmp}'
-        print forTable
+            print('\\end{enumerate}')
+        print('\\end{exmp}')
+        print(forTable)
 
 #-----------------------------PLOT FUNCTIONS---------------------------------------------------------------------------------
     def plot(self, nums_from_ring, labeled=True, color='red', size=20, fontsize=10, allSameLabel=''):
@@ -1099,7 +1099,7 @@ class AlgorithmForParallelAddition(object):
             if numCC.imag()!=0:
                 allReal=False
         if self._verbose==1:
-            print "Plotting:"
+            print("Plotting:")
             show(nums_from_ring)
         if allReal:
             p=list_plot(zip(to_plot,zeros), color=color,  size=size, axes_labels=['Re', 'Im'])
@@ -1376,20 +1376,20 @@ class AlgorithmForParallelAddition(object):
             stdout = sys.stdout
             sys.stdout = fp
             if header:
-                print "\\documentclass{article}"
-                print "\\usepackage[utf8]{inputenc}"
-                print "\\usepackage{amsmath, amsthm}"
-                print "\\usepackage{breqn}"
-                print "\n"
+                print("\\documentclass{article}")
+                print("\\usepackage[utf8]{inputenc}")
+                print("\\usepackage{amsmath, amsthm}")
+                print("\\usepackage{breqn}")
+                print("\n")
 
-                print "\\textwidth 17 cm \\textheight 27 cm"
-                print "\n"
+                print("\\textwidth 17 cm \\textheight 27 cm")
+                print("\n")
 
-                print '\\newtheorem{exmp}{Example}\n'
+                print('\\newtheorem{exmp}{Example}\n')
 
-                print "\\begin{document}"
+                print("\\begin{document}")
                 self.printLatexInfo( shortInput)
-                print '\\end{document}'
+                print('\\end{document}')
             else:
                 self.printLatexInfo( shortInput)
 
@@ -1403,7 +1403,7 @@ class AlgorithmForParallelAddition(object):
             sys.stdout = fp
 
             for log in self._log:
-                print log
+                print(log)
 
             sys.stdout = stdout
         self.addLog("Log saved to "+filename+"_log.txt")
@@ -1414,15 +1414,15 @@ class AlgorithmForParallelAddition(object):
             stdout = sys.stdout
             sys.stdout = fp
 
-            print "\\documentclass{article}"
-            print "\\usepackage[utf8]{inputenc}"
-            print "\usepackage{amsmath, amsthm}"
-            print "\n"
-            print "\\begin{document}"
+            print("\\documentclass{article}")
+            print("\\usepackage[utf8]{inputenc}")
+            print("\usepackage{amsmath, amsthm}")
+            print("\n")
+            print("\\begin{document}")
 
             self._weightFunction.printLatexMapping()
 
-            print '\end{document}'
+            print('\end{document}')
 
             sys.stdout = stdout
         self.addLog("Weight function saved to "+filename+"-weightFunction.tex")
@@ -1436,7 +1436,7 @@ class AlgorithmForParallelAddition(object):
             for i in range(1, self._weightFunction.getMaxLength()):
                 header=header+ ('w_j-%s; ' %i)
             header=header+ 'weight coefficient'
-            print header
+            print(header)
 
             self._weightFunction.printCsvMapping()
 
@@ -1454,7 +1454,7 @@ class AlgorithmForParallelAddition(object):
             for i in range(1, self._weightFunction.getMaxLength()+1):
                 header=header+ ('w_j-%s; ' %i)
             header=header+ 'output digit'
-            print header
+            print(header)
 
             for_cartProd=[]
             for i in range(0,self._weightFunction.getMaxLength()+1):
@@ -1466,7 +1466,7 @@ class AlgorithmForParallelAddition(object):
                 for digit in num_list:
                     line=line+ str(digit)+'; '
                 line=line+ str(out_digit)
-                print line
+                print(line)
 
             sys.stdout = stdout
         self.addLog("Local conversion ("+str(len(allNumbers))+  " lines) saved to "+filename+"-localConversion.csv")
@@ -1487,46 +1487,46 @@ class AlgorithmForParallelAddition(object):
             stdout = sys.stdout
             sys.stdout = fp
 
-            print '#---------------INPUTS---------------'
-            print '#Name of the numeration system'
-            print 'name = \'', self._name, "'"
-            print ''
-            print '#Minimal polynomial of ring generator (use variable x)'
-            print 'minPol =\'', self._minPolynomial(x).expand(), "'"
-            print ''
-            print '#Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)'
-            print 'omegaCC=', self._genCCValue
-            print ''
-            print '#Alphabet (use \'omega\' as ring generator)'
-            print 'alphabet = \'', self._alphabet, "'"
-            print ''
-            print '#Input alphabet (if empty, A + A is used)'
-            print 'inputAlphabet = \'', self._inputAlphabet, "'"
-            print ''
-            print '#Base (use \'omega\' as ring generator)'
-            print 'base =\'' ,self._base, "'"
-            print ''
-            print '#------------SETTING--------------------'
-            print 'max_iterations = 20      #maximum of iterations in the search for the weight coefficient set'
-            print 'max_input_length = 10    #maximal length of the input of the weight function'
-            print 'sanityCheck=True         #run sanity check'
-            print ''
-            print '#------------SAVING---------------------'
-            print 'info=True                #save general info to .tex file'
-            print 'WFcsv=True               #save weight function to .csv file'
-            print 'localConversionCsv=True  #save local conversion to .csv file'
-            print 'saveSetting=False        #save inputs setting as a dictionary'
-            print 'saveLog=True             #save log file'
-            print 'saveUnsolved=False       #save unsolved combinations after interruption'
-            print ''
-            print '#------------IMAGES--------------------'
-            print 'alphabet_img=True        #save image of alphabet and input alphabet'
-            print 'lattice_img=True         #save image of Z[omega]'
-            print 'phase1_images=True       #save images of steps of phase 1'
-            print 'weightCoefSet_img=True   #save image of the weight coefficient set with the estimation given by lemma 3.1:'
-            print 'estimation=True'
-            print 'phase2_images=True       #save images of steps of phase 2 for the input:'
-            print "phase2_input='(omega,1,omega,1,omega,1,omega,1)'"
+            print('#---------------INPUTS---------------')
+            print('#Name of the numeration system')
+            print('name = \'', self._name, "'")
+            print('')
+            print('#Minimal polynomial of ring generator (use variable x)')
+            print('minPol =\'', self._minPolynomial(x).expand(), "'")
+            print('')
+            print('#Embedding (the closest root of minimal polynomial to this value is taken as the ring generator)')
+            print('omegaCC=', self._genCCValue)
+            print('')
+            print('#Alphabet (use \'omega\' as ring generator)')
+            print('alphabet = \'', self._alphabet, "'")
+            print('')
+            print('#Input alphabet (if empty, A + A is used)')
+            print('inputAlphabet = \'', self._inputAlphabet, "'")
+            print('')
+            print('#Base (use \'omega\' as ring generator)')
+            print('base =\'' ,self._base, "'")
+            print('')
+            print('#------------SETTING--------------------')
+            print('max_iterations = 20      #maximum of iterations in the search for the weight coefficient set')
+            print('max_input_length = 10    #maximal length of the input of the weight function')
+            print('sanityCheck=True         #run sanity check')
+            print('')
+            print('#------------SAVING---------------------')
+            print('info=True                #save general info to .tex file')
+            print('WFcsv=True               #save weight function to .csv file')
+            print('localConversionCsv=True  #save local conversion to .csv file')
+            print('saveSetting=False        #save inputs setting as a dictionary')
+            print('saveLog=True             #save log file')
+            print('saveUnsolved=False       #save unsolved combinations after interruption')
+            print('')
+            print('#------------IMAGES--------------------')
+            print('alphabet_img=True        #save image of alphabet and input alphabet')
+            print('lattice_img=True         #save image of Z[omega]')
+            print('phase1_images=True       #save images of steps of phase 1')
+            print('weightCoefSet_img=True   #save image of the weight coefficient set with the estimation given by lemma 3.1:')
+            print('estimation=True')
+            print('phase2_images=True       #save images of steps of phase 2 for the input:')
+            print("phase2_input='(omega,1,omega,1,omega,1,omega,1)'")
 
             sys.stdout = stdout
 

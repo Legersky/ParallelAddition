@@ -115,7 +115,7 @@ class WeightFunctionSearch(object):
                 for x in self._nondecreasing_prev[w_without_first]:
                     w_new=w_without_first+(x,)
                     if self._verbose>=2:
-                        print w_new
+                        print(w_new)
                     if isSublist(witness_seq,list(w_new)):
                         self._algForParallelAdd._cycled=True
                         raise RuntimeErrorParAdd("The sequence "+str(witness_seq+[x])[0:-1]+", ... ,"+str(w_new)[1:-1]+", ...]"+" leads to an infinite loop.")
@@ -124,7 +124,7 @@ class WeightFunctionSearch(object):
                         find_next_letter(w_new,copy(new_witness_seq))
             else:
                 if self._verbose>=2:
-                    print '--------', witness_seq
+                    print('--------', witness_seq)
 
         if tuple(w[0:-1]) in self._nondecreasing_prev:
             if w[-1] in self._nondecreasing_prev[w[0:-1]]:
@@ -148,8 +148,8 @@ class WeightFunctionSearch(object):
 
             Qww=[]
             if self._verbose>=2:
-                print 'To be covered:' , C
-                print 'Previous Qw', Qw_prev
+                print('To be covered:' , C)
+                print('Previous Qw', Qw_prev)
             C_covered_by={}        #key= element of C, value=list of elements of Qw_prev that cover key
             for q in Qw_prev:
                 for covered_by_q in Set(self._algForParallelAdd.sumOfSets(self._alphabet,[self._base*q])).intersection(Set(C)):
@@ -168,7 +168,7 @@ class WeightFunctionSearch(object):
 
             while C_covered_by:        #while there are uncovered elements
                 if self._verbose>=2:
-                    print C_covered_by
+                    print(C_covered_by)
                 to_add=[]
                 if first_time:
                     for covered in C_covered_by:
@@ -309,17 +309,17 @@ class WeightFunctionSearch(object):
                             break
 
                 if self._verbose>=2:
-                    print 'Elements to add:', to_add
+                    print('Elements to add:', to_add)
                 Qww+=to_add
 
 
             if self._verbose>=1:
-                print "Qw_w for ", w_tuple, " before completing: "
-                print Qww
+                print("Qw_w for ", w_tuple, " before completing: ")
+                print(Qww)
 
             if self._verbose>=1:
-                print "Qw_w for ", w_tuple, " was found: "
-                print Qww
+                print("Qw_w for ", w_tuple, " was found: ")
+                print(Qww)
 
             self._Qw_w[w_tuple]=Qww
 
@@ -344,7 +344,7 @@ class WeightFunctionSearch(object):
             combinations=self._find_weightCoef_for_comb_B(combinations)
             self._k+=1
             self._numbersOfSavedCombinations.append(num_prev_comb*len(self._B) - len(combinations))
-            if self._verbose>=1: print "Length of the window: ", self._k,", Number of saved combinations of input digits: " ,self._numbersOfSavedCombinations[-1], ", To next iteration: " ,len(combinations)
+            if self._verbose>=1: print("Length of the window: ", self._k,", Number of saved combinations of input digits: " ,self._numbersOfSavedCombinations[-1], ", To next iteration: " ,len(combinations))
             self._algForParallelAdd.addLog("Length of the window: "+ str(self._k) + ", Number of saved combinations of input digits: " + str(self._numbersOfSavedCombinations[-1]) + ", To next iteration: " + str(len(combinations)))
 
             self._nondecreasing_prev=self._nondecreasing
@@ -363,10 +363,10 @@ class WeightFunctionSearch(object):
         longest=[()]
         self._algForParallelAdd._problematicLetters=[]
         for a in self._B:
-            if self._verbose>=1: print "Processing input", a,',', a, '...'
+            if self._verbose>=1: print("Processing input", a,',', a, '...')
             w_tuple=(a,)
             Qww=self._findQw(w_tuple)
-            if self._verbose>=1:print Qww
+            if self._verbose>=1:print(Qww)
             inp_len=1
             prevQww=Set(Qww)
             while len(Qww)>1:
@@ -375,7 +375,7 @@ class WeightFunctionSearch(object):
                     raise  RuntimeErrorParAdd("Inputs are longer than the given maximum: %s" %(max_input_length))
                 w_tuple = w_tuple+(a,)
                 Qww=self._findQw(w_tuple)    #find Qww for the tuple and save weight coefficient if there is only one element in Qww
-                if self._verbose>=1:  print Qww
+                if self._verbose>=1:  print(Qww)
                 if prevQww==Set(Qww):
                     self._algForParallelAdd.addLog("There is no unique weight coefficient for finite input gained by repetition of letter %s using method number %s" %(a,self._method))
                     self._algForParallelAdd._problematicLetters.append(a)
@@ -494,7 +494,7 @@ class WeightFunctionSearch(object):
         else:
             return None
 
-#-----------------------------PRINT FUNCTION-------------------------------------------------------------
+#-----------------------------print FUNCTION-------------------------------------------------------------
     def printCsvQww(self):
         for inp, coef in self._Qw_w.items():
             line=' '
@@ -504,7 +504,7 @@ class WeightFunctionSearch(object):
                 for i in range(len(inp),self._weightFunction._maxLength):
                     line=line+'; '
                 line=line+ str(coef)
-                print line
+                print(line)
 
     def point_of_gravity(self, numbers):
         point=[]
@@ -539,13 +539,13 @@ class WeightFunctionSearch(object):
         for _set in sets_to_cover:
             elements=union(elements,_set)
         if self._verbose>=1:
-            print 'sets to cover: ',sets_to_cover
-            print 'elements: ', elements
+            print('sets to cover: ',sets_to_cover)
+            print('elements: ', elements)
         while 1:
             subsets_k=Subsets(elements,k)
             covering_subsets=[]
             if self._verbose>=1:
-                print 'subsets', subsets_k
+                print('subsets', subsets_k)
             for subset in subsets_k:
                 covered=True
                 for _set in sets_to_cover:
@@ -555,7 +555,7 @@ class WeightFunctionSearch(object):
                     covering_subsets.append(subset)
             if covering_subsets:
                 if self._verbose>=2:
-                    print 'covering',covering_subsets
+                    print('covering',covering_subsets)
                 return covering_subsets
             k+=1
             if k>6:
