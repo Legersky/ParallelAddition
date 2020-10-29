@@ -1416,7 +1416,7 @@ class AlgorithmForParallelAddition(object):
 
             print("\\documentclass{article}")
             print("\\usepackage[utf8]{inputenc}")
-            print("\usepackage{amsmath, amsthm}")
+            print("\\usepackage{amsmath, amsthm}")
             print("\n")
             print("\\begin{document}")
 
