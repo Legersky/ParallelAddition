@@ -1556,7 +1556,7 @@ class AlgorithmForParallelAddition(object):
             self.addLog('The following row was added to google spreadsheet ParallelAddition_results, worksheet: '+_worksheet)
             self.addLog(str(row))
 
-        except Exception, e:
+        except Exception as e:
             self.addLog("Some problem with saving to google spreadsheet:")
             self.addLog(e)
             self.addLog('The following row can be saved to google spreadsheet ParallelAddition_results')
@@ -1615,7 +1615,7 @@ class AlgorithmForParallelAddition(object):
             else:
                 results+=['-']
             results+=[elapsed_time, message, note, socket.gethostname()]
-        except Exception, e:
+        except Exception as e:
             results+=[message, e]
 
         self.saveToGoogleSpreadsheet('results', results)
@@ -1668,7 +1668,7 @@ def getGoogleSpreadsheet():
 
         try:
             json_key = json.load(open('vysledkyParallel-b1ae50e4c6ea.json'))
-        except Exception, e:
+        except Exception as e:
             json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
 
         scope = ['https://spreadsheets.google.com/feeds']

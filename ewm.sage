@@ -134,7 +134,7 @@ for method1 in methods_phase1:
             print("Keyboard Interrupt:")
             message='Keyboard Interrupt'
 
-        except ExceptionParAdd, e:
+        except ExceptionParAdd as e:
             print("Error:")
             alg.addLog(e)
             message=str(e)

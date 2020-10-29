@@ -31,7 +31,7 @@ try:
     worksheet=sheet.worksheet(ws_name)
     methods_phase1=sage.misc.sage_eval.sage_eval(str(worksheet.cell(1, 3).value))       #methods in the list are used. If empty, default method is used.
     methods_phase2=sage.misc.sage_eval.sage_eval(str(worksheet.cell(2, 3).value))        #methods in the list are used. If empty, default method is used.
-except Exception, e:
+except Exception as e:
     print("Some problem with google spreadsheet:")
     print(e)
 
@@ -66,5 +66,5 @@ for row in rows_to_test:
         else:
             load('ewm.sage')         #run extending window method
 
-    except ExceptionParAdd, e:
+    except ExceptionParAdd as e:
         print(e)
