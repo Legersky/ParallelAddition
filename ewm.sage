@@ -70,7 +70,7 @@ for method1 in methods_phase1:
                 k+=1
             except:
                 pass
-            start=time.clock()
+            start=time.time()
 
             try:
                 verbosity
@@ -140,7 +140,7 @@ for method1 in methods_phase1:
             message=str(e)
 
         finally:
-            end=time.clock()
+            end=time.time()
             alg.addLog("Elapsed time: "+ str(end-start))
 
             try:
