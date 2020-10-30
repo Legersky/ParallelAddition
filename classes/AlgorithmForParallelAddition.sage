@@ -1671,7 +1671,8 @@ def getGoogleSpreadsheet():
         except Exception as e:
             json_key = json.load(open('/home/legerjan/ParallelAddition/vysledkyParallel-b1ae50e4c6ea.json'))
 
-        scope = ['https://spreadsheets.google.com/feeds']
+        scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
 
         credentials=SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
         gc = gspread.authorize(credentials)
@@ -1683,7 +1684,8 @@ def getGoogleSpreadsheet():
         import gspread         #https://gspread.readthedocs.org/en/latest/#gspread.Spreadsheet.add_worksheet
         from oauth2client.service_account import ServiceAccountCredentials
 
-        scope = ['https://spreadsheets.google.com/feeds']
+        scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
         credentials = ServiceAccountCredentials.from_json_keyfile_name('vysledkyParallel-b1ae50e4c6ea.json', scope)
         gc = gspread.authorize(credentials)
 
