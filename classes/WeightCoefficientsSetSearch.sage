@@ -53,7 +53,7 @@ class WeightCoefficientsSetSearch(object):
 #-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET-------------------------------------------------------------------
 
     def _findCandidates(self,to_cover):
-        # it finds \forall elem_c \in to_cover the list cand_for_elem(elem_c): \forall x \in cand_for_elem(elem_c): elem_c \in A + \beta x
+        # it finds \forall elem_c \\in to_cover the list cand_for_elem(elem_c): \forall x \\in cand_for_elem(elem_c): elem_c \\in A + \beta x
         candidates=[]
         for elem_c in to_cover:
             cand_for_elem=[]

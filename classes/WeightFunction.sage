@@ -70,7 +70,7 @@ class WeightFunction(object):
     def printLatexMapping(self):
         self.printLatexInfo()
         for inp, coef in self._mapping.items():
-            print("Input $(w_j, \dots , w_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$')
+            print("Input $(w_j, \\dots , w_{j-%s}) = " %(len(inp)-1) + latex(inp) + "$ coeficient:" + '$' +  latex(coef) + '$')
             print('\n')
 
     def printCsvMapping(self):

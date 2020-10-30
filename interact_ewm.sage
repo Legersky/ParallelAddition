@@ -165,7 +165,7 @@ def _(frame_label=text_control('<h3>Weight function: </h3>', label=''),
             raise RuntimeErrorParAdd("Weight function search must be updated first.")
 
         inp_alpRing=sage.misc.sage_eval.sage_eval(inp, locals={'omega':alg.getRingGenerator()})
-        show("Weight coefficient for input tuple $(x_j, \dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" ,
+        show("Weight coefficient for input tuple $(x_j, \\dots, x_{j-%s}) = " %(len(inp_alpRing)-1) , latex(inp_alpRing) , "$ is: $" ,
              latex(alg.getWeightFunction()(inp_alpRing)),'$')
     except ExceptionParAdd as e:
         print("Error:")

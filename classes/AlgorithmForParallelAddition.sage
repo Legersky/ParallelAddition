@@ -671,7 +671,7 @@ class AlgorithmForParallelAddition(object):
 
 #-----------------------------PARALLEL ADDITION AND CONVERSION---------------------------------------------------------------
     def addParallel(self,a,b):
-        #a, b are numbers in BaseRing saved as lists, a=\sum_{i=0}^n a[i] base^i, a[i] \in alphabet A
+        #a, b are numbers in BaseRing saved as lists, a=\sum_{i=0}^n a[i] base^i, a[i] \\in alphabet A
         for a_i in a:
             if not a_i in self._alphabet:
                 raise ValueErrorParAdd("The digit %s of the number %s is not in the alphabet A." %(a_i,a))
@@ -1012,7 +1012,7 @@ class AlgorithmForParallelAddition(object):
     def printLatexInfo(self, shortInput):
         #print info about numeration system and results of extending window method
         def setLatexBraces(_list):
-            return latex(_list).replace('\left[','\{').replace('right]','}')
+            return latex(_list).replace('\\left[','\\{').replace('right]','}')
 
         forTable='%'
         print('\\begin{exmp}')
@@ -1022,14 +1022,14 @@ class AlgorithmForParallelAddition(object):
         if not shortInput:
             print('Parameters:')
             print('\\begin{itemize}')
-            print("    \item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$')
-            print("    \item Base $\\beta=" + latex(self.getBase()) + '$')
-            print("    \item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$')
-            print("    \item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$')
+            print("    \\item Minimal polynomial of $\\omega$: "+ '$'+latex(self.getMinPolynomial())+ '$')
+            print("    \\item Base $\\beta=" + latex(self.getBase()) + '$')
+            print("    \\item Minimal polynomial of base: " + '$' + latex(self.getMinPolynomialOfBase()) + '$')
+            print("    \\item Alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$')
             if Set(self.sumOfSets(self.getAlphabet(),self.getAlphabet()))==Set(self.getInputAlphabet()):
-                print("    \item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$")
+                print("    \\item Input alphabet $\\mathcal{B} =\\mathcal{A}+ \\mathcal{A}$")
             else:
-                print("    \item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$')
+                print("    \\item Input alphabet $\\mathcal{B} =" + setLatexBraces(self.getInputAlphabet()) + '$')
             print('\\end{itemize}\n')
         else:
             print("The alphabet $\\mathcal{A} ="  + setLatexBraces(self.getAlphabet()) + '$.\n')
@@ -1043,7 +1043,7 @@ class AlgorithmForParallelAddition(object):
             print('There are missing  congruence classes modulo $\\beta$ with the representatives ', self._missing_classes_mod_base.replace('[','').replace(']','') , ' in the alphabet $\\mathcal{A}$.')
             forTable+='no & -- & -- & -- & -- \\\\'
         elif self._missing_representatives_mod_base_minus_one:
-            print('The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$).')
+            print('The elements $', latex(self._missing_representatives_mod_base_minus_one).replace('[','').replace(']','') , '\\in \\mathcal{B}$ have no representative  modulo $\\beta-1$ in the alphabet $\\mathcal{A}$).')
             forTable+='no & -- & -- & -- & -- \\\\'
         else:
             forTable+=' yes &'
@@ -1056,24 +1056,24 @@ class AlgorithmForParallelAddition(object):
             print('The result of the extending window method is:')
             print('\\begin{enumerate}')
             if self._weightCoefSet:
-                print('    \item Phase 1 was successful.')
+                print('    \\item Phase 1 was successful.')
                 print("The number of elements in the weight coefficient set $\\mathcal{Q}$ is " + '$'+ str(len(self._weightCoefSet)) + '$.\n')
                 forTable+= ' \\checkmark &'
                 if self._oneLettersCheck:
-                    print('    \item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n')
+                    print('    \\item There is a unique weight coefficient for input $b,b,\\dots,b$ for all $b\\in\\mathcal{B}$.\n')
                     forTable+= ' \\checkmark &'
                     if self._weightFunction:
-                        print('    \item Phase 2 was successful.')
+                        print('    \\item Phase 2 was successful.')
                         print('The length of window $m$ of the weight function $q$ is', str(self._weightFunction.getMaxLength()) + '.')
                         forTable+= ' \\checkmark \\\\'
                     else:
-                        print('    \item Phase 2 was not successful.\n')
+                        print('    \\item Phase 2 was not successful.\n')
                         forTable+= ' \\xmark \\\\'
                 else:
-                    print('    \item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\in'+ setLatexBraces(self._problematicLetters)+ '$ for some fixed length of window. Thus Phase 2 does not converge.\n')
+                    print('    \\item There is a not unique weight coefficient for input $b,b,\\dots,b$ for $b\\in'+ setLatexBraces(self._problematicLetters)+ '$ for some fixed length of window. Thus Phase 2 does not converge.\n')
                     forTable+= ' \\xmark & --\\\\'
             else:
-                print('    \item Phase 1 was not successful. \n')
+                print('    \\item Phase 1 was not successful. \n')
                 forTable+= ' \\xmark & -- & --\\\\'
             print('\\end{enumerate}')
         print('\\end{exmp}')
@@ -1422,7 +1422,7 @@ class AlgorithmForParallelAddition(object):
 
             self._weightFunction.printLatexMapping()
 
-            print('\end{document}')
+            print('\\end{document}')
 
             sys.stdout = stdout
         self.addLog("Weight function saved to "+filename+"-weightFunction.tex")

@@ -23,7 +23,7 @@ class WeightFunctionSearch(object):
         self._weightCoefSet=weightCoefSet
             #starting set of weight coefficients
         self._Qw_w={}
-            #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \in self._B
+            #dictionary of sets of weight coefficients for (w_0 ... w_m), wi \\in self._B
         self._method=method
         if self._method==None:
             self._method='2b'     #set the default method
@@ -328,7 +328,7 @@ class WeightFunctionSearch(object):
             raise  RuntimeErrorParAdd("There is no Qww for: ", w_tuple_without_first)
 
     def findWeightFunction(self, max_input_length):
-        # checks different w \in alphabet + alphabet, it extends the window if there is no unique weight coefficient
+        # checks different w \\in alphabet + alphabet, it extends the window if there is no unique weight coefficient
         betaQ=[]
         for q in self._weightCoefSet:
             betaQ.append(self._base*q)
