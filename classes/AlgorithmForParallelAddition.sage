@@ -1550,8 +1550,7 @@ class AlgorithmForParallelAddition(object):
             sheet=getGoogleSpreadsheet()
 
             worksheet=sheet.worksheet(_worksheet)
-
-            worksheet.append_row(row)
+            worksheet.append_row([str(r) for r in row])
 
             self.addLog('The following row was added to google spreadsheet ParallelAddition_results, worksheet: '+_worksheet)
             self.addLog(str(row))
