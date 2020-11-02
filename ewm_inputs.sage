@@ -12,7 +12,7 @@ inputAlphabet = ''
 #Base (use 'omega' as ring generator)
 base ='omega - 1'
 #k-block
-kblock=2
+kblock=1
 
 #------------EWM SETTING----------------
 methods_phase1=['1a', '1d']     #methods in the list are used. If empty, default method is used. (See the description below)
