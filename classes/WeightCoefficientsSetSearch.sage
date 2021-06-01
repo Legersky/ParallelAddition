@@ -201,6 +201,7 @@ class WeightCoefficientsSetSearch(object):
 
         if self._method == 18:
             self._Qk1 = self._algForParallelAdd.sumOfSets(self._alphabet,self._alphabet)
+            self._numbersOfElementsInIterations=[len(self._Qk1)]
             betaQ=[self._base*q for q in self._Qk1]
             if not Set(self._algForParallelAdd.sumOfSets(self._inputAlphabet, self._Qk1)).issubset(Set(self._algForParallelAdd.sumOfSets(self._alphabet, betaQ))):
                 raise RuntimeErrorParAdd('For Q computed by method %s: A+A+Q is not subset of A+beta Q.' %self._method)
