@@ -49,6 +49,7 @@ class WeightCoefficientsSetSearch(object):
 # 14 = 1a - takes first the only possible candidates and all in non-covered lists
 # 15 = 1e - chooses all smallest elements (in beta-norm)
 # 16 = 1c - chooses all smallest elements (absolute value)
+# 18 - take A+A (no guarantee to work!!!)
 
 #-----------------------------SEARCH FOR WEIGHT COEFFICIENT SET-------------------------------------------------------------------
 
@@ -198,7 +199,12 @@ class WeightCoefficientsSetSearch(object):
                 raise RuntimeErrorParAdd('There are some problems with implementation, please do not use method %s in Phase 1. (For Q computed by this method: A+A+Q is not subset of A+beta Q.) ' %self._method)
             return self._Qk1
 
-
+        if self._method == 18:
+            self._Qk1 = self._algForParallelAdd.sumOfSets(self._alphabet,self._alphabet)
+            betaQ=[self._base*q for q in self._Qk1]
+            if not Set(self._algForParallelAdd.sumOfSets(self._inputAlphabet, self._Qk1)).issubset(Set(self._algForParallelAdd.sumOfSets(self._alphabet, betaQ))):
+                raise RuntimeErrorParAdd('For Q computed by method %s: A+A+Q is not subset of A+beta Q.' %self._method)
+            return self._Qk1
 
         self._Qk1=[]    #previous potential Weight Coefficient Set
         self._Qk1.append(0)    #0 is always in Weight Coefficients set
@@ -216,7 +222,7 @@ class WeightCoefficientsSetSearch(object):
         while True:
             if k>=maxIterations-1:
                 if self._verbose>=1: print("Phase 1 doesn't stop after %s loops" %(k+1))
-                raise RuntimeErrorParAdd("Searching Weight coefficient set requires more interations than given maximum: " + str(maxIterations))
+                raise RuntimeErrorParAdd("Searching Weight coefficient set requires more iterations than given maximum: " + str(maxIterations))
             tested_set=Set(self._algForParallelAdd.sumOfSets(B,self._Qk1)).difference(Set(self._algForParallelAdd.sumOfSets(B,self._Qk2)))
                 #it is enough to check (B+Qk1)-(B+Qk2)
             Qk=self._getQk(tested_set.list())
